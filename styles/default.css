@@ -227,7 +227,7 @@ body.home-page {
 }
 
 .home-page .page-shell > section:first-child::after {
-  content: "ADMIT ONE";
+  content: "COURSE HUB";
   position: absolute;
   right: -12px;
   top: 20px;
