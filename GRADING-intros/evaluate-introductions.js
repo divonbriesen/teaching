@@ -9,7 +9,107 @@ function normalizeText(value) {
 const STORAGE_KEYS = {
   lastUrl: "introductionsEvaluator.lastUrl",
   lastTitle: "introductionsEvaluator.lastTitle",
+  lastCourseProfile: "introductionsEvaluator.lastCourseProfile",
 };
+
+const COURSE_PROFILES = {
+  web: {
+    key: "web",
+    label: "WEB",
+    requireLinks: true,
+    checkedItemCount: 15,
+  },
+  cis110: {
+    key: "cis110",
+    label: "CIS110",
+    requireLinks: false,
+    checkedItemCount: 14,
+  },
+};
+
+const REQUIRED_LABELS = [
+  "Personal Background",
+  "Professional Background",
+  "Academic Background",
+  "Primary Work Computer",
+  "Operating System & Version",
+  "Backup Work Computer & Location Plan",
+  "Courses I'm Taking, & Why",
+];
+
+const REQUIRED_LINKS = [
+  { key: "clt web", display: "CLT Web" },
+  { key: "github", display: "GitHub" },
+  { key: "github.io", display: "GitHub.io" },
+  { key: "freecodecamp", display: "freeCodeCamp" },
+  { key: "codecademy", display: "Codecademy" },
+  { key: "linkedin", display: "LinkedIn" },
+];
+
+const ISSUE_MESSAGES = {
+  badNameHeading: "Heading 2 name is not in the expected format: Last Name, First Name Middle Initial.",
+  headingShouldBeLeftAligned: "Heading 2 name line should be left-aligned.",
+  onlyFirstHeadingAllowed: "Nothing should be a heading except for the first one (Last, First).",
+  entryNotAlphabetized: "Entry is not alphabetized by last name.",
+  missingHrBeforeEntry: "Entry should start below a horizontal rule.",
+  missingBlankLineBelowHr: "Entry should start with a blank line below a horizontal rule.",
+  missingAcknowledgment: "Missing public acknowledgment sentence with initials and date.",
+  acknowledgmentMissingInitials: "Public acknowledgment is present, but initials are missing.",
+  acknowledgmentMissingDate: "Public acknowledgment is present, but date is missing.",
+  acknowledgmentNeedsSignatureMarker: "Public acknowledgment should include '-' or '~' before initials/date.",
+  acknowledgmentShouldBeLeftAligned: "Public acknowledgment should be left-aligned normal text.",
+  missingDisplayName: "Missing display-name line in the form First M. \"Nickname\" Last ~ Adjective Animal (with optional initial/nickname).",
+  displayNameShouldBeCentered: "Display-name line should be centered.",
+  missingPhoto: "Missing centered photo.",
+  photoShouldBeCentered: "Photo should be centered.",
+  missingCaption: "Missing centered italic caption beneath the photo.",
+  captionShouldBeCentered: "Photo caption should be centered.",
+  missingPersonalStatement: "Missing personal statement with at least 3 complete sentences.",
+  personalStatementShouldBeLeftAligned: "Personal statement should be normal left-aligned body text.",
+  missingNestedCourses: "Courses I'm Taking, & Why must include nested bullet items.",
+  missingFavoriteQuote: "Missing favorite quote block.",
+  quoteLabelShouldBeOmitted: "Do not include the word 'Quote' as a label after the bullets.",
+  missingQuoteAttribution: "Quote is missing attribution.",
+  quoteAttributionMarker: "Quote attribution should start with a dash (-, –, —, etc.) or '~'.",
+  quoteAttributionSeparateLine: "Favorite quote should place attribution on a separate line.",
+  quoteShouldBeCentered: "Quote should be centered.",
+  quoteAttributionShouldBeCentered: "Quote attribution should be centered.",
+  linksNotOnSingleCenteredLine: "Links are present but not as one centered links line with dividers.",
+  missingLinksLine: "Missing centered links line with dividers.",
+  linksLineCentered: "Links line should be centered.",
+  linksNeedDividers: "Links line should include dividers between each required link.",
+  missingBlankLineBeforeLinks: "Missing additional blank line between quote attribution and links line.",
+  missingSeparatorHr: "Missing horizontal rule separator after entry.",
+  missingBlankLineBeforeSeparatorHr: "Missing at least one blank line before the horizontal rule separator.",
+  multipleSpaces: "Contains multiple consecutive spaces in visible text. Tip: This may include tabs- remove them. Also use View -> Show non-printing characters.",
+};
+
+const LINK_ISSUE_PATTERNS = [
+  /^Missing required link label:/,
+  /^CLT Web link must match /,
+  /^GitHub link must match /,
+  /^GitHub\.io link must match /,
+  /^GitHub\.io username must match /,
+  /^freeCodeCamp link must point to /,
+  /^Codecademy link must point to /,
+  /^LinkedIn link must point to /,
+  /^Links are present but not as one centered links line with dividers\.$/,
+  /^Missing centered links line with dividers\.$/,
+  /^Links line should be centered\.$/,
+  /^Links line should include dividers between each required link\.$/,
+  /^Missing additional blank line between quote attribution and links line\.$/,
+];
+
+const BLOCKED_ENTRY_HEADING_PHRASES = [
+  "table of contents",
+  "do not edit the table of contents",
+  "entries go below",
+  "don't make a new tab",
+  "there should be no additional tabs",
+  "read the instructions",
+  "published using google docs",
+  "report abuse",
+];
 
 const boldClassCache = new WeakMap();
 const centeredClassCache = new WeakMap();
@@ -251,17 +351,19 @@ function loadLastRunState() {
     return {
       lastUrl: normalizeText(window.localStorage.getItem(STORAGE_KEYS.lastUrl) || ""),
       lastTitle: normalizeText(window.localStorage.getItem(STORAGE_KEYS.lastTitle) || ""),
+      lastCourseProfile: normalizeText(window.localStorage.getItem(STORAGE_KEYS.lastCourseProfile) || ""),
     };
   } catch (error) {
     console.warn("Unable to read saved evaluator state.", error);
-    return { lastUrl: "", lastTitle: "" };
+    return { lastUrl: "", lastTitle: "", lastCourseProfile: "" };
   }
 }
 
-function saveLastRunState(url, title) {
+function saveLastRunState(url, title, courseProfileKey) {
   try {
     window.localStorage.setItem(STORAGE_KEYS.lastUrl, url);
     window.localStorage.setItem(STORAGE_KEYS.lastTitle, title);
+    window.localStorage.setItem(STORAGE_KEYS.lastCourseProfile, courseProfileKey);
   } catch (error) {
     console.warn("Unable to save evaluator state.", error);
   }
@@ -293,6 +395,64 @@ function promptForReportTitle(lastTitle) {
   return title;
 }
 
+function getDefaultCourseProfile(lastCourseProfile, reportTitle) {
+  const normalizedSaved = normalizeText(lastCourseProfile).toLowerCase();
+  const normalizedTitle = normalizeText(reportTitle).toLowerCase();
+
+  if (normalizedSaved === "web" || normalizedSaved === "cis110") {
+    return normalizedSaved;
+  }
+
+  if (normalizedTitle.includes("cis110")) {
+    return "cis110";
+  }
+
+  return "web";
+}
+
+function promptForCourseProfile(lastCourseProfile, reportTitle) {
+  const defaultProfile = getDefaultCourseProfile(lastCourseProfile, reportTitle);
+  const profileInput = window.prompt(
+    "Course profile for this run (WEB or CIS110):",
+    defaultProfile.toUpperCase(),
+  );
+
+  if (profileInput === null) {
+    return null;
+  }
+
+  const normalized = normalizeText(profileInput).toLowerCase();
+
+  if (normalized === "web") {
+    return COURSE_PROFILES.web;
+  }
+
+  if (normalized === "cis110" || normalized === "cis 110") {
+    return COURSE_PROFILES.cis110;
+  }
+
+  window.alert("Invalid course profile. Enter WEB or CIS110.");
+  return undefined;
+}
+
+function getRunConfigFromQuery() {
+  if (typeof window === "undefined" || !window.location) {
+    return {
+      title: "",
+      url: "",
+      course: "",
+    };
+  }
+
+  const params = new URLSearchParams(window.location.search || "");
+
+  return {
+    title: normalizeText(params.get("title") || ""),
+    url: normalizeText(params.get("url") || ""),
+    course: normalizeText(params.get("course") || ""),
+  };
+}
+
 function countSentences(text) {
   const normalized = normalizeText(text);
 
@@ -317,10 +477,75 @@ function isNameHeadingFormat(text) {
 function isDisplayNameLine(text) {
   const namePart = "[\\p{L}][\\p{L}'’\\-]*";
   const pattern = new RegExp(
-    `^${namePart}(?:\\s+[A-Z]\\.)?(?:\\s+"[^"\\n]+")?(?:\\s+${namePart})+\\s*[~|*]\\s*${namePart}(?:\\s+${namePart})+$`,
+    `^${namePart}(?:,\\s*${namePart})?(?:\\s+[A-Z]\\.)?(?:\\s+"[^"\\n]+")?(?:\\s+${namePart})*\\s*[~|*\\-]\\s*${namePart}(?:\\s+${namePart})+$`,
     "u",
   );
   return pattern.test(normalizeText(text));
+}
+
+function isLikelyDisplayNameLine(textValue) {
+  const text = normalizeText(textValue);
+
+  if (!text || text.length < 10 || text.length > 90) {
+    return false;
+  }
+
+  if (text.includes(":")) {
+    return false;
+  }
+
+  if (!/(?:\s[~|*\-]\s|\|\|)/.test(text)) {
+    return false;
+  }
+
+  const words = text.match(/[\p{L}][\p{L}'’\-]*/gu) || [];
+  return words.length >= 4 && words.length <= 12;
+}
+
+function hasAcknowledgmentText(textValue) {
+  const signals = getAcknowledgmentSignals(textValue);
+  return signals.hasPublicVisibility && signals.hasDate && signals.hasInitials;
+}
+
+function isAcknowledgmentCandidateText(textValue) {
+  const signals = getAcknowledgmentSignals(textValue);
+  return signals.looksLikeAcknowledgment;
+}
+
+function getAcknowledgmentSignals(textValue) {
+  const text = normalizeText(textValue);
+
+  if (!text) {
+    return {
+      text,
+      hasPublicVisibility: false,
+      hasDate: false,
+      hasInitials: false,
+      hasSignatureMarker: false,
+      looksLikeAcknowledgment: false,
+    };
+  }
+
+  const mentionsPublicVisibility = /\bpublic(?:ly)?\b|\bweb\b/i.test(text);
+  const hasUnderstandClause = /\bi\s+understand\b/i.test(text);
+  const hasVisibilityIntent = /(won['’]t|will not|don['’]?t)\s+put\s+anything\s+here/i.test(text);
+  const datePattern = /(?:\d{1,2}[\/.\-]\d{1,2}[\/.\-]\d{2,4}|\d{1,2}\s+[A-Za-z]{3,9}\s+\d{2,4}|[A-Za-z]{3,9}\s+\d{1,2},?\s+\d{2,4}|MM[\/-]DD[\/-]YYYY)/;
+  const initialsPattern = /(?:(?:\b[A-Z]\.){2,6}\b|\b[A-Z](?:\s+[A-Z]){1,5}\b|\b[A-Z]{2,6}\b|\b[A-Z]{1,6}[\/-][A-Z]{1,6}\b|\b[A-Z]\.\s*[A-Z](?:\.)?\b)/;
+  const hasDate = datePattern.test(text);
+  const hasInitials = initialsPattern.test(text);
+  const hasSignatureMarker = /[-~–—]\s*(?:(?:[A-Z]\.){2,6}|[A-Z]{2,6}|[A-Z](?:\s+[A-Z]){1,5})/u.test(text);
+  const looksLikeAcknowledgment =
+    (mentionsPublicVisibility && (hasUnderstandClause || hasVisibilityIntent) && (hasDate || hasInitials)) ||
+    (hasUnderstandClause && mentionsPublicVisibility);
+
+  return {
+    text,
+    hasPublicVisibility: mentionsPublicVisibility,
+    hasDate,
+    hasInitials,
+    hasSignatureMarker,
+    looksLikeAcknowledgment,
+  };
 }
 
 function hasAcknowledgmentSignature(element) {
@@ -328,35 +553,147 @@ function hasAcknowledgmentSignature(element) {
     return false;
   }
 
-  const text = normalizeText(element.textContent);
+  return hasAcknowledgmentText(element.textContent || "");
+}
+
+function isAcknowledgmentCandidateElement(element) {
+  if (!element) {
+    return false;
+  }
+
+  return isAcknowledgmentCandidateText(element.textContent || "");
+}
+
+function findAcknowledgmentElement(block) {
+  const stopTags = new Set(["UL", "OL", "BLOCKQUOTE", "HR"]);
+  const candidates = [];
+
+  for (let index = 0; index < block.elements.length; index += 1) {
+    const element = block.elements[index];
+
+    if (stopTags.has(element.tagName)) {
+      break;
+    }
+
+    if (!(element.tagName === "P" || /^H[1-6]$/.test(element.tagName))) {
+      continue;
+    }
+
+    if (normalizeText(element.textContent).length === 0) {
+      continue;
+    }
+
+    candidates.push(element);
+
+    // Acknowledgment should be near the top; keep search bounded.
+    if (candidates.length >= 8) {
+      break;
+    }
+  }
+
+  const strictMatch = candidates.find((candidate) => hasAcknowledgmentSignature(candidate));
+
+  if (strictMatch) {
+    return strictMatch;
+  }
+
+  return candidates.find((candidate) => isAcknowledgmentCandidateElement(candidate)) || null;
+}
+
+function isLikelyEntryHeadingText(textValue) {
+  const text = normalizeText(textValue);
 
   if (!text) {
     return false;
   }
 
-  const mentionsPublicVisibility = /public/i.test(text);
-  const initialsAndDatePattern = /[A-Z]{1,5}(?:\s*-\s*|\s+)\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}/;
+  const lowered = text.toLowerCase();
 
-  return mentionsPublicVisibility && initialsAndDatePattern.test(text);
+  if (BLOCKED_ENTRY_HEADING_PHRASES.some((phrase) => lowered.includes(phrase))) {
+    return false;
+  }
+
+  if (isAcknowledgmentCandidateText(text)) {
+    return false;
+  }
+
+  if (text.length > 60 || /[!?]/.test(text) || /\d{1,2}[\/.\-]\d{1,2}/.test(text)) {
+    return false;
+  }
+
+  if (/[|~*]/.test(text)) {
+    return false;
+  }
+
+  const tokenMatches = text.match(/[\p{L}][\p{L}'’\-.]*/gu) || [];
+  if (tokenMatches.length < 2 || tokenMatches.length > 6) {
+    return false;
+  }
+
+  const capitalizedTokenCount = tokenMatches.filter((token) => /^[\p{Lu}]/u.test(token)).length;
+  return capitalizedTokenCount >= 2;
 }
 
 function collectIntroBlocks(doc) {
-  const h2Entries = Array.from(doc.querySelectorAll("h2"));
+  const allHeadings = Array.from(doc.querySelectorAll("h2"));
+  const entryHeadings = allHeadings.filter((heading) =>
+    isLikelyEntryHeadingText(heading.textContent || ""),
+  );
 
-  return h2Entries
-    .map((heading) => {
-      const name = normalizeText(heading.textContent);
-      const elements = [];
-      let node = heading.nextElementSibling;
+  return entryHeadings.map((heading, index) => {
+    const name = normalizeText(heading.textContent);
+    const previousHeading = index > 0 ? entryHeadings[index - 1] : null;
+    const nextHeading = index + 1 < entryHeadings.length ? entryHeadings[index + 1] : null;
+    const elements = [];
+    let node = heading.nextElementSibling;
 
-      while (node && node.tagName !== "H2") {
-        elements.push(node);
-        node = node.nextElementSibling;
-      }
+    while (node && node !== nextHeading) {
+      elements.push(node);
+      node = node.nextElementSibling;
+    }
 
-      return { heading, name, elements };
-    })
-    .filter((block) => block.name.length > 0);
+    return {
+      heading,
+      name,
+      elements,
+      previousHeading,
+      nextHeading,
+    };
+  });
+}
+
+function getLastNameSortKey(nameValue) {
+  const name = normalizeText(nameValue);
+
+  if (!name) {
+    return "";
+  }
+
+  const source = name.includes(",")
+    ? name.split(",")[0]
+    : (name.split(/\s+/).slice(-1)[0] || name);
+
+  return source
+    .toLowerCase()
+    .replace(/[^\p{L}]/gu, "");
+}
+
+function applyAlphabeticalOrderIssues(results) {
+  let previousKey = "";
+
+  results.forEach((result) => {
+    const currentKey = getLastNameSortKey(result.name);
+
+    if (!currentKey) {
+      return;
+    }
+
+    if (previousKey && currentKey < previousKey) {
+      result.issues.unshift(ISSUE_MESSAGES.entryNotAlphabetized);
+    }
+
+    previousKey = currentKey;
+  });
 }
 
 function normalizeLabelKey(label) {
@@ -401,6 +738,20 @@ function normalizeLabelKey(label) {
 function findLabeledListItems(block) {
   const labels = new Map();
   const boldClasses = getBoldClassesForDocument(block.heading.ownerDocument);
+  const upsertLabel = (labelText, item, isBold) => {
+    const normalized = normalizeLabelKey(labelText);
+
+    if (!normalized) {
+      return;
+    }
+
+    const existing = labels.get(normalized);
+    labels.set(normalized, {
+      item,
+      isBold: Boolean(existing && existing.isBold) || Boolean(isBold),
+    });
+  };
+
   const listItems = block.elements.flatMap((element) =>
     Array.from(element.querySelectorAll("li")),
   );
@@ -413,12 +764,7 @@ function findLabeledListItems(block) {
       const strongLabel = normalizeText(strong.textContent).replace(/\s*:\s*$/, "");
 
       if (strongLabel) {
-        const key = normalizeLabelKey(strongLabel);
-        const existing = labels.get(key);
-        labels.set(key, {
-          item,
-          isBold: Boolean(existing && existing.isBold) || elementIsBold(strong, boldClasses),
-        });
+        upsertLabel(strongLabel, item, elementIsBold(strong, boldClasses));
       }
     }
 
@@ -426,21 +772,41 @@ function findLabeledListItems(block) {
     const textLabels = itemText.match(/[A-Za-z][A-Za-z'’&,\-\s]+?:/g) || [];
     textLabels.forEach((rawLabel) => {
       const cleaned = rawLabel.replace(/:\s*$/, "");
-      const normalized = normalizeLabelKey(cleaned);
-      if (normalized) {
-        const labelCandidates = Array.from(item.querySelectorAll("span, b, strong"));
-        const labelIsBold = labelCandidates.some((node) => {
-          const nodeText = normalizeText(node.textContent);
-          return nodeText.includes(cleaned) && elementIsBold(node, boldClasses);
-        });
-        const existing = labels.get(normalized);
-        labels.set(normalized, {
-          item,
-          isBold: Boolean(existing && existing.isBold) || labelIsBold,
-        });
-      }
+      const labelCandidates = Array.from(item.querySelectorAll("span, b, strong"));
+      const labelIsBold = labelCandidates.some((node) => {
+        const nodeText = normalizeText(node.textContent);
+        return nodeText.includes(cleaned) && elementIsBold(node, boldClasses);
+      }) || elementIsBold(item, boldClasses);
+      // Google Docs published HTML frequently strips reliable inline bold markers from list labels.
+      // If we can parse a valid "Label:" in a bullet item, treat it as bold unless there is strong evidence otherwise.
+      upsertLabel(cleaned, item, labelIsBold || textLabels.length > 0);
     });
 
+  });
+
+  // Google Docs sometimes exports bullets as paragraph lines, not semantic <li> nodes.
+  const paragraphLikeElements = block.elements.filter((element) =>
+    element.tagName === "P" || /^H[1-6]$/.test(element.tagName),
+  );
+
+  paragraphLikeElements.forEach((element) => {
+    const lines = (element.textContent || "")
+      .split(/\r?\n/)
+      .map((line) => normalizeText(line))
+      .filter(Boolean);
+
+    lines.forEach((line) => {
+      const bulletMatch = line.match(/^[\u2022●○\-–]\s*([^:]{2,120}):/u);
+      const plainMatch = line.match(/^([A-Za-z][A-Za-z'’&,\-\s]{2,120}):/u);
+      const matchedLabel = bulletMatch ? bulletMatch[1] : (plainMatch ? plainMatch[1] : "");
+
+      if (!matchedLabel) {
+        return;
+      }
+
+      const lineSuggestsBold = /^[\u2022●○\-–]\s*[^:]{2,120}:/u.test(line);
+      upsertLabel(matchedLabel, element, elementIsBold(element, boldClasses) || lineSuggestsBold);
+    });
   });
 
   return labels;
@@ -466,7 +832,7 @@ function validateSpacingRule(block) {
   });
 
   if (hasMultipleSpaces) {
-    issues.push("Contains multiple consecutive spaces in visible text. Tip: This may include tabs- remove them.");
+    issues.push(ISSUE_MESSAGES.multipleSpaces);
   }
 
   const blockquote = block.elements.find((element) => element.tagName === "BLOCKQUOTE");
@@ -514,23 +880,40 @@ function validateSpacingRule(block) {
   return issues;
 }
 
-function validateBlock(block) {
+function validateBlock(block, courseProfile) {
   const issues = [];
   const centeredClasses = getCenteredClassesForDocument(block.heading.ownerDocument);
   const imageCenteredClasses = getImageCenteredClassesForDocument(block.heading.ownerDocument);
 
   if (!isNameHeadingFormat(block.name)) {
-    issues.push("Heading 2 name is not in the expected format: Last Name, First Name Middle Initial.");
+    issues.push(ISSUE_MESSAGES.badNameHeading);
   }
 
   if (elementIsCentered(block.heading, centeredClasses)) {
-    issues.push("Heading 2 name line should be left-aligned.");
+    issues.push(ISSUE_MESSAGES.headingShouldBeLeftAligned);
+  }
+
+  const unexpectedHeadings = block.elements.filter((element) => {
+    if (!/^H[1-6]$/.test(element.tagName)) {
+      return false;
+    }
+
+    const text = normalizeText(element.textContent || "");
+    if (!text) {
+      return false;
+    }
+
+    return !isNameHeadingFormat(text);
+  });
+
+  if (unexpectedHeadings.length > 0) {
+    issues.push(ISSUE_MESSAGES.onlyFirstHeadingAllowed);
   }
 
   const entryPrefixElements = [];
   let previousElement = block.heading.previousElementSibling;
 
-  while (previousElement && previousElement.tagName !== "H2") {
+  while (previousElement && previousElement !== block.previousHeading) {
     entryPrefixElements.unshift(previousElement);
     previousElement = previousElement.previousElementSibling;
   }
@@ -545,7 +928,7 @@ function validateBlock(block) {
   }
 
   if (hrBeforeHeadingIndex < 0) {
-    issues.push("Entry should start below a horizontal rule.");
+    issues.push(ISSUE_MESSAGES.missingHrBeforeEntry);
   } else {
     const betweenHrAndHeading = entryPrefixElements.slice(hrBeforeHeadingIndex + 1);
     const hasBlankLineBelowHr = betweenHrAndHeading.some(
@@ -553,45 +936,61 @@ function validateBlock(block) {
     );
 
     if (!hasBlankLineBelowHr) {
-      issues.push("Entry should start with a blank line below a horizontal rule.");
+      issues.push(ISSUE_MESSAGES.missingBlankLineBelowHr);
     }
   }
 
-  const firstParagraph = block.elements.find((element) => element.tagName === "P");
+  const acknowledgmentParagraph = findAcknowledgmentElement(block);
+  const acknowledgmentInHeading = isAcknowledgmentCandidateText(block.name);
+  const acknowledgmentSignals = getAcknowledgmentSignals(
+    acknowledgmentParagraph ? acknowledgmentParagraph.textContent || "" : block.name,
+  );
 
-  if (!firstParagraph || !hasAcknowledgmentSignature(firstParagraph)) {
-    issues.push("Missing public acknowledgment sentence with italic initials and date.");
-  } else if (elementIsCentered(firstParagraph, centeredClasses)) {
-    issues.push("Public acknowledgment should be left-aligned normal text.");
-  }
-
-  const displayLine = block.elements.find((element) => {
-    if (/^H[1-6]$/.test(element.tagName)) {
-      return false;
+  if (!acknowledgmentParagraph && !acknowledgmentInHeading) {
+    issues.push(ISSUE_MESSAGES.missingAcknowledgment);
+  } else {
+    if (!acknowledgmentSignals.hasInitials) {
+      issues.push(ISSUE_MESSAGES.acknowledgmentMissingInitials);
     }
 
-    return isDisplayNameLine(element.textContent || "");
-  });
+    if (!acknowledgmentSignals.hasDate) {
+      issues.push(ISSUE_MESSAGES.acknowledgmentMissingDate);
+    }
+
+    if (
+      acknowledgmentSignals.hasInitials &&
+      acknowledgmentSignals.hasDate &&
+      !acknowledgmentSignals.hasSignatureMarker
+    ) {
+      issues.push(ISSUE_MESSAGES.acknowledgmentNeedsSignatureMarker);
+    }
+
+    if (elementIsCentered(acknowledgmentParagraph, centeredClasses)) {
+      issues.push(ISSUE_MESSAGES.acknowledgmentShouldBeLeftAligned);
+    }
+  }
+
+  const displayLine = block.elements.find((element) =>
+    isDisplayNameLine(element.textContent || "") || isLikelyDisplayNameLine(element.textContent || ""),
+  );
 
   if (!displayLine) {
-    issues.push(
-      "Missing display-name line in the form First M. \"Nickname\" Last ~ Adjective Animal (with optional initial/nickname).",
-    );
+    issues.push(ISSUE_MESSAGES.missingDisplayName);
   } else if (!elementIsCentered(displayLine, centeredClasses)) {
-    issues.push("Display-name line should be centered.");
+    issues.push(ISSUE_MESSAGES.displayNameShouldBeCentered);
   }
 
   const image = block.elements.find((element) => element.tagName === "IMG") ||
     block.elements.find((element) => element.querySelector("img"));
 
   if (!image) {
-    issues.push("Missing centered photo.");
+    issues.push(ISSUE_MESSAGES.missingPhoto);
   } else {
     const imageElement = image.tagName === "IMG" ? image : image.querySelector("img");
     const isCentered = imageIsCentered(imageElement, centeredClasses, imageCenteredClasses);
 
     if (!isCentered) {
-      issues.push("Photo should be centered.");
+      issues.push(ISSUE_MESSAGES.photoShouldBeCentered);
     }
   }
 
@@ -637,9 +1036,9 @@ function validateBlock(block) {
   }
 
   if (!hasItalicCaption) {
-    issues.push("Missing centered italic caption beneath the photo.");
+    issues.push(ISSUE_MESSAGES.missingCaption);
   } else if (captionElement && !elementIsCentered(captionElement, centeredClasses)) {
-    issues.push("Photo caption should be centered.");
+    issues.push(ISSUE_MESSAGES.captionShouldBeCentered);
   }
 
   const paragraphText = block.elements
@@ -653,23 +1052,13 @@ function validateBlock(block) {
     .find((element) => countSentences(normalizeText(element.textContent)) >= 3);
 
   if (!personalStatement) {
-    issues.push("Missing personal statement with at least 3 complete sentences.");
+    issues.push(ISSUE_MESSAGES.missingPersonalStatement);
   } else if (personalStatementElement && elementIsCentered(personalStatementElement, centeredClasses)) {
-    issues.push("Personal statement should be normal left-aligned body text.");
+    issues.push(ISSUE_MESSAGES.personalStatementShouldBeLeftAligned);
   }
-
-  const requiredLabels = [
-    "Personal Background",
-    "Professional Background",
-    "Academic Background",
-    "Primary Work Computer",
-    "Operating System & Version",
-    "Backup Work Computer & Location Plan",
-    "Courses I'm Taking, & Why",
-  ];
   const labels = findLabeledListItems(block);
 
-  requiredLabels.forEach((label) => {
+  REQUIRED_LABELS.forEach((label) => {
     const key = normalizeLabelKey(label);
     const labelInfo = labels.get(key);
 
@@ -704,7 +1093,7 @@ function validateBlock(block) {
     }
 
     if (nestedCourses.length === 0 && siblingNestedCourses.length === 0) {
-      issues.push("Courses I'm Taking, & Why must include nested bullet items.");
+      issues.push(ISSUE_MESSAGES.missingNestedCourses);
     }
   }
 
@@ -716,6 +1105,8 @@ function validateBlock(block) {
   let attributionStartsWithMarker = true;
   let quoteAndAttributionSameLine = false;
   let quoteAttributionElement = null;
+  let quoteStartElement = null;
+  let quoteStartLine = "";
 
   if (blockquote) {
     const quoteElement = blockquote.tagName === "BLOCKQUOTE" ? blockquote : blockquote.querySelector("blockquote");
@@ -723,30 +1114,34 @@ function validateBlock(block) {
     const quoteFooter = quoteElement ? quoteElement.querySelector("footer") : null;
 
     hasQuote = Boolean(quoteText && quoteText.length >= 8);
+    quoteStartElement = quoteElement || null;
+    quoteStartLine = quoteText || "";
     hasAttribution = Boolean(quoteFooter && normalizeText(quoteFooter.textContent).length > 0);
     if (quoteFooter && hasAttribution) {
-      attributionStartsWithMarker = /^[-~]/.test(normalizeText(quoteFooter.textContent));
+      attributionStartsWithMarker = /^[\-~\u2010-\u2015\u2212]/u.test(normalizeText(quoteFooter.textContent));
     }
     quoteAttributionElement = quoteFooter || null;
   } else {
     // Google Docs published HTML often uses plain paragraphs instead of semantic blockquote/footer.
-    const paragraphLines = block.elements
-      .filter((element) => element.tagName === "P")
+    const textLineElements = block.elements
+      .filter((element) => ["P", "UL", "OL", "BLOCKQUOTE"].includes(element.tagName));
+
+    const textLines = textLineElements
       .map((element) => normalizeText(element.textContent))
       .filter((text) => text.length > 0);
 
-    const quoteLineIndex = paragraphLines.findIndex((line) => /["“”]/.test(line));
+    const quoteLineIndex = textLines.findIndex((line) => /["“”]/.test(line));
 
     if (quoteLineIndex >= 0) {
-      hasQuote = paragraphLines[quoteLineIndex].length >= 8;
-      const quoteLine = paragraphLines[quoteLineIndex];
-      const quoteElementIndex = block.elements.findIndex(
-        (element) => element.tagName === "P" && normalizeText(element.textContent) === quoteLine,
-      );
-      const quoteElement = quoteElementIndex >= 0 ? block.elements[quoteElementIndex] : null;
+      hasQuote = textLines[quoteLineIndex].length >= 8;
+      const quoteLine = textLines[quoteLineIndex];
+      const quoteElement = textLineElements[quoteLineIndex] || null;
+      const quoteElementIndex = quoteElement ? block.elements.indexOf(quoteElement) : -1;
+      quoteStartElement = quoteElement;
+      quoteStartLine = quoteLine;
 
       const sameLineAttribution = /\s[-\u2013\u2014]\s+[A-Za-z]/.test(quoteLine);
-      const nextLine = paragraphLines[quoteLineIndex + 1] || "";
+      const nextLine = textLines[quoteLineIndex + 1] || "";
       const nextLineAttribution = /^[-\u2013\u2014]\s*.+/.test(nextLine);
 
       const nextElement = quoteElementIndex >= 0 ? block.elements[quoteElementIndex + 1] : null;
@@ -764,37 +1159,115 @@ function validateBlock(block) {
       quoteAttributionElement = nextElementAttribution ? nextElement : null;
 
       if (nextLineAttribution) {
-        attributionStartsWithMarker = /^[-~]/.test(nextLine);
+        attributionStartsWithMarker = /^[\-~\u2010-\u2015\u2212]/u.test(nextLine);
       } else if (nextElementAttribution) {
-        attributionStartsWithMarker = /^[-~]/.test(nextElementText);
+        attributionStartsWithMarker = /^[\-~\u2010-\u2015\u2212]/u.test(nextElementText);
       } else if (sameLineAttribution) {
-        attributionStartsWithMarker = /\s[-~]\s+[A-Za-z]/.test(quoteLine);
+        attributionStartsWithMarker = /\s[\-~\u2010-\u2015\u2212]\s+[A-Za-z]/u.test(quoteLine);
       }
 
       if (quoteElement && !elementIsCentered(quoteElement, centeredClasses)) {
-        issues.push("Quote should be centered.");
+        issues.push(ISSUE_MESSAGES.quoteShouldBeCentered);
       }
 
       if (nextElement && nextElementAttribution && !elementIsCentered(nextElement, centeredClasses)) {
-        issues.push("Quote attribution should be centered.");
+        issues.push(ISSUE_MESSAGES.quoteAttributionShouldBeCentered);
       }
     }
   }
 
+  const lastNonEmptyBulletIndex = (() => {
+    for (let index = block.elements.length - 1; index >= 0; index -= 1) {
+      const element = block.elements[index];
+      const hasVisibleText = normalizeText(element.textContent || "").length > 0;
+      if ((element.tagName === "UL" || element.tagName === "OL") && hasVisibleText) {
+        return index;
+      }
+    }
+    return -1;
+  })();
+
+  if (lastNonEmptyBulletIndex >= 0) {
+    const quoteStartAfterBullets = (() => {
+      for (let index = lastNonEmptyBulletIndex + 1; index < block.elements.length; index += 1) {
+        const candidate = block.elements[index];
+        const candidateText = normalizeText(candidate.textContent || "");
+
+        if (/["“”]/.test(candidateText)) {
+          return {
+            element: candidate,
+            line: candidateText,
+          };
+        }
+      }
+
+      return null;
+    })();
+
+    const labelQuoteElement = quoteStartAfterBullets ? quoteStartAfterBullets.element : quoteStartElement;
+    const labelQuoteLine = quoteStartAfterBullets ? quoteStartAfterBullets.line : quoteStartLine;
+    const quoteStartIndex = labelQuoteElement ? block.elements.indexOf(labelQuoteElement) : -1;
+    const bulletBoundaryIndex = (() => {
+      if (quoteStartIndex >= 0) {
+        for (let index = quoteStartIndex - 1; index >= 0; index -= 1) {
+          const element = block.elements[index];
+          const hasVisibleText = normalizeText(element.textContent || "").length > 0;
+          if ((element.tagName === "UL" || element.tagName === "OL") && hasVisibleText) {
+            return index;
+          }
+        }
+      }
+
+      return lastNonEmptyBulletIndex;
+    })();
+
+    const beforeQuoteElements = block.elements.slice(
+      bulletBoundaryIndex,
+      quoteStartIndex >= 0 ? quoteStartIndex : block.elements.length,
+    );
+
+    const isDisallowedQuoteLabel = (textValue) => {
+      const normalized = normalizeText(textValue);
+
+      // Covers standalone "Quote:" labels, line-start labels with attribution
+      // ("Quote: Mark Twain: ..."), and flattened Google Docs cases where
+      // the label is appended directly before the opening quote (..."coursesQuote:").
+      return /^quote\b/i.test(normalized) || /quote\b\s*:?\s*$/i.test(normalized);
+    };
+
+    const hasQuoteWordBeforeQuote = beforeQuoteElements.some((element) => {
+      const lines = (element.textContent || "")
+        .split(/\r?\n/)
+        .map((line) => normalizeText(line))
+        .filter(Boolean);
+
+      return lines.some((line) => isDisallowedQuoteLabel(line));
+    });
+
+    const quoteLinePrefix = labelQuoteLine.split(/["“”]/)[0] || "";
+    const hasQuoteWordInQuotePrefix = labelQuoteElement
+      ? isDisallowedQuoteLabel(quoteLinePrefix)
+      : false;
+
+    if (hasQuoteWordBeforeQuote || hasQuoteWordInQuotePrefix) {
+      issues.push(ISSUE_MESSAGES.quoteLabelShouldBeOmitted);
+    }
+  }
+
   if (!hasQuote) {
-    issues.push("Missing favorite quote block.");
+    issues.push(ISSUE_MESSAGES.missingFavoriteQuote);
   }
 
   if (hasQuote && !hasAttribution) {
-    issues.push("Quote is missing attribution.");
+    issues.push(ISSUE_MESSAGES.missingQuoteAttribution);
   }
 
   if (hasQuote && hasAttribution && !attributionStartsWithMarker) {
-    issues.push("Quote attribution should start with '-' or '~'.");
+    issues.push(ISSUE_MESSAGES.quoteAttributionMarker);
   }
 
   if (hasQuote && quoteAndAttributionSameLine) {
-    issues.push("Favorite quote should place attribution on a separate line.");
+    issues.push(ISSUE_MESSAGES.quoteAttributionSeparateLine);
   }
 
   validateSpacingRule(block).forEach((issue) => issues.push(issue));
@@ -807,22 +1280,13 @@ function validateBlock(block) {
     })),
   );
 
-  const requiredLinks = [
-    { key: "clt web", display: "CLT Web" },
-    { key: "github", display: "GitHub" },
-    { key: "github.io", display: "GitHub.io" },
-    { key: "freecodecamp", display: "freeCodeCamp" },
-    { key: "codecademy", display: "Codecademy" },
-    { key: "linkedin", display: "LinkedIn" },
-  ];
-
   const linkContainerInfo = block.elements
     .map((element) => {
       const elementAnchors = Array.from(element.querySelectorAll("a")).map((anchor) =>
         normalizeLinkLabel(anchor.textContent || ""),
       );
       const labelSet = new Set(elementAnchors.filter(Boolean));
-      const requiredLabelMatches = requiredLinks.filter((requiredLink) => labelSet.has(requiredLink.key)).length;
+      const requiredLabelMatches = REQUIRED_LINKS.filter((requiredLink) => labelSet.has(requiredLink.key)).length;
       const dividerCount = ((element.textContent || "").match(/\|/g) || []).length;
       const centered = elementOrAncestorIsCentered(element, centeredClasses);
 
@@ -864,7 +1328,7 @@ function validateBlock(block) {
 
   const linkContainer = linkContainerInfo ? linkContainerInfo.element : null;
 
-  requiredLinks.forEach((requiredLink) => {
+  REQUIRED_LINKS.forEach((requiredLink) => {
     if (!anchors.some((anchor) => anchor.label === requiredLink.key)) {
       issues.push(`Missing required link label: ${requiredLink.display}.`);
     }
@@ -916,18 +1380,18 @@ function validateBlock(block) {
 
   if (!linkContainer) {
     if (hasAnyLinkLikeContent(linkCandidates)) {
-      issues.push("Links are present but not as one centered links line with dividers.");
+      issues.push(ISSUE_MESSAGES.linksNotOnSingleCenteredLine);
     } else {
-      issues.push("Missing centered links line with dividers.");
+      issues.push(ISSUE_MESSAGES.missingLinksLine);
     }
   } else {
     if (!elementOrAncestorIsCentered(linkContainer, centeredClasses)) {
-      issues.push("Links line should be centered.");
+      issues.push(ISSUE_MESSAGES.linksLineCentered);
     }
 
     const dividerCount = linkContainerInfo ? linkContainerInfo.dividerCount : 0;
     if (dividerCount < 5) {
-      issues.push("Links line should include dividers between each required link.");
+      issues.push(ISSUE_MESSAGES.linksNeedDividers);
     }
   }
 
@@ -942,7 +1406,7 @@ function validateBlock(block) {
       ).length;
 
       if (blankParagraphs < 1) {
-        issues.push("Missing additional blank line between quote attribution and links line.");
+        issues.push(ISSUE_MESSAGES.missingBlankLineBeforeLinks);
       }
     }
   }
@@ -952,23 +1416,32 @@ function validateBlock(block) {
   );
 
   if (hrIndex < 0) {
-    issues.push("Missing horizontal rule separator after entry.");
+    issues.push(ISSUE_MESSAGES.missingSeparatorHr);
   } else {
     const hasBlankLineBeforeHr = block.elements
       .slice(0, hrIndex)
       .some((element) => element.tagName === "P" && normalizeText(element.textContent).length === 0);
 
     if (!hasBlankLineBeforeHr) {
-      issues.push("Missing at least one blank line before the horizontal rule separator.");
+      issues.push(ISSUE_MESSAGES.missingBlankLineBeforeSeparatorHr);
     }
   }
 
-  const multipleSpacesIssue =
-    "Contains multiple consecutive spaces in visible text. Tip: This may include tabs- remove them.";
-  const missingAdditionalBlankLineIssue =
-    "Missing additional blank line between quote attribution and links line.";
-  const missingHrIssue = "Missing horizontal rule separator after entry.";
-  const missingBlankBeforeHrIssue = "Missing at least one blank line before the horizontal rule separator.";
+  if (!courseProfile.requireLinks) {
+    for (let index = issues.length - 1; index >= 0; index -= 1) {
+      const issue = issues[index];
+      const isLinkIssue = LINK_ISSUE_PATTERNS.some((pattern) => pattern.test(issue));
+
+      if (isLinkIssue) {
+        issues.splice(index, 1);
+      }
+    }
+  }
+
+  const multipleSpacesIssue = ISSUE_MESSAGES.multipleSpaces;
+  const missingAdditionalBlankLineIssue = ISSUE_MESSAGES.missingBlankLineBeforeLinks;
+  const missingHrIssue = ISSUE_MESSAGES.missingSeparatorHr;
+  const missingBlankBeforeHrIssue = ISSUE_MESSAGES.missingBlankLineBeforeSeparatorHr;
   const multipleSpacesIndex = issues.indexOf(multipleSpacesIssue);
   const missingAdditionalBlankLineIndex = issues.indexOf(missingAdditionalBlankLineIssue);
 
@@ -1077,13 +1550,13 @@ function formatGroupedIssueLines(issues) {
   return formattedLines;
 }
 
-function formatReport(results) {
+function formatReport(results, courseProfile) {
   if (results.length === 0) {
     return "- No Heading 2 introduction entries were found in the target document.";
   }
 
   const lines = [];
-  const checkedItemCount = 13;
+  const checkedItemCount = courseProfile.checkedItemCount;
 
   results.forEach((result) => {
     const issueCountLabel = result.issues.length === 1 ? "issue" : "issues";
@@ -1106,8 +1579,10 @@ function formatReport(results) {
 }
 
 async function evaluateIntroductionsFromUrl() {
-  const { lastUrl, lastTitle } = loadLastRunState();
-  const reportTitle = promptForReportTitle(lastTitle);
+  const { lastUrl, lastTitle, lastCourseProfile } = loadLastRunState();
+  const queryConfig = getRunConfigFromQuery();
+  const hasPrompt = typeof window.prompt === "function";
+  const reportTitle = queryConfig.title || (hasPrompt ? promptForReportTitle(lastTitle) : "");
 
   if (reportTitle === null) {
     console.info("Evaluation canceled by user.");
@@ -1115,14 +1590,40 @@ async function evaluateIntroductionsFromUrl() {
   }
 
   if (!reportTitle) {
+    if (!hasPrompt) {
+      console.error("No report title available. Provide ?title=... in the URL when prompt() is unavailable.");
+      return;
+    }
     console.error("No report title entered. Please run again and provide a title.");
     return;
   }
 
-  const urlInput = window.prompt(
-    "Enter the full URL that contains the introduction entries:",
-    lastUrl || "",
-  );
+  let courseProfile = null;
+  const queryCourse = queryConfig.course.toLowerCase();
+  if (queryCourse === "web") {
+    courseProfile = COURSE_PROFILES.web;
+  } else if (queryCourse === "cis110" || queryCourse === "cis 110") {
+    courseProfile = COURSE_PROFILES.cis110;
+  } else {
+    courseProfile = hasPrompt ? promptForCourseProfile(lastCourseProfile, reportTitle) : null;
+  }
+
+  if (courseProfile === null) {
+    console.info("Evaluation canceled by user.");
+    return;
+  }
+
+  if (!courseProfile) {
+    console.error("No valid course profile entered. Please run again and enter WEB or CIS110.");
+    return;
+  }
+
+  const urlInput = queryConfig.url || (hasPrompt
+    ? window.prompt(
+      "Enter the full URL that contains the introduction entries:",
+      lastUrl || "",
+    )
+    : "");
 
   if (urlInput === null) {
     console.info("Evaluation canceled by user.");
@@ -1132,6 +1633,10 @@ async function evaluateIntroductionsFromUrl() {
   const url = normalizeText(urlInput);
 
   if (!url) {
+    if (!hasPrompt) {
+      console.error("No URL available. Provide ?url=... in the URL when prompt() is unavailable.");
+      return;
+    }
     console.error("No URL entered. Please run again and provide a valid URL.");
     return;
   }
@@ -1156,11 +1661,13 @@ async function evaluateIntroductionsFromUrl() {
 
     const results = introBlocks.map((block) => ({
       name: block.name,
-      issues: validateBlock(block),
+      issues: validateBlock(block, courseProfile),
     }));
 
-    const report = formatReport(results);
-    saveLastRunState(url, reportTitle);
+    applyAlphabeticalOrderIssues(results);
+
+    const report = formatReport(results, courseProfile);
+    saveLastRunState(url, reportTitle, courseProfile.key);
 
     console.log(`${reportTitle}:\n` + report);
 

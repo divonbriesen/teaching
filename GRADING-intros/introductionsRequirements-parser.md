@@ -7,10 +7,12 @@ This file is a stricter, machine-friendly version of the same checklist.
 - Rule: Entry is alphabetized by last name.
 - Rule: Entry starts with a blank line below a horizontal rule.
 - Check: Entry title is Heading 2.
+- Check: Only the student name line should use heading formatting; non-name content should not be a heading.
 - Check: A horizontal rule appears above the entry heading.
 - Check: At least one blank paragraph appears between that horizontal rule and the entry heading.
 - Check: Heading 2 text matches `Last Name, First Name` with an optional trailing middle initial.
 - Check: Heading 2 name line is left-aligned (not centered).
+- Check: Entries are in alphabetical order by last name.
 
 ## 2. Public Acknowledgment
 
@@ -91,6 +93,7 @@ This file is a stricter, machine-friendly version of the same checklist.
 
 ## 11. Required Links
 
+- Rule: These links are required only for web classes (ITIS3135, WEB115, WEB215, WEB250). CIS110 students should not be graded on this links requirement.
 - Rule: Leave exactly one additional blank line after the quote attribution before the links line.
 - Rule: A centered links line is required below the quote block.
 - Check: The links line includes all of the following labels:
