@@ -203,6 +203,73 @@ body.home-page {
     linear-gradient(180deg, #f7f0e4 0%, var(--bg) 100%);
 }
 
+body#intro-example-page {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1.12rem;
+  line-height: 1.6;
+  margin: 0;
+  padding: 1rem;
+}
+
+body#intro-example-page main {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+body#intro-example-page figure {
+  text-align: center;
+  margin: 1rem auto;
+}
+
+body#intro-example-page img {
+  width: 320px;
+  max-width: 100%;
+  height: auto;
+}
+
+body#intro-example-page figcaption {
+  font-style: italic;
+}
+
+body#intro-example-page blockquote {
+  text-align: center;
+body#intro-example-page .web-links-note {
+  text-align: center;
+  font-style: italic;
+  margin: 0.85rem 0 0.35rem;
+}
+body#intro-example-page .profile-links-line {
+  text-align: center;
+  margin: 0;
+}
+  margin: 1rem auto;
+}
+
+body#intro-example-page blockquote p {
+  margin: 0.35rem 0;
+}
+
+body#intro-instructions-page blockquote {
+  text-align: center;
+  margin: 1rem auto;
+  padding: 0;
+  border-left: 0;
+  background: transparent;
+}
+
+body#intro-instructions-page blockquote p,
+body#intro-instructions-page blockquote footer {
+  margin: 0.35rem 0;
+}
+
+.display-name-and-mascot {
+  text-align: center;
+  font-size: 2.35rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0.5rem 0 0.75rem;
+}
+
 .home-page .page-shell {
   width: min(1100px, calc(100% - 32px));
   margin: 0 auto;

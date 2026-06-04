@@ -11,6 +11,7 @@ This file is a stricter, machine-friendly version of the same checklist.
 - Check: A horizontal rule appears above the entry heading.
 - Check: At least one blank paragraph appears between that horizontal rule and the entry heading.
 - Check: Heading 2 text matches `Last Name, First Name` with an optional trailing middle initial.
+- Check: If there is an initial it has a period.
 - Check: Heading 2 name line is left-aligned (not centered).
 - Check: Entries are in alphabetical order by last name.
 
@@ -19,6 +20,8 @@ This file is a stricter, machine-friendly version of the same checklist.
 - Rule: A public acknowledgment sentence is required.
 - Check: A sentence about the post being public is present.
 - Check: The acknowledgment includes initials and a date.
+- Check: The initials and date are italic.
+- Check: The acknowledgement is NOT italic or bold.
 - Check: The acknowledgment is left-aligned normal text.
 
 ## 3. Display Name Line
