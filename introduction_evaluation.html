@@ -6,79 +6,16 @@
     <title>Introduction Evaluation Tool</title>
     <link rel="stylesheet" href="styles/default.css" />
     <script src="scripts/include-repeated-code.js" defer></script>
-    <style>
-      .page-wrap {
-        max-width: 980px;
-        margin: 0 auto;
-      }
-
-      .eval-note {
-        margin: 0.5rem 0 1rem;
-        font-size: 0.95rem;
-        color: #444;
-      }
-
-      .control-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        margin: 0.75rem 0;
-      }
-
-      .control-row button {
-        cursor: pointer;
-        padding: 0.45rem 0.8rem;
-      }
-
-      textarea {
-        width: 100%;
-        min-height: 340px;
-        font-family:
-          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-        font-size: 0.95rem;
-        line-height: 1.4;
-        padding: 0.75rem;
-      }
-
-      .results {
-        margin-top: 1rem;
-        border: 1px solid #ddd;
-        padding: 1rem;
-      }
-
-      .summary {
-        font-weight: 700;
-        margin-bottom: 0.75rem;
-      }
-
-      .checks {
-        margin: 0;
-        padding-left: 1.25rem;
-      }
-
-      .checks li {
-        margin: 0.35rem 0;
-      }
-
-      .pass {
-        color: #155724;
-      }
-
-      .fail {
-        color: #8b1a1a;
-      }
-
-      .info {
-        color: #444;
-      }
-    </style>
-      <script src="https://lint.page/kit/4d0fe3.js" crossorigin="anonymous"></script>
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <header></header>
 
-    <main class="page-wrap">
-      <h2 class="page-title">Introduction Evaluation Tool</h2>
+    <main>
+      <h2>Introduction Evaluation Tool</h2>
 
       <p>
         Paste one student's introduction below to run a browser-based JavaScript
@@ -89,12 +26,12 @@
           >Back to Introductions Instructions</a
         >
       </p>
-      <p class="eval-note">
+      <p>
         Note: Text-only checks can validate structure and content, but cannot
         fully verify document-only formatting such as real Heading 2 style,
         visual centering, italics, or image placement.
       </p>
-      <p class="eval-note">
+      <p>
         Rich-text paste is automatically converted to Markdown when possible.
       </p>
 
@@ -114,13 +51,13 @@
         placeholder="Paste the full introduction text here..."
       ></textarea>
 
-      <div class="control-row">
+      <div>
         <button type="button" id="evaluateBtn">Evaluate</button>
         <button type="button" id="clearBtn">Clear</button>
       </div>
 
-      <section class="results" id="results" aria-live="polite">
-        <p class="info">No evaluation run yet.</p>
+      <section id="results" aria-live="polite">
+        <p>No evaluation run yet.</p>
       </section>
     </main>
 
@@ -185,7 +122,10 @@
 
           const tag = node.tagName.toLowerCase();
           const children = Array.from(node.childNodes);
-          const childMd = () => children.map((child) => htmlNodeToMarkdown(child, listDepth)).join("");
+          const childMd = () =>
+            children
+              .map((child) => htmlNodeToMarkdown(child, listDepth))
+              .join("");
 
           if (tag === "br") {
             return "\n";
@@ -202,7 +142,8 @@
           }
 
           if (tag === "a") {
-            const text = normalizeMarkdown(childMd()) || (node.textContent || "").trim();
+            const text =
+              normalizeMarkdown(childMd()) || (node.textContent || "").trim();
             const href = node.getAttribute("href");
             return href ? "[" + text + "](" + href + ")" : text;
           }
@@ -216,7 +157,9 @@
             const listItems = Array.from(node.children)
               .filter((el) => el.tagName && el.tagName.toLowerCase() === "li")
               .map((li, index) => {
-                const content = normalizeMarkdown(htmlNodeToMarkdown(li, listDepth + 1));
+                const content = normalizeMarkdown(
+                  htmlNodeToMarkdown(li, listDepth + 1),
+                );
                 const indent = "  ".repeat(listDepth);
                 const prefix = tag === "ol" ? index + 1 + ". " : "- ";
 
@@ -226,7 +169,9 @@
 
                 const lines = content.split("\n");
                 const firstLine = indent + prefix + lines[0];
-                const nextLines = lines.slice(1).map((line) => indent + "  " + line);
+                const nextLines = lines
+                  .slice(1)
+                  .map((line) => indent + "  " + line);
                 return [firstLine].concat(nextLines).join("\n");
               })
               .filter(Boolean);
@@ -335,7 +280,9 @@
         }
 
         function parseDateFromText(text) {
-          const match = (text || "").match(/\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}(?!\d)/);
+          const match = (text || "").match(
+            /\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}(?!\d)/,
+          );
           return match ? match[0] : "";
         }
 
@@ -375,8 +322,11 @@
           }
 
           const middleCandidate = rightWords[rightWords.length - 1];
-          const hasMiddleInitial = /^[A-Za-z]\.?(?:$)/.test(middleCandidate) && rightWords.length >= 2;
-          const firstNameWords = hasMiddleInitial ? rightWords.slice(0, -1) : rightWords;
+          const hasMiddleInitial =
+            /^[A-Za-z]\.?(?:$)/.test(middleCandidate) && rightWords.length >= 2;
+          const firstNameWords = hasMiddleInitial
+            ? rightWords.slice(0, -1)
+            : rightWords;
 
           if (firstNameWords.length < 1 || firstNameWords.length > 2) {
             return false;
@@ -412,11 +362,14 @@
           const firstLikelyNameLine =
             nonEmptyIndices
               .map((item) => stripMarkdownDecorators(item.line))
-              .find((line) =>
-                line &&
-                /,/.test(line) &&
-                !/:/.test(line) &&
-                !/\b(public|background|computer|operating system|courses|quote)\b/i.test(line),
+              .find(
+                (line) =>
+                  line &&
+                  /,/.test(line) &&
+                  !/:/.test(line) &&
+                  !/\b(public|background|computer|operating system|courses|quote)\b/i.test(
+                    line,
+                  ),
               ) || firstLine;
           addCheck(
             "Name line format looks like Last, First (optional middle initial)",
@@ -460,16 +413,23 @@
           if (hasPublicLine || acknowledgmentMatch) {
             const acknowledgmentOffset = acknowledgmentMatch
               ? acknowledgmentMatch.index || 0
-              : flatText.toLowerCase().indexOf(normalizeText(hasPublicLine.line).toLowerCase());
+              : flatText
+                  .toLowerCase()
+                  .indexOf(normalizeText(hasPublicLine.line).toLowerCase());
             acknowledgmentWindow =
               acknowledgmentOffset >= 0
                 ? flatText.slice(
                     Math.max(0, acknowledgmentOffset - 120),
                     Math.min(flatText.length, acknowledgmentOffset + 280),
                   )
-                : [lines[hasPublicLine.index], lines[hasPublicLine.index + 1] || ""].join(" ");
+                : [
+                    lines[hasPublicLine.index],
+                    lines[hasPublicLine.index + 1] || "",
+                  ].join(" ");
             const hasInitials = /\b[A-Z]{2,5}\b/.test(acknowledgmentWindow);
-            const hasDate = /\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}(?!\d)/.test(acknowledgmentWindow);
+            const hasDate = /\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}(?!\d)/.test(
+              acknowledgmentWindow,
+            );
             hasInitialsAndDate = hasInitials && hasDate;
           }
           addCheck(
@@ -486,19 +446,33 @@
             const initials = initialsMatch ? initialsMatch[0] : "";
             const date = parseDateFromText(acknowledgmentWindow);
             const italicWindow = (rawText || "").replace(/\r\n?/g, "\n");
-            const escapedInitials = initials.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            const escapedInitials = initials.replace(
+              /[.*+?^${}()|[\]\\]/g,
+              "\\$&",
+            );
             const escapedDate = date.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
             const combinedItalicsPattern = new RegExp(
-              "(?:\\*|_)[^\\n]*" + escapedInitials + "[^\\n]*" + escapedDate + "[^\\n]*(?:\\*|_)",
+              "(?:\\*|_)[^\\n]*" +
+                escapedInitials +
+                "[^\\n]*" +
+                escapedDate +
+                "[^\\n]*(?:\\*|_)",
               "i",
             );
-            const initialsItalicPattern = new RegExp("(?:\\*|_)\\s*" + escapedInitials + "\\s*(?:\\*|_)", "i");
-            const dateItalicPattern = new RegExp("(?:\\*|_)\\s*" + escapedDate + "\\s*(?:\\*|_)", "i");
+            const initialsItalicPattern = new RegExp(
+              "(?:\\*|_)\\s*" + escapedInitials + "\\s*(?:\\*|_)",
+              "i",
+            );
+            const dateItalicPattern = new RegExp(
+              "(?:\\*|_)\\s*" + escapedDate + "\\s*(?:\\*|_)",
+              "i",
+            );
 
             initialsDateItalicized =
               Boolean(initials && date) &&
               (combinedItalicsPattern.test(italicWindow) ||
-                (initialsItalicPattern.test(italicWindow) && dateItalicPattern.test(italicWindow)));
+                (initialsItalicPattern.test(italicWindow) &&
+                  dateItalicPattern.test(italicWindow)));
           }
           addCheck(
             "Acknowledgment initials/date are italicized",
@@ -524,7 +498,8 @@
                 !line.includes(":") &&
                 displayPattern.test(line),
             );
-          const hasDisplayInTopBlock = displayCandidatePattern.test(topIntroBlock);
+          const hasDisplayInTopBlock =
+            displayCandidatePattern.test(topIntroBlock);
           addCheck(
             "Display-name line format appears valid",
             Boolean(displayLine) || hasDisplayInTopBlock,
@@ -576,14 +551,18 @@
               courseLinePattern.test(line),
             );
 
-          const coursesBlockPattern = /Courses I['’]m Taking,?\s*&\s*Why:\s*([\s\S]*?)(?=(Funny\/Interesting Item to Remember Me by:|I['’]d Also Like to Share:|["“]|$))/i;
+          const coursesBlockPattern =
+            /Courses I['’]m Taking,?\s*&\s*Why:\s*([\s\S]*?)(?=(Funny\/Interesting Item to Remember Me by:|I['’]d Also Like to Share:|["“]|$))/i;
           const coursesBlockMatch = flatText.match(coursesBlockPattern);
           const coursesBlock = coursesBlockMatch ? coursesBlockMatch[1] : "";
-          const compactCoursePattern = /[A-Z]{2,5}\s?\d{3}[A-Za-z]?\s*-\s*[^:]+:\s*[^\n]+?(?=(?:[A-Z]{2,5}\s?\d{3}[A-Za-z]?\s*-\s*[^:]+:)|$)/g;
-          const compactCourseMatches = coursesBlock.match(compactCoursePattern) || [];
+          const compactCoursePattern =
+            /[A-Z]{2,5}\s?\d{3}[A-Za-z]?\s*-\s*[^:]+:\s*[^\n]+?(?=(?:[A-Z]{2,5}\s?\d{3}[A-Za-z]?\s*-\s*[^:]+:)|$)/g;
+          const compactCourseMatches =
+            coursesBlock.match(compactCoursePattern) || [];
           const hasNestedCoursesByBlock = compactCourseMatches.length > 0;
 
-          const hasNestedCourses = hasNestedCoursesByLines || hasNestedCoursesByBlock;
+          const hasNestedCourses =
+            hasNestedCoursesByLines || hasNestedCoursesByBlock;
           addCheck(
             "Courses section has nested course bullets with code, name, colon, and reason",
             hasNestedCourses,
@@ -781,28 +760,19 @@
               const cls = item.passed ? "pass" : "fail";
               const status = item.passed ? "PASS" : "FAIL";
               const details = item.details ? " - " + item.details : "";
-              return (
-                '<li class="' +
-                cls +
-                '">' +
-                status +
-                ": " +
-                item.name +
-                details +
-                "</li>"
-              );
+              return "<li>" + status + ": " + item.name + details + "</li>";
             })
             .join("");
 
           container.innerHTML =
-            '<p class="summary">Summary: ' +
+            "<p>Summary: " +
             passCount +
             " passed, " +
             failCount +
             " failed (" +
             checks.length +
             " checks)</p>" +
-            '<ol class="checks">' +
+            "<ol>" +
             items +
             "</ol>";
         }
@@ -821,29 +791,31 @@
           .addEventListener("click", function () {
             document.getElementById("introText").value = "";
             document.getElementById("results").innerHTML =
-              '<p class="info">No evaluation run yet.</p>';
+              "<p>No evaluation run yet.</p>";
           });
 
-        document.getElementById("introText").addEventListener("paste", function (event) {
-          const clipboard = event.clipboardData;
-          if (!clipboard) {
-            return;
-          }
+        document
+          .getElementById("introText")
+          .addEventListener("paste", function (event) {
+            const clipboard = event.clipboardData;
+            if (!clipboard) {
+              return;
+            }
 
-          const html = clipboard.getData("text/html");
-          const plain = clipboard.getData("text/plain") || "";
-          if (!html) {
-            return;
-          }
+            const html = clipboard.getData("text/html");
+            const plain = clipboard.getData("text/plain") || "";
+            if (!html) {
+              return;
+            }
 
-          const markdown = htmlToMarkdown(html);
-          if (!markdown) {
-            return;
-          }
+            const markdown = htmlToMarkdown(html);
+            if (!markdown) {
+              return;
+            }
 
-          event.preventDefault();
-          insertTextAtCursor(event.target, markdown || plain);
-        });
+            event.preventDefault();
+            insertTextAtCursor(event.target, markdown || plain);
+          });
       })();
     </script>
   </body>
