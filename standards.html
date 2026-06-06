@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITIS3135 | con von Briesen | Web Standards</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <script src="scripts/include-repeated-code.js" defer></script>
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <h2>Web Standards</h2>
+      <section>
+        <h3>Standards Checklist</h3>
+        <p>
+          Use this list to validate page structure, naming, and compliance. Some
+          rules demonstrate examples in subbullets.
+        </p>
+        <ol>
+          <li>
+            File name is meaningful, has no capital letters or spaces, and is
+            consistent with other pages in site (if applicable). <br />Examples:
+            <ul>
+              <li>introduction.html</li>
+              <li>course_contract.html</li>
+              <li>crap_website_evaluations.html</li>
+            </ul>
+          </li>
+          <li>
+            Title element has the site name followed by some sort of divider
+            followed by the page name (or a close/clear variant of it).
+            <br />Examples:
+            <ul>
+              <li>Billy Jean's Emporium | Contact</li>
+              <li>Wilber Jackson's Wild Jackal | ABC123 | Course Contract</li>
+              <li>Foggy Bottom Enterprises ~ Welcome</li>
+            </ul>
+          </li>
+          <li>
+            There is a legible favicon that matches the site name and/or theme,
+            when viewed on the browser tab.
+          </li>
+          <li>
+            Page Validation with the script from Accumulus (cloud)
+            <pre><code>&lt;script src="https://lint.page/kit/4d0fe3.js" crossorigin="anonymous"&gt;&lt;/script&gt;</code> </pre>
+            <ul>
+              <li>Script is last line within head element</li>
+              <li>Cloud appears on web page all green</li>
+              <li>Manual check of cloud -> WCAG shows no warning/errors</li>
+            </ul>
+          </li>
+          <li>
+            General Page Layout/Structure
+            <ul>
+              <li>Page has header/main/footer in body.</li>
+              <li>Header and footer match across entire site, to the pixel</li>
+              <li>
+                Header
+                <ul>
+                  <li>Includes site name only, in an h1</li>
+                  <li>Includes navbar with site navigation</li>
+                  <li>
+                    Any navigation leading outside of site is a secondary navbar
+                  </li>
+                  <li>
+                    Ok to put navbar between header and main if it's standalone
+                    and not part of header (i.e off to side)
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Main
+                <ul>
+                  <li>Includes page name in an h2 at the top of main</li>
+                  <li>
+                    If appropriate, includes subsections with h3 as section
+                    titles
+                  </li>
+                  <li>
+                    If further divisions are needed, use article elements with
+                    h4 as article titles
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Footer
+                <ul>
+                  <li>
+                    includes "Site Designed by" followed by your design firm or
+                    name, depending on context.
+                  </li>
+                  <li>
+                    may include something like "Certified in ...." and any
+                    earned certificates. At a minimum on the course site, and
+                    optionally on sites like personal and design sites.
+                  </li>
+                  <li>
+                    Footer includes some kind of site tagline in italics or
+                    quotes (but not both).
+                  </li>
+                  <li>
+                    Footer goes from widest to narrowest to avoid xmas tree
+                    effect.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            Apply CRAP Design Principles
+            <ol>
+              <li>
+                Contrast: Text and important elements have sufficient contrast
+                with background and other elements.
+              </li>
+              <li>
+                Repetition: Design elements (colors, fonts, spacing, etc.) are
+                used consistently across the site to create a cohesive look.
+              </li>
+              <li>
+                Alignment: Elements are aligned in a way that creates a clear
+                visual connection between them, improving readability and
+                organization.
+              </li>
+              <li>
+                Proximity: Related items are grouped together, while unrelated
+                items are spaced apart to create a clear structure and
+                hierarchy.
+              </li>
+            </ol>
+          </li>
+          <li>
+            DO NOT
+            <ol>
+              <li>
+                DO NOT use divs or spans when a more semantic element is
+                available. For example, use header for the page header, nav for
+                navigation, main for the main content area, and footer for the
+                page footer. The litmus test should be - "Is there a more
+                specific element that could be used here instead of a div or
+                span?" If the answer is yes, use that element instead of a div
+                or span. If not, make the div or span meaningful by adding
+                appropriate classes or attributes, but be ready to justify why
+                you are using a div or span instead of a more semantic element.
+              </li>
+              <li>
+                DO NOT use inline styles instead of CSS classes for styling
+                unless there are only two or less instances of said styling.
+                This logic is similar to that of avoiding divs and spans - if
+                there is a more efficient way to apply the styling across
+                multiple elements, use that instead of inline styles.
+              </li>
+              <li>
+                DO NOT add classes you are not using. Avoid things like main
+                class = "main".
+              </li>
+              <li>
+                DO NOT use code that serves little purpose, or that you just
+                pulled from an example or AI without need.
+              </li>
+              <li>
+                DO NOT use more than one h1 and one h2 on any page with the h1
+                as the site name and the h2 as the page name. The exception is a
+                multipage site (aka SPA Single Page Application) where you might
+                use a section to deliniate each page and then use an h2 for the
+                page name within each section.
+              </li>
+              <li>
+                DO NOT overcomplicate your CSS and HTML; you can build a nice
+                page with only about 10 lines of CSS, and no classes or divs or
+                spans or ids whatsoever. Start out with that, and begin to add
+                those other items as NECESSARY to achieve the design you want.
+                If you find yourself adding a lot of code, stop and ask if there
+                is a more efficient way to achieve the same result.
+              </li>
+              <li>
+                DO NOT use black or white, or Times New Roman, or Comics Sans or
+                Papyrus. Doing any of these shows ignorance, or laziness, or
+                both.
+              </li>
+              <li>
+                DO NOT use colors that clash or are too similar to each other.
+                If you are not sure about your color choices, use a tool like
+                Coolors to generate a palette for you, and then adjust as
+                needed.
+              </li>
+              <li>
+                DO NOT use more than 2-3 fonts on a page. If you are not sure
+                about your font choices, use a tool like Google Fonts to find
+                pairings that work well together.
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </section>
+    </main>
+    <footer></footer>
+  </body>
+</html>
