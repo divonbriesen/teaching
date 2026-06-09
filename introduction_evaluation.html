@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Introduction Evaluation Tool</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <script src="scripts/include-repeated-code.js" defer></script>
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header></header>
+
+    <main>
+      <h2>Introduction Evaluation Tool</h2>
+
+      <p>
+        Paste one student's introduction below to run a browser-based JavaScript
+        check against the shared requirements checklist.
+      </p>
+      <p>
+        <a href="shared_introductions_instructions.html"
+          >Back to Introductions Instructions</a
+        >
+      </p>
+      <p>
+        Note: Text-only checks can validate structure and content, but cannot
+        fully verify document-only formatting such as real Heading 2 style,
+        visual centering, italics, or image placement.
+      </p>
+      <p>
+        Rich-text paste is automatically converted to Markdown when possible.
+      </p>
+
+      <label for="courseType"><strong>Course Type</strong></label>
+      <select id="courseType">
+        <option value="cis110" selected>
+          CIS110 (no required links check)
+        </option>
+        <option value="web">
+          Web class (ITIS3135 / WEB115 / WEB215 / WEB250)
+        </option>
+      </select>
+
+      <label for="introText"><strong>Pasted Introduction</strong></label>
+      <textarea
+        id="introText"
+        placeholder="Paste the full introduction text here..."
+      ></textarea>
+
+      <div>
+        <button type="button" id="evaluateBtn">Evaluate</button>
+        <button type="button" id="clearBtn">Clear</button>
+      </div>
+
+      <section id="results" aria-live="polite">
+        <p>No evaluation run yet.</p>
+      </section>
+    </main>
+
+    <footer></footer>
+
+    <script>
+      (function () {
+        const REQUIRED_LABELS = [
+          "Personal Background",
+          "Professional Background",
+          "Academic Background",
+          "Primary Work Computer",
+          "Operating System & Version",
+          "Backup Work Computer & Location Plan",
+          "Courses I'm Taking, & Why",
+        ];
+
+        const OPTIONAL_LABELS = [
+          "Funny/Interesting Item to Remember Me by",
+          "I'd Also Like to Share",
+        ];
+
+        function normalizeText(value) {
+          return (value || "")
+            .replace(/\u00a0/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+        }
+
+        function normalizeLabel(value) {
+          return normalizeText(value)
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, " ")
+            .trim();
+        }
+
+        function decodeHtmlEntities(value) {
+          const textarea = document.createElement("textarea");
+          textarea.innerHTML = value || "";
+          return textarea.value;
+        }
+
+        function normalizeMarkdown(md) {
+          return (md || "")
+            .replace(/[ \t]+\n/g, "\n")
+            .replace(/\n{3,}/g, "\n\n")
+            .trim();
+        }
+
+        function htmlNodeToMarkdown(node, listDepth = 0) {
+          if (!node) {
+            return "";
+          }
+
+          if (node.nodeType === Node.TEXT_NODE) {
+            return node.textContent || "";
+          }
+
+          if (node.nodeType !== Node.ELEMENT_NODE) {
+            return "";
+          }
+
+          const tag = node.tagName.toLowerCase();
+          const children = Array.from(node.childNodes);
+          const childMd = () =>
+            children
+              .map((child) => htmlNodeToMarkdown(child, listDepth))
+              .join("");
+
+          if (tag === "br") {
+            return "\n";
+          }
+
+          if (tag === "strong" || tag === "b") {
+            const text = normalizeMarkdown(childMd());
+            return text ? "**" + text + "**" : "";
+          }
+
+          if (tag === "em" || tag === "i") {
+            const text = normalizeMarkdown(childMd());
+            return text ? "*" + text + "*" : "";
+          }
+
+          if (tag === "a") {
+            const text =
+              normalizeMarkdown(childMd()) || (node.textContent || "").trim();
+            const href = node.getAttribute("href");
+            return href ? "[" + text + "](" + href + ")" : text;
+          }
+
+          if (tag === "li") {
+            const text = normalizeMarkdown(childMd());
+            return text;
+          }
+
+          if (tag === "ul" || tag === "ol") {
+            const listItems = Array.from(node.children)
+              .filter((el) => el.tagName && el.tagName.toLowerCase() === "li")
+              .map((li, index) => {
+                const content = normalizeMarkdown(
+                  htmlNodeToMarkdown(li, listDepth + 1),
+                );
+                const indent = "  ".repeat(listDepth);
+                const prefix = tag === "ol" ? index + 1 + ". " : "- ";
+
+                if (!content) {
+                  return "";
+                }
+
+                const lines = content.split("\n");
+                const firstLine = indent + prefix + lines[0];
+                const nextLines = lines
+                  .slice(1)
+                  .map((line) => indent + "  " + line);
+                return [firstLine].concat(nextLines).join("\n");
+              })
+              .filter(Boolean);
+
+            return listItems.join("\n") + "\n\n";
+          }
+
+          if (tag === "blockquote") {
+            const content = normalizeMarkdown(childMd());
+            if (!content) {
+              return "";
+            }
+            return (
+              content
+                .split("\n")
+                .map((line) => "> " + line)
+                .join("\n") + "\n\n"
+            );
+          }
+
+          if (/^h[1-6]$/.test(tag)) {
+            const level = Number(tag[1]);
+            const text = normalizeMarkdown(childMd());
+            return text ? "#".repeat(level) + " " + text + "\n\n" : "";
+          }
+
+          if (tag === "p" || tag === "div") {
+            const text = normalizeMarkdown(childMd());
+            return text ? text + "\n\n" : "";
+          }
+
+          return childMd();
+        }
+
+        function htmlToMarkdown(html) {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html || "", "text/html");
+          const nodes = Array.from(doc.body.childNodes);
+          const md = nodes.map((node) => htmlNodeToMarkdown(node)).join("");
+          return normalizeMarkdown(decodeHtmlEntities(md));
+        }
+
+        function insertTextAtCursor(textarea, text) {
+          const start = textarea.selectionStart;
+          const end = textarea.selectionEnd;
+          const current = textarea.value;
+          textarea.value = current.slice(0, start) + text + current.slice(end);
+          const newPos = start + text.length;
+          textarea.selectionStart = newPos;
+          textarea.selectionEnd = newPos;
+        }
+
+        function toEvaluationLines(rawText) {
+          const decoded = decodeHtmlEntities(rawText)
+            .replace(/\u00a0/g, " ")
+            .replace(/\r\n?/g, "\n");
+
+          const markerPattern =
+            /(Personal Background:|Professional Background:|Academic Background:|Background in this Subject:|Primary Work Computer:|Primary Computer:|Operating System\s*&\s*Version:|Backup Work Computer\s*&\s*Location Plan:|Courses I['’]m Taking,?\s*&\s*Why:|Funny\/Interesting Item to Remember Me by:|I['’]d Also Like to Share:)/gi;
+
+          let prepared = decoded.replace(markerPattern, "\n$1");
+
+          // If paste collapses lines, split before likely course-code entries.
+          prepared = prepared
+            .replace(/([a-z0-9])([A-Z]{2,5}\s?\d{3}[A-Za-z]?\s*-)/g, "$1\n$2")
+            .replace(/([.!?])\s*([A-Z]{2,5}\s?\d{3}[A-Za-z]?\s*-)/g, "$1\n$2");
+
+          // Split quote and attribution when flattened together.
+          prepared = prepared
+            .replace(/([a-z0-9])(["“])/gi, "$1\n$2")
+            .replace(/(["”])\s*([\-~])\s*/g, "$1\n$2 ");
+
+          return prepared.split("\n").map((line) => line.trim());
+        }
+
+        function isBulletLine(line) {
+          return /^\s*[-*•]\s+/.test(line);
+        }
+
+        function getPrefixBeforeColon(line) {
+          const text = normalizeText(line);
+          const beforeColon = text.includes(":") ? text.split(":")[0] : text;
+          return normalizeLabel(
+            beforeColon.replace(/^[-*•]\s*/, "").replace(/\*/g, ""),
+          );
+        }
+
+        function stripMarkdownDecorators(line) {
+          let cleaned = normalizeText(line || "");
+
+          // Remove common markdown line prefixes.
+          cleaned = cleaned
+            .replace(/^#{1,6}\s+/, "")
+            .replace(/^>+\s*/, "")
+            .replace(/^[-*•]\s+/, "")
+            .replace(/^\d+\.\s+/, "");
+
+          // Remove surrounding markdown emphasis.
+          cleaned = cleaned
+            .replace(/^\*\*(.*?)\*\*$/, "$1")
+            .replace(/^__(.*?)__$/, "$1")
+            .replace(/^\*(.*?)\*$/, "$1")
+            .replace(/^_(.*?)_$/, "$1");
+
+          return normalizeText(cleaned);
+        }
+
+        function parseDateFromText(text) {
+          const match = (text || "").match(
+            /\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}(?!\d)/,
+          );
+          return match ? match[0] : "";
+        }
+
+        function looksLikeSimpleName(text) {
+          const line = normalizeText(text || "");
+          if (!line || !line.includes(",")) {
+            return false;
+          }
+
+          // Name line should not contain sentence punctuation.
+          // Allow periods only as part of single-letter initials (e.g. "M.").
+          const lineWithoutInitials = line.replace(/\b[A-Za-z]\./g, "");
+          if (/[.!?;:]/.test(lineWithoutInitials)) {
+            return false;
+          }
+
+          const parts = line.split(",");
+          if (parts.length !== 2) {
+            return false;
+          }
+
+          const last = normalizeText(parts[0]);
+          const right = normalizeText(parts[1]);
+          const nameWordPattern = /^[A-Za-z][A-Za-z'\-]*$/;
+
+          const lastWords = last.split(/\s+/).filter(Boolean);
+          if (lastWords.length < 1 || lastWords.length > 3) {
+            return false;
+          }
+          if (!lastWords.every((word) => nameWordPattern.test(word))) {
+            return false;
+          }
+
+          const rightWords = right.split(/\s+/).filter(Boolean);
+          if (rightWords.length < 1 || rightWords.length > 3) {
+            return false;
+          }
+
+          const middleCandidate = rightWords[rightWords.length - 1];
+          const hasMiddleInitial =
+            /^[A-Za-z]\.?(?:$)/.test(middleCandidate) && rightWords.length >= 2;
+          const firstNameWords = hasMiddleInitial
+            ? rightWords.slice(0, -1)
+            : rightWords;
+
+          if (firstNameWords.length < 1 || firstNameWords.length > 2) {
+            return false;
+          }
+          if (!firstNameWords.every((word) => nameWordPattern.test(word))) {
+            return false;
+          }
+
+          return !hasMiddleInitial || /^[A-Za-z]\.?(?:$)/.test(middleCandidate);
+        }
+
+        function evaluateIntroduction(rawText, courseType) {
+          const lines = toEvaluationLines(rawText);
+          const nonEmptyIndices = lines
+            .map((line, index) => ({ line, index }))
+            .filter((item) => item.line.length > 0);
+          const flatText = normalizeText(decodeHtmlEntities(rawText));
+
+          const checks = [];
+          const addCheck = (name, passed, details) =>
+            checks.push({ name, passed, details: details || "" });
+
+          if (nonEmptyIndices.length === 0) {
+            addCheck(
+              "Input has content",
+              false,
+              "No text found. Paste an introduction first.",
+            );
+            return checks;
+          }
+
+          const firstLine = stripMarkdownDecorators(nonEmptyIndices[0].line);
+          const firstLikelyNameLine =
+            nonEmptyIndices
+              .map((item) => stripMarkdownDecorators(item.line))
+              .find(
+                (line) =>
+                  line &&
+                  /,/.test(line) &&
+                  !/:/.test(line) &&
+                  !/\b(public|background|computer|operating system|courses|quote)\b/i.test(
+                    line,
+                  ),
+              ) || firstLine;
+          addCheck(
+            "Name line format looks like Last, First (optional middle initial)",
+            looksLikeSimpleName(firstLikelyNameLine),
+            looksLikeSimpleName(firstLikelyNameLine)
+              ? ""
+              : "First non-empty line should look like Last Name, First Name M.",
+          );
+
+          const secondLine =
+            nonEmptyIndices.length > 1
+              ? stripMarkdownDecorators(nonEmptyIndices[1].line)
+              : "";
+          const nameIsStandaloneFirstLine =
+            looksLikeSimpleName(firstLine) &&
+            (!secondLine || !looksLikeSimpleName(secondLine));
+          addCheck(
+            "Name appears on its own heading line",
+            nameIsStandaloneFirstLine,
+            nameIsStandaloneFirstLine
+              ? ""
+              : "Name should be isolated on its own line; flattened text usually means heading formatting/newlines were lost.",
+          );
+
+          const acknowledgmentPattern =
+            /(anyone with the link can see[^.?!]*|public(?:ly)?\s+(?:document|post|information|entry)[^.?!]*|this\s+is\s+a\s+public[^.?!]*|won['’]?t\s+put\s+anything\s+here[^.?!]*|comfortable\s+with\s+others\s+seeing[^.?!]*)/i;
+          const hasPublicLine = nonEmptyIndices.find((item) =>
+            acknowledgmentPattern.test(item.line),
+          );
+          const acknowledgmentMatch = flatText.match(acknowledgmentPattern);
+          addCheck(
+            "Public acknowledgment sentence present",
+            Boolean(hasPublicLine || acknowledgmentMatch),
+            hasPublicLine || acknowledgmentMatch
+              ? ""
+              : "Expected a sentence mentioning this post is public.",
+          );
+
+          let hasInitialsAndDate = false;
+          let acknowledgmentWindow = "";
+          if (hasPublicLine || acknowledgmentMatch) {
+            const acknowledgmentOffset = acknowledgmentMatch
+              ? acknowledgmentMatch.index || 0
+              : flatText
+                  .toLowerCase()
+                  .indexOf(normalizeText(hasPublicLine.line).toLowerCase());
+            acknowledgmentWindow =
+              acknowledgmentOffset >= 0
+                ? flatText.slice(
+                    Math.max(0, acknowledgmentOffset - 120),
+                    Math.min(flatText.length, acknowledgmentOffset + 280),
+                  )
+                : [
+                    lines[hasPublicLine.index],
+                    lines[hasPublicLine.index + 1] || "",
+                  ].join(" ");
+            const hasInitials = /\b[A-Z]{2,5}\b/.test(acknowledgmentWindow);
+            const hasDate = /\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}(?!\d)/.test(
+              acknowledgmentWindow,
+            );
+            hasInitialsAndDate = hasInitials && hasDate;
+          }
+          addCheck(
+            "Acknowledgment includes initials and date",
+            hasInitialsAndDate,
+            hasInitialsAndDate
+              ? ""
+              : "Expected initials and a date near the acknowledgment.",
+          );
+
+          let initialsDateItalicized = false;
+          if (hasInitialsAndDate) {
+            const initialsMatch = acknowledgmentWindow.match(/\b[A-Z]{2,5}\b/);
+            const initials = initialsMatch ? initialsMatch[0] : "";
+            const date = parseDateFromText(acknowledgmentWindow);
+            const italicWindow = (rawText || "").replace(/\r\n?/g, "\n");
+            const escapedInitials = initials.replace(
+              /[.*+?^${}()|[\]\\]/g,
+              "\\$&",
+            );
+            const escapedDate = date.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            const combinedItalicsPattern = new RegExp(
+              "(?:\\*|_)[^\\n]*" +
+                escapedInitials +
+                "[^\\n]*" +
+                escapedDate +
+                "[^\\n]*(?:\\*|_)",
+              "i",
+            );
+            const initialsItalicPattern = new RegExp(
+              "(?:\\*|_)\\s*" + escapedInitials + "\\s*(?:\\*|_)",
+              "i",
+            );
+            const dateItalicPattern = new RegExp(
+              "(?:\\*|_)\\s*" + escapedDate + "\\s*(?:\\*|_)",
+              "i",
+            );
+
+            initialsDateItalicized =
+              Boolean(initials && date) &&
+              (combinedItalicsPattern.test(italicWindow) ||
+                (initialsItalicPattern.test(italicWindow) &&
+                  dateItalicPattern.test(italicWindow)));
+          }
+          addCheck(
+            "Acknowledgment initials/date are italicized",
+            initialsDateItalicized,
+            initialsDateItalicized
+              ? ""
+              : "Italicize initials and date (either together like *ABC 5/31/2026* or separately).",
+          );
+
+          const displayPattern =
+            /^[A-Za-z][A-Za-z.'-]+(?:\s+[A-Za-z]\.?)?(?:\s+["“][^"”]+["”])?\s+[A-Za-z][A-Za-z.'-]+\s*(?:~|\||\*)\s+[A-Za-z][A-Za-z'\-]*(?:\s+[A-Za-z][A-Za-z'\-]*)+$/;
+          const topIntroBlock = decodeHtmlEntities(rawText || "")
+            .replace(/\r\n?/g, "\n")
+            .split(/Personal Background:/i)[0];
+          const displayCandidatePattern =
+            /[A-Za-z][A-Za-z.'-]+(?:\s+[A-Za-z]\.?)?(?:\s+["“][^"”]+["”])?\s+[A-Za-z][A-Za-z.'-]+\s*(?:~|\||\*)\s+[A-Za-z][A-Za-z'\-]*(?:\s+[A-Za-z][A-Za-z'\-]*)+/;
+          const displayLine = nonEmptyIndices
+            .map((item) => stripMarkdownDecorators(item.line))
+            .find(
+              (line) =>
+                /(?:~|\||\s\*\s)/.test(line) &&
+                !isBulletLine(line) &&
+                !line.includes(":") &&
+                displayPattern.test(line),
+            );
+          const hasDisplayInTopBlock =
+            displayCandidatePattern.test(topIntroBlock);
+          addCheck(
+            "Display-name line format appears valid",
+            Boolean(displayLine) || hasDisplayInTopBlock,
+            displayLine || hasDisplayInTopBlock
+              ? ""
+              : 'Expected line like: First M. "Nickname" Last ~ Adjective Animal',
+          );
+
+          const labelPrefixes = lines.map(getPrefixBeforeColon);
+          REQUIRED_LABELS.forEach((label) => {
+            const found = labelPrefixes.includes(normalizeLabel(label));
+            addCheck(
+              "Required bullet present: " + label + ":",
+              found,
+              found ? "" : "Missing required label.",
+            );
+          });
+
+          const coursesLabelIndex = labelPrefixes.findIndex(
+            (prefix) => prefix === normalizeLabel("Courses I'm Taking, & Why"),
+          );
+          const nestedCourseCandidates = [];
+
+          if (coursesLabelIndex >= 0) {
+            for (let i = coursesLabelIndex + 1; i < lines.length; i += 1) {
+              const line = lines[i];
+              if (!line) {
+                break;
+              }
+              const prefix = getPrefixBeforeColon(line);
+              if (
+                REQUIRED_LABELS.some(
+                  (label) => normalizeLabel(label) === prefix,
+                )
+              ) {
+                break;
+              }
+              if (isBulletLine(line)) {
+                nestedCourseCandidates.push(line);
+              }
+            }
+          }
+
+          const courseLinePattern =
+            /^[\-*•]\s*[A-Za-z]{2,5}\s?\d{3}[A-Za-z]?\s*-\s*[^:]+:\s*.+/;
+          const hasNestedCoursesByLines =
+            nestedCourseCandidates.length > 0 &&
+            nestedCourseCandidates.every((line) =>
+              courseLinePattern.test(line),
+            );
+
+          const coursesBlockPattern =
+            /Courses I['’]m Taking,?\s*&\s*Why:\s*([\s\S]*?)(?=(Funny\/Interesting Item to Remember Me by:|I['’]d Also Like to Share:|["“]|$))/i;
+          const coursesBlockMatch = flatText.match(coursesBlockPattern);
+          const coursesBlock = coursesBlockMatch ? coursesBlockMatch[1] : "";
+          const compactCoursePattern =
+            /[A-Z]{2,5}\s?\d{3}[A-Za-z]?\s*-\s*[^:]+:\s*[^\n]+?(?=(?:[A-Z]{2,5}\s?\d{3}[A-Za-z]?\s*-\s*[^:]+:)|$)/g;
+          const compactCourseMatches =
+            coursesBlock.match(compactCoursePattern) || [];
+          const hasNestedCoursesByBlock = compactCourseMatches.length > 0;
+
+          const hasNestedCourses =
+            hasNestedCoursesByLines || hasNestedCoursesByBlock;
+          addCheck(
+            "Courses section has nested course bullets with code, name, colon, and reason",
+            hasNestedCourses,
+            hasNestedCourses
+              ? ""
+              : "Expected nested bullets like: CIS110 - Introduction to Computers: reason",
+          );
+
+          OPTIONAL_LABELS.forEach((label) => {
+            const labelNorm = normalizeLabel(label);
+            const line = lines.find(
+              (entry) => getPrefixBeforeColon(entry) === labelNorm,
+            );
+            if (!line) {
+              addCheck(
+                "Optional bullet omitted or filled: " + label + ":",
+                true,
+                "Not present (acceptable).",
+              );
+              return;
+            }
+            const afterColon = normalizeText(
+              line.split(":").slice(1).join(":"),
+            );
+            const emptyLike =
+              /^(n\/?a|none|not applicable|na|\[?n\/?a\]?|\[?none\]?)$/i.test(
+                afterColon,
+              );
+            addCheck(
+              "Optional bullet omitted or filled: " + label + ":",
+              !emptyLike,
+              emptyLike
+                ? "If not used, remove the optional bullet entirely."
+                : "",
+            );
+          });
+
+          const quoteIndex = lines.findIndex((line) => /["“”]/.test(line));
+          addCheck(
+            "Favorite quote line present",
+            quoteIndex >= 0,
+            quoteIndex >= 0 ? "" : "No quote line found.",
+          );
+
+          if (quoteIndex >= 0) {
+            const exactlyOneBlankBefore =
+              quoteIndex > 0 &&
+              lines[quoteIndex - 1] === "" &&
+              (quoteIndex < 2 || lines[quoteIndex - 2] !== "");
+            addCheck(
+              "Exactly one blank line before quote",
+              exactlyOneBlankBefore,
+              exactlyOneBlankBefore
+                ? ""
+                : "Expected exactly one blank line immediately above quote.",
+            );
+
+            const quoteLabelBefore =
+              /^quote\b\s*:?/i.test(lines[quoteIndex]) ||
+              (quoteIndex > 0 && /^quote\b\s*:?/i.test(lines[quoteIndex - 1]));
+            addCheck(
+              "No Quote/Quote: label before quote",
+              !quoteLabelBefore,
+              quoteLabelBefore ? "Remove the Quote/Quote: label text." : "",
+            );
+
+            const attributionLine = lines[quoteIndex + 1] || "";
+            addCheck(
+              "Attribution is on next line and starts with - or ~",
+              /^[-~]/.test(attributionLine),
+              /^[-~]/.test(attributionLine)
+                ? ""
+                : "Line immediately after quote should start with - or ~.",
+            );
+          }
+
+          const hasMultipleSpaces = lines.some((line) =>
+            /\S\s{2,}\S/.test(line),
+          );
+          addCheck(
+            "No multiple consecutive spaces in visible text",
+            !hasMultipleSpaces,
+            hasMultipleSpaces
+              ? "Found repeated spaces between visible characters."
+              : "",
+          );
+
+          if (courseType === "web") {
+            const requiredLinkLabels = [
+              "clt web",
+              "github",
+              "github.io",
+              "freecodecamp",
+              "codecademy",
+              "linkedin",
+            ];
+            const joinedLower = lines.join("\n").toLowerCase();
+            const hasAllLabels = requiredLinkLabels.every((label) =>
+              joinedLower.includes(label),
+            );
+            addCheck(
+              "Web-class links labels present",
+              hasAllLabels,
+              hasAllLabels
+                ? ""
+                : "Missing one or more required labels in links line.",
+            );
+
+            const linkLine =
+              lines.find(
+                (line) => /clt web/i.test(line) && /github/i.test(line),
+              ) || "";
+            const dividerCount = (linkLine.match(/\|/g) || []).length;
+            addCheck(
+              "Web-class links line has at least 5 dividers",
+              dividerCount >= 5,
+              dividerCount >= 5
+                ? ""
+                : "Expected at least 5 | dividers for 6 links.",
+            );
+
+            const cltWebOk =
+              /https?:\/\/webpages\.charlotte\.edu\/[a-z]{2}[a-z0-9]*/i.test(
+                joinedLower,
+              );
+            const githubIoMatch = joinedLower.match(
+              /https?:\/\/([a-z0-9-]+)\.github\.io/i,
+            );
+            const githubMatch = joinedLower.match(
+              /https?:\/\/github\.com\/([a-z0-9-]+)/i,
+            );
+            const fccOk =
+              /https?:\/\/www\.freecodecamp\.org\/[a-z0-9._-]+/i.test(
+                joinedLower,
+              );
+            const codecademyOk =
+              /https?:\/\/www\.codecademy\.com\/profiles\/[a-z0-9._-]+/i.test(
+                joinedLower,
+              );
+            const linkedinOk = /https?:\/\/(www\.)?linkedin\.com\//i.test(
+              joinedLower,
+            );
+            const githubConsistent =
+              Boolean(githubIoMatch) &&
+              Boolean(githubMatch) &&
+              githubIoMatch[1] === githubMatch[1];
+
+            addCheck(
+              "CLT Web link format looks valid",
+              cltWebOk,
+              cltWebOk ? "" : "Expected webpages.charlotte.edu/xy... URL.",
+            );
+            addCheck(
+              "GitHub and GitHub.io usernames match",
+              githubConsistent,
+              githubConsistent
+                ? ""
+                : "GitHub and GitHub.io usernames should match.",
+            );
+            addCheck(
+              "freeCodeCamp profile link present",
+              fccOk,
+              fccOk ? "" : "Expected freeCodeCamp profile URL.",
+            );
+            addCheck(
+              "Codecademy profile link present",
+              codecademyOk,
+              codecademyOk ? "" : "Expected Codecademy profile URL.",
+            );
+            addCheck(
+              "LinkedIn profile link present",
+              linkedinOk,
+              linkedinOk ? "" : "Expected LinkedIn profile URL.",
+            );
+          } else {
+            addCheck("Web-class links check", true, "Skipped for CIS110.");
+          }
+
+          addCheck(
+            "Document-only formatting checks (centering, heading style, italics, photo placement)",
+            true,
+            "Manual visual check still required in Google Docs.",
+          );
+
+          return checks;
+        }
+
+        function renderResults(checks) {
+          const container = document.getElementById("results");
+          const passCount = checks.filter((item) => item.passed).length;
+          const failCount = checks.length - passCount;
+
+          const items = checks
+            .map((item) => {
+              const cls = item.passed ? "pass" : "fail";
+              const status = item.passed ? "PASS" : "FAIL";
+              const details = item.details ? " - " + item.details : "";
+              return "<li>" + status + ": " + item.name + details + "</li>";
+            })
+            .join("");
+
+          container.innerHTML =
+            "<p>Summary: " +
+            passCount +
+            " passed, " +
+            failCount +
+            " failed (" +
+            checks.length +
+            " checks)</p>" +
+            "<ol>" +
+            items +
+            "</ol>";
+        }
+
+        document
+          .getElementById("evaluateBtn")
+          .addEventListener("click", function () {
+            const text = document.getElementById("introText").value;
+            const courseType = document.getElementById("courseType").value;
+            const checks = evaluateIntroduction(text, courseType);
+            renderResults(checks);
+          });
+
+        document
+          .getElementById("clearBtn")
+          .addEventListener("click", function () {
+            document.getElementById("introText").value = "";
+            document.getElementById("results").innerHTML =
+              "<p>No evaluation run yet.</p>";
+          });
+
+        document
+          .getElementById("introText")
+          .addEventListener("paste", function (event) {
+            const clipboard = event.clipboardData;
+            if (!clipboard) {
+              return;
+            }
+
+            const html = clipboard.getData("text/html");
+            const plain = clipboard.getData("text/plain") || "";
+            if (!html) {
+              return;
+            }
+
+            const markdown = htmlToMarkdown(html);
+            if (!markdown) {
+              return;
+            }
+
+            event.preventDefault();
+            insertTextAtCursor(event.target, markdown || plain);
+          });
+      })();
+    </script>
+  </body>
+</html>
