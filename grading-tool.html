@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITIS3135 | con von Briesen | Grading Tool</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <script src="scripts/include-repeated-code.js" defer></script>
+    <style>
+      #grading-tool { max-width: 760px; margin: 0 auto; }
+
+      #grading-tool .tool-inputs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      #grading-tool input[type="password"],
+      #grading-tool input[type="url"] {
+        flex: 1 1 220px;
+        padding: 0.5rem 0.75rem;
+        border: 1.5px solid #ccc;
+        border-radius: 6px;
+        font-size: 0.9rem;
+      }
+
+      #grading-tool button#evaluate-btn {
+        padding: 0.5rem 1.25rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      #grading-tool .key-note {
+        font-size: 0.75rem;
+        color: #777;
+        margin-bottom: 1rem;
+      }
+
+      #grading-tool #error-msg {
+        color: #c00;
+        font-size: 0.875rem;
+        margin-bottom: 0.75rem;
+      }
+
+      #grading-tool #score-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+      }
+
+      #grading-tool #score-bar .student-info { flex: 1; }
+      #grading-tool #score-bar .student-name { font-weight: 700; font-size: 1rem; }
+      #grading-tool #score-bar .student-url { font-size: 0.75rem; color: #555; word-break: break-all; }
+
+      #grading-tool .pills { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+      #grading-tool .pill {
+        border-radius: 999px;
+        padding: 3px 10px;
+        font-size: 0.75rem;
+        font-weight: 700;
+      }
+      #grading-tool .pill.pass { background: #dcfce7; color: #15803d; }
+      #grading-tool .pill.fail { background: #fee2e2; color: #b91c1c; }
+      #grading-tool .pill.unknown { background: #fef3c7; color: #b45309; }
+
+      #grading-tool button#copy-btn {
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: 1.5px solid currentColor;
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      #grading-tool .category-block {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.75rem;
+      }
+
+      #grading-tool .category-title {
+        font-weight: 700;
+        font-size: 0.9rem;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 0.4rem;
+        margin-bottom: 0.5rem;
+      }
+
+      #grading-tool .check-item {
+        display: flex;
+        gap: 0.5rem;
+        align-items: baseline;
+        font-size: 0.875rem;
+        margin-bottom: 4px;
+      }
+
+      #grading-tool .check-item .icon { flex-shrink: 0; }
+      #grading-tool .check-item.fail-item { color: #7f1d1d; }
+      #grading-tool .check-item.unknown-item { color: #78350f; }
+      #grading-tool .check-note { font-size: 0.8rem; color: #555; }
+
+      #grading-tool #overall-notes {
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 0.875rem;
+        line-height: 1.6;
+      }
+
+      #grading-tool #overall-notes strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      #grading-tool #loading {
+        text-align: center;
+        padding: 2rem;
+        color: #555;
+      }
+    </style>
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header></header>
+
+    <main>
+      <h2>Grading Tool</h2>
+
+      <div id="grading-tool">
+        <section>
+          <h3>Evaluate a Student Site</h3>
+          <p>
+            Paste the student's project URL and your Anthropic API key. The tool
+            fetches the site, looks up the student name from their root index
+            page, and checks all ITIS3135 Web Standards automatically.
+          </p>
+
+          <div class="tool-inputs">
+            <input
+              type="password"
+              id="api-key"
+              placeholder="Anthropic API key"
+              autocomplete="off"
+            />
+            <input
+              type="url"
+              id="site-url"
+              placeholder="https://student.github.io/project/"
+            />
+            <button id="evaluate-btn">Evaluate</button>
+          </div>
+          <p class="key-note">
+            Your API key is used only in your browser and never stored or sent anywhere else.
+          </p>
+          <p id="error-msg" hidden></p>
+        </section>
+
+        <div id="loading" hidden>
+          🔍 Fetching page and evaluating against standards…
+        </div>
+
+        <div id="results" hidden>
+          <div id="score-bar">
+            <div class="student-info">
+              <div class="student-name" id="student-name"></div>
+              <div class="student-url" id="student-url"></div>
+            </div>
+            <div class="pills" id="pills"></div>
+            <button id="copy-btn">Copy Feedback</button>
+          </div>
+          <div id="categories"></div>
+          <div id="overall-notes"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer></footer>
+
+    <script>
+      const STANDARDS = [
+        { category: "1. Site Structure", items: ["Images are in an images folder","Stylesheets are in a styles folder; default stylesheet is called default.css","Scripts are in a scripts folder","Unused files are in a z_archives folder","Reusable code is in a components folder","Absolute URLs used for external sites","Relative URLs used for internal pages","Relative links do NOT open in new windows/tabs"] },
+        { category: "2. File Naming", items: ["Filename is meaningful, lowercase, no spaces","Filename is consistent with other pages in the site"] },
+        { category: "3. Title Element", items: ["Title has site name + divider + page name"] },
+        { category: "4. Favicon", items: ["Legible favicon present that matches site name/theme"] },
+        { category: "5. Page Validation", items: ["Accumulus lint script is last line in head element","Cloud appears all green on page","WCAG shows no warnings/errors"] },
+        { category: "6. Page Layout / Structure", items: ["Body has header, main, and footer","Header and footer match across entire site","Header includes site name in h1","Header includes navbar with site navigation","Main includes page name in h2 at top","Subsections use h3 as section titles","Footer includes 'Site Designed by' credit","Footer includes site tagline in italics or quotes","Footer goes widest to narrowest (no Christmas tree effect)"] },
+        { category: "7. Styles", items: ["No plain white or black used without justification","At least 2 fonts used; no complex/serif fonts for small text","Default link colors overridden (no default blue/purple)","Cohesive color palette used","Paragraphs not center-aligned on normal screens"] },
+        { category: "8. CRAP Design Principles", items: ["Contrast: text and elements have sufficient contrast","Repetition: design elements consistent across site","Alignment: elements aligned to create visual connection","Proximity: related items grouped, unrelated items spaced"] },
+        { category: "9. DO NOTs", items: ["No divs/spans when semantic elements are available","No inline styles (except ≤2 instances)","No unused classes","No unnecessary or AI-copied code without purpose","Only one h1 and one h2 per page","CSS and HTML are not overcomplicated","No black, white, Times New Roman, Comic Sans, or Papyrus","No clashing or too-similar colors","No centered paragraphs","No centered bullets"] },
+      ];
+
+      const SYSTEM_PROMPT = `You are a grading assistant for ITIS3135 Front-End Web Development. You will be given a student's website URL AND the URL of their personal home page (the root index of the site). First fetch the personal home page and extract the student's full name from it (look for a heading, byline, or "about me" text). Then fetch the project page and evaluate it against each checklist item below.
+
+STANDARDS:
+${STANDARDS.map(c => `${c.category}:\n${c.items.map(i => `  - ${i}`).join("\n")}`).join("\n\n")}
+
+Respond ONLY with a valid JSON object — no markdown, no backticks, no preamble. Use this exact format:
+{
+  "student_name": "Full Name or null if not found",
+  "categories": [
+    { "category": "exact category name from above", "items": [{ "item": "exact item text", "pass": true, "note": "" }] }
+  ],
+  "overall_notes": "2-3 sentence summary suitable for pasting directly into Canvas as instructor feedback."
+}
+
+Rules:
+- student_name: extracted from personal home page; null if not found
+- pass: true if met, false if not met, null if cannot determine
+- note: brief explanation when pass is false or null; empty string when pass is true
+- Preserve exact category and item text`;
+
+      function getRootUrl(url) {
+        try { return new URL(url).origin + "/"; } catch { return null; }
+      }
+
+      let lastResults = null;
+      let lastUrl = "";
+
+      document.getElementById("evaluate-btn").addEventListener("click", evaluate);
+      document.getElementById("site-url").addEventListener("keydown", e => { if (e.key === "Enter") evaluate(); });
+
+      async function evaluate() {
+        const apiKey = document.getElementById("api-key").value.trim();
+        const url = document.getElementById("site-url").value.trim();
+        if (!apiKey || !url) return;
+
+        lastUrl = url;
+        setError("");
+        setLoading(true);
+        document.getElementById("results").hidden = true;
+
+        const rootUrl = getRootUrl(url);
+
+        try {
+          const res = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-api-key": apiKey,
+              "anthropic-version": "2023-06-01",
+              "anthropic-dangerous-direct-browser-access": "true",
+            },
+            body: JSON.stringify({
+              model: "claude-sonnet-4-5",
+              max_tokens: 4000,
+              system: SYSTEM_PROMPT,
+              tools: [{ type: "web_search_20250305", name: "web_search" }],
+              messages: [{ role: "user", content: `Personal home page (extract student name from here): ${rootUrl}\n\nProject page to evaluate: ${url}` }],
+            }),
+          });
+
+          const data = await res.json();
+          if (data.error) { setError("API error: " + data.error.message); return; }
+
+          const raw = (data.content || []).filter(b => b.type === "text").map(b => b.text).join("");
+          const parsed = JSON.parse(raw.replace(/```json|```/gi, "").trim());
+          lastResults = parsed;
+          renderResults(parsed, url);
+        } catch (err) {
+          setError("Something went wrong. Check the URL and try again.");
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      function renderResults(data, url) {
+        // Student info
+        document.getElementById("student-name").textContent = data.student_name || "";
+        document.getElementById("student-url").textContent = url;
+
+        // Pills
+        let pass = 0, fail = 0, unknown = 0;
+        data.categories.forEach(c => c.items.forEach(i => {
+          if (i.pass === true) pass++;
+          else if (i.pass === false) fail++;
+          else unknown++;
+        }));
+        const pillsEl = document.getElementById("pills");
+        pillsEl.innerHTML = `
+          <span class="pill pass">${pass} passed</span>
+          <span class="pill fail">${fail} failed</span>
+          ${unknown ? `<span class="pill unknown">${unknown} unknown</span>` : ""}
+        `;
+
+        // Categories
+        const catEl = document.getElementById("categories");
+        catEl.innerHTML = data.categories.map(cat => `
+          <div class="category-block">
+            <div class="category-title">${cat.category}</div>
+            ${cat.items.map(item => {
+              const icon = item.pass === true ? "✅" : item.pass === false ? "❌" : "⚠️";
+              const cls = item.pass === false ? "fail-item" : item.pass === null ? "unknown-item" : "";
+              return `<div class="check-item ${cls}">
+                <span class="icon">${icon}</span>
+                <span>${item.item}${item.note ? ` <span class="check-note">— ${item.note}</span>` : ""}</span>
+              </div>`;
+            }).join("")}
+          </div>
+        `).join("");
+
+        // Overall notes
+        const notesEl = document.getElementById("overall-notes");
+        if (data.overall_notes) {
+          notesEl.innerHTML = `<strong>Overall Feedback</strong>${data.overall_notes}`;
+          notesEl.hidden = false;
+        } else {
+          notesEl.hidden = true;
+        }
+
+        document.getElementById("results").hidden = false;
+      }
+
+      document.getElementById("copy-btn").addEventListener("click", () => {
+        if (!lastResults) return;
+        const name = lastResults.student_name ? `Student: ${lastResults.student_name}\n` : "";
+        const lines = lastResults.categories.map(cat => {
+          const items = cat.items.map(i => {
+            const icon = i.pass === true ? "✅" : i.pass === false ? "❌" : "⚠️";
+            return `  ${icon} ${i.item}${i.note ? " — " + i.note : ""}`;
+          }).join("\n");
+          return `${cat.category}\n${items}`;
+        }).join("\n\n");
+        const overall = lastResults.overall_notes ? `\n\nOverall: ${lastResults.overall_notes}` : "";
+        const text = `${name}URL: ${lastUrl}\n\n${lines}${overall}`;
+        navigator.clipboard.writeText(text).then(() => {
+          const btn = document.getElementById("copy-btn");
+          btn.textContent = "✓ Copied!";
+          setTimeout(() => { btn.textContent = "Copy Feedback"; }, 2000);
+        });
+      });
+
+      function setLoading(on) {
+        document.getElementById("loading").hidden = !on;
+        document.getElementById("evaluate-btn").disabled = on;
+        document.getElementById("evaluate-btn").textContent = on ? "Evaluating…" : "Evaluate";
+      }
+
+      function setError(msg) {
+        const el = document.getElementById("error-msg");
+        el.textContent = msg;
+        el.hidden = !msg;
+      }
+    </script>
+  </body>
+</html>
