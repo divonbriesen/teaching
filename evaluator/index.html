@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WEB123 | Site Evaluator</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <header>
+      <h1>WEB123 Evaluator</h1>
+      <nav>
+        <a href="../">Course Home</a>
+        <a href="../standards.html">Standards</a>
+      </nav>
+    </header>
+    <main>
+      <h2>Site Evaluation</h2>
+      <section>
+        <form id="eval-form">
+          <label for="student-url">Student Site URL</label>
+          <input
+            type="url"
+            id="student-url"
+            placeholder="https://webpages.charlotte.edu/loginid/itis3135/"
+            required
+          />
+          <label for="instructions">Assignment Instructions <span>(optional — paste for assignment compliance check)</span></label>
+          <textarea id="instructions" rows="8" placeholder="Paste assignment instructions here..."></textarea>
+          <button type="submit">Evaluate</button>
+        </form>
+      </section>
+
+      <section id="results" hidden>
+        <h3>Results</h3>
+        <div id="summary"></div>
+        <div id="rule-results"></div>
+        <div id="ai-results"></div>
+      </section>
+    </main>
+    <footer>
+      <p><em>"Standards exist so students can exceed them."</em></p>
+      <p>Site Designed by von Briesen &amp; Co.</p>
+    </footer>
+    <script src="scripts/app.js"></script>
+  </body>
+</html>
