@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Introduction Evaluation Tool</title>
     <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
     <script src="scripts/include-repeated-code.js" defer></script>
     <script
       src="https://lint.page/kit/4d0fe3.js"
@@ -69,9 +70,9 @@
           "Personal Background",
           "Professional Background",
           "Academic Background",
-          "Primary Work Computer",
-          "Operating System & Version",
-          "Backup Work Computer & Location Plan",
+          "Primary Work Computer (type, OS, and version)",
+          "Primary Work Location",
+          "Alternate Computer & Location",
           "Courses I'm Taking, & Why",
         ];
 
@@ -230,7 +231,7 @@
             .replace(/\r\n?/g, "\n");
 
           const markerPattern =
-            /(Personal Background:|Professional Background:|Academic Background:|Background in this Subject:|Primary Work Computer:|Primary Computer:|Operating System\s*&\s*Version:|Backup Work Computer\s*&\s*Location Plan:|Courses I['’]m Taking,?\s*&\s*Why:|Funny\/Interesting Item to Remember Me by:|I['’]d Also Like to Share:)/gi;
+            /(Personal Background:|Professional Background:|Academic Background:|Background in this Subject:|Primary Work Computer\s*\(type,?\s*OS,?\s*and\s*version\)\s*:|Primary Work Computer:|Primary Computer:|Primary Work Location:|Operating System\s*&\s*Version:|Alternate Computer\s*&\s*Location:|Backup Work Computer\s*&\s*Location Plan:|Courses I['’]m Taking,?\s*&\s*Why:|Funny\/Interesting Item to Remember Me by:|I['’]d Also Like to Share:)/gi;
 
           let prepared = decoded.replace(markerPattern, "\n$1");
 
