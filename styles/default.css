@@ -141,3 +141,29 @@ li > ol {
   font-size: 0.75em;
   margin: 0 0 12px;
 }
+
+/* "con" wordplay: italic with a dotted underline signal; click (focus)
+   or hover pops the explanation tooltip */
+.con-note {
+  font-style: italic;
+  border-bottom: 2px dotted currentColor;
+  cursor: help;
+  position: relative;
+}
+
+.con-note:hover::after,
+.con-note:focus::after {
+  content: "\201Cwith\201D in Spanish, as in con queso\2026";
+  position: absolute;
+  left: 0;
+  top: 110%;
+  z-index: 10;
+  background: #2f3e33;
+  color: #f5f2e9;
+  font-style: normal;
+  font-size: 0.45em;
+  letter-spacing: normal;
+  padding: 6px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
