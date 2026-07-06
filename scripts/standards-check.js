@@ -33,16 +33,21 @@
   }
 
   function isLocal(u) {
-    return u && !/^(https?:)?\/\//i.test(u) && !u.startsWith("data:") && !u.startsWith("mailto:") && !u.startsWith("#");
+    if (!u) return false;
+    const low = u.toLowerCase();
+    return !low.startsWith("http://") && !low.startsWith("https://") && !low.startsWith("//") &&
+      !low.startsWith("data:") && !low.startsWith("mailto:") && !low.startsWith("#");
   }
 
   async function runChecks() {
     const d = document;
     const h1 = d.querySelector("h1");
     const h1Text = h1 ? h1.textContent.trim() : "";
-    const course =
-      (d.currentScript && d.currentScript.dataset.mode) === "course" ||
-      ((!d.currentScript || !d.currentScript.dataset.mode) && /[A-Z]{2,}\d{3,}/.test(h1Text));
+    // Course rules apply only inside a course-code directory
+    // (itis3135, web115, web250, itsc1110, ...); data-mode overrides.
+    const scriptMode = d.currentScript && d.currentScript.dataset.mode;
+    const inCourseDir = /\/[a-z]{2,4}\d{3,4}[a-z]?\//i.test(location.pathname);
+    const course = scriptMode === "course" || (!scriptMode && inCourseDir);
 
     add("INFO", "checking against",
       course ? "general plus course standards" : "general standards");
@@ -90,7 +95,7 @@
       add(!banned.length ? "PASS" : "FAIL", "no banned fonts (as the primary choice)", banned.join(", "));
       add(/(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(css) ? "PASS" : "FAIL", "link colors overridden (no blue/purple/green/red; visited matches normal)", /(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(css) ? "" : "no `a` selector in CSS");
       const bw = [...css.matchAll(/:\s*(#000000|#000|#ffffff|#fff|black|white)\s*[;}]/gi)].map((m) => m[1]);
-      const cssComments = /\/\*[^]*?\S[^]*?\*\//.test(css);
+      const cssComments = /\/\*[\s\S]*?\S[\s\S]*?\*\//.test(css);
       if (!bw.length) add("PASS", "no black/white without a reason (CSS comment)");
       else if (cssComments) add("PASS", "no black/white without a reason (CSS comment)", [...new Set(bw)].join(", ") + " — commented");
       else add("FAIL", "no black/white without a reason (CSS comment)", [...new Set(bw)].join(", ") + " — no CSS comments found");
@@ -165,7 +170,8 @@
     // The favicon never counts as the page image, however it's included.
     const favHref = icon ? icon.getAttribute("href") || "" : "";
     const imgs = [...d.querySelectorAll("img")].map((i) => i.getAttribute("src") || "")
-      .filter((s) => s !== favHref && !s.toLowerCase().includes("favicon"));
+      .filter((s) => s !== favHref && !s.toLowerCase().includes("favicon")
+        && !s.includes("lint.page")); // Accumulus injects its own imgs — not the student's
     if (!imgs.length && !d.querySelector("svg")) add("FAIL", "at least one image (favicon doesn't count)");
     else add("PASS", "at least one image (favicon doesn't count)", imgs.slice(0, 3).map(short).join(", ") || "inline svg");
     const localImgs = imgs.filter(isLocal);
@@ -204,7 +210,13 @@
       badBlank.map((a) => a.getAttribute("href")).slice(0, 5).join(", "));
 
     const crap = internal.filter((h) => course && (h.startsWith("stuff/") || h.includes("/stuff/")));
-    const ugly = internal.filter((h) => !crap.includes(h) && /[A-Z ]/.test(h.split("#")[0].split("?")[0]));
+    const ugly = [];
+    for (const h of internal) {
+      if (crap.includes(h)) continue;
+      const path = h.split("#")[0].split("?")[0];
+      if (/[A-Z ]/.test(path.trim())) ugly.push(h.trim());
+      else if (path !== path.trim()) ugly.push(h.trim() + " (space in link href)");
+    }
     add(!ugly.length ? "PASS" : "FAIL", "internal filenames lowercase, no spaces", ugly.slice(0, 5).join(", "));
     if (crap.length) add("INFO", "stuff/ links exempt from filename rules", crap.slice(0, 3).join(", "));
 
@@ -245,7 +257,7 @@
     const badge = document.createElement("div");
     badge.id = "standards-check-badge";
     badge.style.cssText =
-      "position:fixed;bottom:12px;right:12px;z-index:9999;cursor:pointer;" +
+      "position:fixed;bottom:60px;right:36px;z-index:9999;cursor:pointer;" +
       "font-size:34px;line-height:1;user-select:none;border-radius:50%;padding:4px;" +
       (fails
         ? "transform:rotate(180deg);background:rgba(255,220,220,.9);" +
@@ -256,17 +268,29 @@
 
     const panel = document.createElement("div");
     panel.style.cssText =
-      "position:fixed;bottom:56px;right:12px;z-index:9999;display:none;" +
+      "position:fixed;bottom:110px;right:36px;z-index:9999;display:none;" +
       "max-height:70vh;max-width:480px;overflow:auto;background:#fff;color:#222;" +
       "border:2px solid #444;border-radius:10px;padding:10px 14px;" +
       "font:12px/1.5 monospace;box-shadow:0 6px 18px rgba(0,0,0,.3);text-align:left;";
     const icons = { PASS: "✅", FAIL: "❌", WARN: "⚠️", INFO: "ℹ️" };
-    panel.innerHTML = res
+    const closeX = '<span data-vicuna-close style="position:sticky;top:0;float:right;' +
+      'cursor:pointer;font:bold 14px/1 sans-serif;color:#666;padding:0 2px;">&#10005;</span>';
+    panel.innerHTML = closeX + res
       .map((r) => icons[r.level] + " " + r.rule + (r.detail ? ": " + r.detail : ""))
       .join("<br>") +
       "<br><br><strong>" + res.filter((r) => r.level === "PASS").length + " pass, " + fails + " fail</strong>";
-    badge.addEventListener("click", () => {
+    badge.addEventListener("click", (e) => {
+      e.stopPropagation();
       panel.style.display = panel.style.display === "none" ? "block" : "none";
+    });
+    panel.addEventListener("click", (e) => {
+      if (e.target.hasAttribute && e.target.hasAttribute("data-vicuna-close")) {
+        panel.style.display = "none";
+      }
+      e.stopPropagation();
+    });
+    document.addEventListener("click", () => {
+      panel.style.display = "none";
     });
     document.body.appendChild(badge);
     document.body.appendChild(panel);
