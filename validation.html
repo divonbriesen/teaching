@@ -45,6 +45,10 @@
           comment justifications, working links, footer content, and more.
         </p>
         <p>
+          It's running on this very page — and every page of this site — so
+          look at the bottom-right corner right now to see it in action.
+        </p>
+        <p>
           A vicuña appears in the bottom-right corner of your page:
           <strong>standing proudly right-side up when every check passes,
           flipped on its head with a pulsing red glow when something
@@ -52,25 +56,13 @@
           way for the full report of what passed and what didn't.
         </p>
 
-        <h4>Option 1: Link It Directly</h4>
+        <h4>How To Install It</h4>
         <p>Add one line before the end of your body element:</p>
         <pre><code>&lt;script src="https://divonbriesen.github.io/web123/scripts/standards-check.js" defer&gt;&lt;/script&gt;</code></pre>
         <p>
-          You always get the latest version automatically, but your page
-          depends on an outside site — which is fine while you're building.
-        </p>
-
-        <h4>Option 2: Host Your Own</h4>
-        <p>
-          Download
-          <a href="scripts/standards-check.js" download>standards-check.js</a>
-          into your own scripts folder and reference it relatively:
-        </p>
-        <pre><code>&lt;script src="scripts/standards-check.js" defer&gt;&lt;/script&gt;</code></pre>
-        <p>
-          Your site stays self-contained (and the script itself passes the
-          "scripts in a scripts folder" rule), but you won't get updates unless
-          you re-download.
+          Always link it from here — do not copy the file into your own site.
+          The standards evolve during the semester, and a copied version goes
+          stale; the linked version is always current.
         </p>
 
         <h4>Notes</h4>
@@ -92,5 +84,6 @@
       </section>
     </main>
     <footer></footer>
+      <script src="scripts/standards-check.js" defer></script>
   </body>
 </html>

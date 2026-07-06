@@ -167,3 +167,9 @@ li > ol {
   border-radius: 8px;
   white-space: nowrap;
 }
+
+/* centered-links: sample intro link rows are centered per the intro
+   format; a class beats repeating an inline style on every sample */
+.centered-links {
+  text-align: center;
+}

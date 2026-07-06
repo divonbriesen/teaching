@@ -1,9 +1,8 @@
 /* Standards self-check badge.
  *
- * Add to any page, either from the course hub:
+ * Add to any page, linked from the course hub (do not copy it — a copy
+ * goes stale as the standards evolve):
  *   <script src="https://divonbriesen.github.io/web123/scripts/standards-check.js" defer></script>
- * or copy this file into your own scripts/ folder:
- *   <script src="scripts/standards-check.js" defer></script>
  *
  * A llama appears bottom-right: right-side up = all checks pass,
  * upside down = something failed. Click it for the full report.
@@ -51,14 +50,14 @@
 
     // ===== HEAD =====
     const icon = d.querySelector('link[rel~="icon"]');
-    if (!icon) add("FAIL", "favicon present and resolves");
+    const FAV_RULE = "favicon present, resolves, in images/";
+    if (!icon) add("FAIL", FAV_RULE, "no favicon link");
     else {
       const href = icon.getAttribute("href") || "";
-      if (href.startsWith("data:")) add("PASS", "favicon present and resolves", short(href) + " (embedded)");
-      else {
-        add((await ok(href)) ? "PASS" : "FAIL", "favicon present and resolves", short(href));
-        if (isLocal(href)) add(href.includes("images/") ? "PASS" : "FAIL", "favicon in images/", short(href));
-      }
+      if (href.startsWith("data:")) add("PASS", FAV_RULE, short(href) + " (embedded — folder not required)");
+      else if (!(await ok(href))) add("FAIL", FAV_RULE, short(href) + " doesn't resolve");
+      else if (isLocal(href) && !href.includes("images/")) add("FAIL", FAV_RULE, short(href) + " not in images/");
+      else add("PASS", FAV_RULE, short(href));
     }
 
     const title = d.title.trim();
@@ -87,9 +86,8 @@
         stacks.map((s) => s.split(",")[0].trim().replace(/['"]/g, "").toLowerCase()).filter((f) => f && !generic.has(f))
       );
       add(primaries.size >= 2 ? "PASS" : "FAIL", "at least 2 fonts", [...primaries].sort().join(", ") || "none");
-      const allFonts = stacks.flatMap((s) => s.split(",").map((f) => f.trim().replace(/['"]/g, "").toLowerCase()));
-      const banned = allFonts.filter((f) => BANNED_FONTS.some((b) => f.includes(b)));
-      add(!banned.length ? "PASS" : "FAIL", "no banned fonts", [...new Set(banned)].join(", "));
+      const banned = [...primaries].filter((f) => BANNED_FONTS.some((b) => f.includes(b)));
+      add(!banned.length ? "PASS" : "FAIL", "no banned fonts (as the primary choice)", banned.join(", "));
       add(/(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(css) ? "PASS" : "FAIL", "link colors overridden (no blue/purple/green/red; visited matches normal)", /(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(css) ? "" : "no `a` selector in CSS");
       const bw = [...css.matchAll(/:\s*(#000000|#000|#ffffff|#fff|black|white)\s*[;}]/gi)].map((m) => m[1]);
       const cssComments = /\/\*[^]*?\S[^]*?\*\//.test(css);
@@ -108,7 +106,7 @@
     if (!scripts.some((s) => s.includes("lint.page"))) add("FAIL", "validation script (lint.page) present");
     else {
       const last = headScripts[headScripts.length - 1];
-      add(last && (last.src || "").includes("lint.page") ? "PASS" : "WARN",
+      add(last && (last.src || "").includes("lint.page") ? "PASS" : "FAIL",
         "validation script is last line of head");
     }
 
@@ -116,16 +114,26 @@
     const HDR_RULE = "header starts with h1 (site name)";
     const headerEl = d.querySelector("header");
     const h1s = d.querySelectorAll("h1");
+    const firstSig = (el, skip) => {
+      for (const c of el.querySelectorAll("*")) {
+        if (!skip.includes(c.tagName.toLowerCase())) return c.tagName.toLowerCase();
+      }
+      return null;
+    };
     if (!headerEl) add("FAIL", HDR_RULE, "no <header>");
-    else if (h1s.length === 1) add("PASS", HDR_RULE, h1Text);
-    else add("FAIL", HDR_RULE, "found " + h1s.length + " h1s");
+    else if (h1s.length !== 1) add("FAIL", HDR_RULE, "found " + h1s.length + " h1s");
+    else {
+      const f = firstSig(headerEl, ["hgroup", "div"]);
+      if ([null, "h1", "p", "img", "picture"].includes(f)) add("PASS", HDR_RULE, h1Text);
+      else add("FAIL", HDR_RULE, "h1 present but <" + f + "> comes first");
+    }
     if (course && h1Text) {
       const good = /['’]s\s+\S+/.test(h1Text) && /[A-Z]{2,}\d{3,}[A-Z0-9]*\s*$/.test(h1Text);
       add(good ? "PASS" : "FAIL", "site name = Name's Mascot <divider> COURSEID", good ? "" : h1Text);
     }
     if (title && h1Text) {
       const site = h1Text.toLowerCase();
-      add(title.toLowerCase().startsWith(site.slice(0, Math.max(8, site.length / 2))) ? "PASS" : "WARN",
+      add(title.toLowerCase().startsWith(site.slice(0, Math.max(8, site.length / 2))) ? "PASS" : "FAIL",
         "title combines h1 (site name) + divider + h2 (page name)");
     }
 
@@ -146,7 +154,11 @@
     const mainEl = d.querySelector("main");
     const h2s = d.querySelectorAll("h2");
     if (!mainEl) add("FAIL", MAIN_RULE, "no <main>");
-    else if (h2s.length === 1) add("PASS", MAIN_RULE, h2s[0].textContent.trim());
+    else if (h2s.length === 1) {
+      const f = firstSig(mainEl, ["div", "section", "article"]);
+      if ([null, "h2", "img", "picture"].includes(f)) add("PASS", MAIN_RULE, h2s[0].textContent.trim());
+      else add("FAIL", MAIN_RULE, "h2 present but <" + f + "> comes first");
+    }
     else if (!h2s.length) add("FAIL", MAIN_RULE, "main has no h2");
     else add("INFO", MAIN_RULE, "found " + h2s.length + " h2s — fine for an SPA if each h2 is a page name");
 
