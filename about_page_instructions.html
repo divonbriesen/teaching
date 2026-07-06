@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITIS3135 | con von Briesen | About Page Instructions</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script src="scripts/include-repeated-code.js" defer></script>
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <h2>About Page Instructions</h2>
+
+      <section>
+        <h3>The Assignment</h3>
+        <p>
+          Add an About page (about.html, linked as About after Contract in your
+          menu) to your course site. Its header/footer match your other course
+          pages exactly and share the same linked CSS. On it, describe in a
+          couple of paragraphs and bullets: what this site demonstrates
+          (ITIS3135, with a link to this hub), the tools the course uses
+          (VS Code, Emmet, SFTP via Filezilla, Git via GitHub, browser tools,
+          the Accumulus validator), and the sites you'll build.
+        </p>
+      </section>
+
+      <section>
+        <h3>How Everything Connects</h3>
+        <p>
+          This is a <em>work in progress</em> — the map below shows what your
+          completed assignments will look like by the end of the course. Note
+          the whole tree is duplicated between your school webspace
+          (webpages.charlotte.edu) and your GitHub Pages site.
+        </p>
+        <pre>
+public_html/          ← webpages.charlotte.edu/youruserid/  (duplicated at yourgithubid.github.io)
+│
+├── index.html        ← Personal Home Page — links to the Course Site
+│
+├── yourfirmname.co/  ← DESIGN FIRM SITE (standalone; may instead live inside itis3135/)
+│   └── index.html       reached from the footer of every course page ("Designed by …")
+│
+└── itis3135/         ← COURSE SITE (matching header/footer on every page)
+    │
+    ├── components/      header.html, footer.html — shared by all course pages
+    ├── styles/          default.css
+    ├── scripts/
+    ├── images/
+    │
+    │   PRIMARY MENU (in the shared header)
+    ├── index.html            Home
+    ├── introduction.html     Introduction
+    ├── contract.html         Contract
+    ├── about.html            About — describes all the sites on this map
+    ├── survey.html ─┐
+    ├── gallery.html │
+    ├── inventory.html        assignment pages, added as modules progress
+    ├── website_evaluations.html
+    ├── pictures.html│
+    └── ...        ──┘
+    │
+    │   SECONDARY MENU (links leaving the course site)
+    ├── stuff/
+    │   └── crap_page.htm     CRAPPY PAGE — intentionally breaks every rule
+    │
+    ├── hobby/                MIDTERM: standalone hobby site
+    │   ├── index.html           one page, sections act as pages (SPA)
+    │   └── images/
+    │
+    └── yourmascot/           MASCOT COMPANY: whimsical business site
+        ├── components/          own header/footer — entirely different look
+        ├── index.html
+        └── 4+ more pages        about, products, hours, contact, ...
+
+  LINK FLOW:  Personal Home → Course Site → (footer) → Design Firm
+              Course secondary menu → Crappy Page, Hobby, Mascot Company
+              Design Firm / Hobby / Mascot never link back to course pages</pre>
+      </section>
+
+      <section>
+        <h3>Requirements Checklist</h3>
+        <ul>
+          <li>h2 is About; header/footer identical to your other course pages.</li>
+          <li>Mentions ITIS3135 and links to this hub.</li>
+          <li>Names the course tools (VS Code, Emmet, SFTP/Filezilla, GitHub, Accumulus).</li>
+          <li>
+            Lists the planned sites: personal home, course site, design firm,
+            crappy page, whimsical product company, peer-management tool,
+            client project.
+          </li>
+          <li>At least two paragraphs plus bullets.</li>
+        </ul>
+        <p>
+          The <a href="validation.html">Vicunadator</a> checks all of this
+          automatically on your about.html.
+        </p>
+      </section>
+    </main>
+    <footer></footer>
+    <script src="scripts/standards-check.js" defer></script>
+  </body>
+</html>
