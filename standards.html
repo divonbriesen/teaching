@@ -30,6 +30,10 @@
             <ul>
               <li>All images are in an images folder</li>
               <li>
+                Every page has at least one image — the favicon does not
+                count, no matter how it's included.
+              </li>
+              <li>
                 Linked stylesheets (other than font services like Google
                 Fonts) live in a styles folder, and the site's stylesheet is
                 called default.css — if there are several, default.css must be
@@ -48,7 +52,11 @@
                 Relative URLs are for any page that is part of the same site you
                 are linking from. Standard navbars should all be relative.
               </li>
-              <li>Relative links should NOT open in new windows/tabs</li>
+              <li>
+                Relative links should NOT open in new windows/tabs — unless
+                they point into another directory (a separate site or
+                subproject).
+              </li>
             </ul>
           </li>
 
@@ -62,10 +70,9 @@
             </ul>
           </li>
           <li>
-            Title element = the site name (exactly matching the h1) followed by
-            some sort of divider followed by the page name (matching the h2, or
-            a close/clear variant of it — Home vs. Welcome, About vs. About Us
-            are fine).
+            Title combines the h1 (name of site) with the h2 (name of page)
+            with a divider between. Close/clear page-name variants are fine —
+            Home vs. Welcome, About vs. About Us.
             <br />Examples:
             <ul>
               <li>Billy Jean's Emporium | Contact</li>
@@ -75,7 +82,8 @@
           </li>
           <li>
             There is a legible favicon that matches the site name and/or theme,
-            when viewed on the browser tab.
+            when viewed on the browser tab. The favicon file lives in the
+            images folder, unless it's embedded (a data URI).
           </li>
           <li>
             Page Validation with the script from Accumulus (cloud)
@@ -94,8 +102,13 @@
               <li>
                 Header
                 <ul>
-                  <li>Includes site name only, in an h1</li>
+                  <li>
+                    Starts with one h1 containing the site name only
+                  </li>
                   <li>Includes navbar with site navigation</li>
+                  <li>
+                    Two or more similar/related links belong in a nav element.
+                  </li>
                   <li>
                     Any navigation leading outside of site is a secondary navbar
                   </li>
@@ -108,7 +121,10 @@
               <li>
                 Main
                 <ul>
-                  <li>Includes page name in an h2 at the top of main</li>
+                  <li>
+                    Starts with one h2 containing the page name. (SPA-style
+                    pages may have multiple h2s, one per page name.)
+                  </li>
                   <li>
                     If appropriate, includes subsections with h3 as section
                     titles
@@ -122,11 +138,6 @@
               <li>
                 Footer
                 <ul>
-                  <li>
-                    may include something like "Certified in ...." and any
-                    earned certificates. At a minimum on the course site, and
-                    optionally on sites like personal and design sites.
-                  </li>
                   <li>
                     A site tagline in italics or quotes (but not both) appears
                     in the header or the footer.
@@ -143,16 +154,17 @@
             Styles
             <ol>
               <li>
-                Do not use white or black without good reason (and explain in
-                comments
+                Do not use white or black without good reason — explain the
+                reason in a CSS comment.
               </li>
               <li>
                 Use at least 2 fonts (check google fonts) and avoid using
                 complex/serif fonts for small text
               </li>
               <li>
-                override default link colors and styles - we should never see
-                the standard blue/purple color on links
+                override default link colors and styles — no blue, purple,
+                green, or red links, and visited links stay the same color as
+                unvisited ones
               </li>
               <li>
                 Use a color palette that is cohesive and not jarring (check
@@ -162,6 +174,16 @@
                 Do not align paragraphs, unless you intend for them to be one
                 line (it's ok to for small devices), but not for normal screens.
               </li>
+            </ol>
+          </li>
+          <li>
+            Comments &amp; Justifications — each of these, when present, needs
+            a comment explaining why it's necessary. One comment on the first
+            of a same-reason group is sufficient.
+            <ol>
+              <li>divs and spans</li>
+              <li>classes and ids</li>
+              <li>inline styles</li>
             </ol>
           </li>
           <li>

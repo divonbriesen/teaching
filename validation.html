@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITIS3135 | con von Briesen | Validation</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script src="scripts/include-repeated-code.js" defer></script>
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <h2>Validation</h2>
+
+      <section>
+        <h3>Accumulus — The Cloud</h3>
+        <p>
+          Every page in this course carries the Accumulus validation script.
+          It puts a small cloud on your page that checks your HTML as you
+          work: all green means your markup is valid; click the cloud to see
+          errors, warnings, and the WCAG accessibility report.
+        </p>
+        <pre><code>&lt;script src="https://lint.page/kit/4d0fe3.js" crossorigin="anonymous"&gt;&lt;/script&gt;</code></pre>
+        <p>
+          Per the <a href="standards.html">standards</a>, this script is the
+          last line inside your head element, the cloud shows all green, and a
+          manual check of cloud &gt; WCAG shows no warnings or errors.
+        </p>
+      </section>
+
+      <section>
+        <h3>The Vicunadator — Vicuña + Validator</h3>
+        <p>
+          Accumulus checks that your HTML is <em>valid</em>. The Vicunadator
+          checks that your page meets the
+          <a href="standards.html">Web Standards</a> and (when it detects a
+          course site) the
+          <a href="course_standards.html">Course Site Standards</a>: favicon,
+          title format, stylesheet organization, fonts, structure, nav, images,
+          comment justifications, working links, footer content, and more.
+        </p>
+        <p>
+          A vicuña appears in the bottom-right corner of your page:
+          <strong>standing proudly right-side up when every check passes,
+          flipped on its head with a pulsing red glow when something
+          fails.</strong> Click it either
+          way for the full report of what passed and what didn't.
+        </p>
+
+        <h4>Option 1: Link It Directly</h4>
+        <p>Add one line before the end of your body element:</p>
+        <pre><code>&lt;script src="https://divonbriesen.github.io/web123/scripts/standards-check.js" defer&gt;&lt;/script&gt;</code></pre>
+        <p>
+          You always get the latest version automatically, but your page
+          depends on an outside site — which is fine while you're building.
+        </p>
+
+        <h4>Option 2: Host Your Own</h4>
+        <p>
+          Download
+          <a href="scripts/standards-check.js" download>standards-check.js</a>
+          into your own scripts folder and reference it relatively:
+        </p>
+        <pre><code>&lt;script src="scripts/standards-check.js" defer&gt;&lt;/script&gt;</code></pre>
+        <p>
+          Your site stays self-contained (and the script itself passes the
+          "scripts in a scripts folder" rule), but you won't get updates unless
+          you re-download.
+        </p>
+
+        <h4>Notes</h4>
+        <ul>
+          <li>
+            Course-site rules switch on automatically when your h1 ends with a
+            course ID (like ITIS3135). To force general-only rules, use
+            <code>data-mode="general"</code> on the script tag.
+          </li>
+          <li>
+            The Vicunadator judges the page it sits on — put it on every page
+            you want checked.
+          </li>
+          <li>
+            It is a helper, not the grader. Passing the vicuña doesn't
+            guarantee full credit; failing it almost certainly costs you some.
+          </li>
+        </ul>
+      </section>
+    </main>
+    <footer></footer>
+  </body>
+</html>

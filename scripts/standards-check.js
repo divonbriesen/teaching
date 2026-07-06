@@ -1,0 +1,265 @@
+/* Standards self-check badge.
+ *
+ * Add to any page, either from the course hub:
+ *   <script src="https://divonbriesen.github.io/web123/scripts/standards-check.js" defer></script>
+ * or copy this file into your own scripts/ folder:
+ *   <script src="scripts/standards-check.js" defer></script>
+ *
+ * A llama appears bottom-right: right-side up = all checks pass,
+ * upside down = something failed. Click it for the full report.
+ * Optional: <script ... data-mode="general"> to skip course-site rules
+ * (mode is auto-detected from the h1 otherwise).
+ */
+(function () {
+  "use strict";
+  const BANNED_FONTS = ["times new roman", "comic sans", "papyrus"];
+  const CREDIT_RE = /designed by|created by|a product of|brought to you by|production/i;
+  const results = [];
+  const add = (level, rule, detail) => results.push({ level, rule, detail: detail || "" });
+
+  const short = (s) => (s && s.startsWith("data:") ? s.slice(0, 20) + "…" : (s || "").slice(0, 80));
+
+  async function ok(url) {
+    try {
+      const r = await fetch(url, { method: "HEAD" });
+      return r.ok;
+    } catch (e) { return false; }
+  }
+
+  async function getText(url) {
+    try {
+      const r = await fetch(url);
+      return r.ok ? await r.text() : "";
+    } catch (e) { return ""; }
+  }
+
+  function isLocal(u) {
+    return u && !/^(https?:)?\/\//i.test(u) && !u.startsWith("data:") && !u.startsWith("mailto:") && !u.startsWith("#");
+  }
+
+  async function runChecks() {
+    const d = document;
+    const h1 = d.querySelector("h1");
+    const h1Text = h1 ? h1.textContent.trim() : "";
+    const course =
+      (d.currentScript && d.currentScript.dataset.mode) === "course" ||
+      ((!d.currentScript || !d.currentScript.dataset.mode) && /[A-Z]{2,}\d{3,}/.test(h1Text));
+
+    add("INFO", "checking against",
+      course ? "general plus course standards" : "general standards");
+    add("PASS", "page loads");
+
+    // ===== HEAD =====
+    const icon = d.querySelector('link[rel~="icon"]');
+    if (!icon) add("FAIL", "favicon present and resolves");
+    else {
+      const href = icon.getAttribute("href") || "";
+      if (href.startsWith("data:")) add("PASS", "favicon present and resolves", short(href) + " (embedded)");
+      else {
+        add((await ok(href)) ? "PASS" : "FAIL", "favicon present and resolves", short(href));
+        if (isLocal(href)) add(href.includes("images/") ? "PASS" : "FAIL", "favicon in images/", short(href));
+      }
+    }
+
+    const title = d.title.trim();
+    if (!title) add("FAIL", "title element present");
+    else if (!/[|~•·—-]/.test(title)) add("FAIL", "title combines h1 (site name) + divider + h2 (page name)", "no divider: " + title);
+    else add("PASS", "title has a divider", title);
+
+    const sheets = [...d.querySelectorAll('link[rel~="stylesheet"]')].map((l) => l.getAttribute("href") || "");
+    const localSheets = sheets.filter(isLocal);
+    const embedded = [...d.querySelectorAll("style")].map((s) => s.textContent).join("\n");
+    const CSS_RULE = "stylesheets in styles/, first named default.css";
+    if (!localSheets.length) {
+      add("PASS", CSS_RULE, embedded.trim() ? "embedded styles only — folder/default.css not required" : "no stylesheets on this page");
+    } else if (localSheets.some((s) => !s.includes("styles/")))
+      add("FAIL", CSS_RULE, "outside styles/: " + localSheets.filter((s) => !s.includes("styles/")).join(", "));
+    else if (!localSheets[0].endsWith("default.css"))
+      add("FAIL", CSS_RULE, "first stylesheet is " + localSheets[0]);
+    else add("PASS", CSS_RULE);
+
+    let css = embedded;
+    for (const s of localSheets) css += await getText(s);
+    if (css) {
+      const stacks = [...css.matchAll(/font-family\s*:([^;}]+)/gi)].map((m) => m[1]);
+      const generic = new Set(["serif", "sans-serif", "monospace", "cursive", "system-ui", "inherit", "initial", "unset", "revert"]);
+      const primaries = new Set(
+        stacks.map((s) => s.split(",")[0].trim().replace(/['"]/g, "").toLowerCase()).filter((f) => f && !generic.has(f))
+      );
+      add(primaries.size >= 2 ? "PASS" : "FAIL", "at least 2 fonts", [...primaries].sort().join(", ") || "none");
+      const allFonts = stacks.flatMap((s) => s.split(",").map((f) => f.trim().replace(/['"]/g, "").toLowerCase()));
+      const banned = allFonts.filter((f) => BANNED_FONTS.some((b) => f.includes(b)));
+      add(!banned.length ? "PASS" : "FAIL", "no banned fonts", [...new Set(banned)].join(", "));
+      add(/(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(css) ? "PASS" : "FAIL", "link colors overridden (no blue/purple/green/red; visited matches normal)", /(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(css) ? "" : "no `a` selector in CSS");
+      const bw = [...css.matchAll(/:\s*(#000000|#000|#ffffff|#fff|black|white)\s*[;}]/gi)].map((m) => m[1]);
+      const cssComments = /\/\*[^]*?\S[^]*?\*\//.test(css);
+      if (!bw.length) add("PASS", "no black/white without a reason (CSS comment)");
+      else if (cssComments) add("PASS", "no black/white without a reason (CSS comment)", [...new Set(bw)].join(", ") + " — commented");
+      else add("FAIL", "no black/white without a reason (CSS comment)", [...new Set(bw)].join(", ") + " — no CSS comments found");
+    } else add("FAIL", "page has CSS (linked or embedded)", "no CSS found at all");
+
+    const scripts = [...d.querySelectorAll("script[src]")].map((s) => s.getAttribute("src") || "");
+    const localScripts = scripts.filter(isLocal);
+    if (!localScripts.length) add("PASS", "scripts in scripts/", "no local scripts on this page");
+    else if (localScripts.every((s) => s.includes("scripts/"))) add("PASS", "scripts in scripts/");
+    else add("FAIL", "scripts in scripts/", localScripts.filter((s) => !s.includes("scripts/")).join(", "));
+
+    const headScripts = [...d.head.querySelectorAll("script")];
+    if (!scripts.some((s) => s.includes("lint.page"))) add("FAIL", "validation script (lint.page) present");
+    else {
+      const last = headScripts[headScripts.length - 1];
+      add(last && (last.src || "").includes("lint.page") ? "PASS" : "WARN",
+        "validation script is last line of head");
+    }
+
+    // ===== BODY =====
+    const HDR_RULE = "header starts with h1 (site name)";
+    const headerEl = d.querySelector("header");
+    const h1s = d.querySelectorAll("h1");
+    if (!headerEl) add("FAIL", HDR_RULE, "no <header>");
+    else if (h1s.length === 1) add("PASS", HDR_RULE, h1Text);
+    else add("FAIL", HDR_RULE, "found " + h1s.length + " h1s");
+    if (course && h1Text) {
+      const good = /['’]s\s+\S+/.test(h1Text) && /[A-Z]{2,}\d{3,}[A-Z0-9]*\s*$/.test(h1Text);
+      add(good ? "PASS" : "FAIL", "site name = Name's Mascot <divider> COURSEID", good ? "" : h1Text);
+    }
+    if (title && h1Text) {
+      const site = h1Text.toLowerCase();
+      add(title.toLowerCase().startsWith(site.slice(0, Math.max(8, site.length / 2))) ? "PASS" : "WARN",
+        "title combines h1 (site name) + divider + h2 (page name)");
+    }
+
+    const anchors = [...d.querySelectorAll("a[href]")];
+    const internal = anchors.map((a) => a.getAttribute("href")).filter(isLocal);
+    if (internal.length >= 2) {
+      const nav = d.querySelector("nav");
+      if (!nav) add("FAIL", "2+ related links are in a <nav>", internal.length + " internal links, no nav");
+      else {
+        const main = d.querySelector("main");
+        const inHeader = !!d.querySelector("header nav");
+        const beforeMain = main ? nav.compareDocumentPosition(main) & Node.DOCUMENT_POSITION_FOLLOWING : true;
+        add(inHeader || beforeMain ? "PASS" : "FAIL", "nav in header (between header and main ok if floating to the side)", inHeader || beforeMain ? "" : "nav found after main starts");
+      }
+    } else add("PASS", "2+ related links are in a <nav>", "fewer than 2 internal links");
+
+    const MAIN_RULE = "main present, starting with h2 as the page name";
+    const mainEl = d.querySelector("main");
+    const h2s = d.querySelectorAll("h2");
+    if (!mainEl) add("FAIL", MAIN_RULE, "no <main>");
+    else if (h2s.length === 1) add("PASS", MAIN_RULE, h2s[0].textContent.trim());
+    else if (!h2s.length) add("FAIL", MAIN_RULE, "main has no h2");
+    else add("INFO", MAIN_RULE, "found " + h2s.length + " h2s — fine for an SPA if each h2 is a page name");
+
+    // The favicon never counts as the page image, however it's included.
+    const favHref = icon ? icon.getAttribute("href") || "" : "";
+    const imgs = [...d.querySelectorAll("img")].map((i) => i.getAttribute("src") || "")
+      .filter((s) => s !== favHref && !s.toLowerCase().includes("favicon"));
+    if (!imgs.length && !d.querySelector("svg")) add("FAIL", "at least one image (favicon doesn't count)");
+    else add("PASS", "at least one image (favicon doesn't count)", imgs.slice(0, 3).map(short).join(", ") || "inline svg");
+    const localImgs = imgs.filter(isLocal);
+    if (localImgs.length) {
+      const bad = localImgs.filter((i) => !i.includes("images/"));
+      add(!bad.length ? "PASS" : "FAIL", "images in images/", bad.map(short).join(", "));
+    }
+
+    // comments justify divs/spans, classes/ids, inline styles
+    let comments = 0;
+    const tw = d.createTreeWalker(d.documentElement, NodeFilter.SHOW_COMMENT);
+    while (tw.nextNode()) if (tw.currentNode.data.trim()) comments++;
+    const badge = d.getElementById("standards-check-badge");
+    const divSpan = [...d.querySelectorAll("div,span")]
+      .filter((el) => !el.dataset.include && !(badge && badge.contains(el)) && el !== badge).length;
+    const classId = [...d.querySelectorAll("[class],[id]")]
+      .filter((el) => !(badge && badge.contains(el)) && el !== badge).length;
+    const inline = [...d.querySelectorAll("[style]")]
+      .filter((el) => !(badge && badge.contains(el)) && el !== badge).length;
+    add(!divSpan || comments ? "PASS" : "FAIL", "divs/spans explained in comments",
+      divSpan ? divSpan + " used" + (comments ? "" : ", no comments found") : "none used");
+    add(!classId || comments ? "PASS" : "FAIL", "classes/ids explained in comments",
+      classId ? classId + " used" + (comments ? "" : ", no comments found") : "none used");
+    if (!inline) add("PASS", "inline styles (2 or fewer, explained in comments)", "0");
+    else if (inline <= 2) add(comments ? "PASS" : "FAIL", "inline styles (2 or fewer, explained in comments)",
+      inline + (comments ? "" : ", no comments found"));
+    else add("FAIL", "inline styles (2 or fewer, explained in comments)", inline + " found");
+
+    // Relative links may open new tabs only when they point into another directory.
+    const badBlank = anchors.filter((a) => {
+      const h = a.getAttribute("href") || "";
+      const path = h.split("#")[0].split("?")[0].replace(/\/+$/, "");
+      return a.target === "_blank" && isLocal(h) && !path.includes("/");
+    });
+    add(!badBlank.length ? "PASS" : "FAIL", "relative links must not open new tabs (other directories ok)",
+      badBlank.map((a) => a.getAttribute("href")).slice(0, 5).join(", "));
+
+    const crap = internal.filter((h) => course && (h.startsWith("stuff/") || h.includes("/stuff/")));
+    const ugly = internal.filter((h) => !crap.includes(h) && /[A-Z ]/.test(h.split("#")[0].split("?")[0]));
+    add(!ugly.length ? "PASS" : "FAIL", "internal filenames lowercase, no spaces", ugly.slice(0, 5).join(", "));
+    if (crap.length) add("INFO", "stuff/ links exempt from filename rules", crap.slice(0, 3).join(", "));
+
+    const broken = [];
+    for (const h of [...new Set(internal)].slice(0, 20)) {
+      if (!(await ok(h))) broken.push(h);
+    }
+    add(!broken.length ? "PASS" : "FAIL", "internal links resolve", broken.slice(0, 6).join(", "));
+
+    // ===== FOOTER =====
+    const footer = d.querySelector("footer");
+    add(footer ? "PASS" : "FAIL", "<footer> present");
+    if (footer) {
+      const footHtml = footer.innerHTML;
+      if (course) {
+        add(CREDIT_RE.test(footer.textContent) ? "PASS" : "FAIL", "footer has designer credit");
+        add(/certified in/i.test(footer.textContent) ? "PASS" : "FAIL", "footer 'Certified in ...' line");
+      }
+      const header = d.querySelector("header");
+      const chrome = (header ? header.innerHTML : "") + footHtml;
+      const chromeText = (header ? header.textContent : "") + footer.textContent;
+      const hasTagline = /<em|<i[\s>]/.test(chrome) || /["“][^"”]{4,}["”]/.test(chromeText);
+      add(hasTagline ? "PASS" : "FAIL", "tagline in italics or quotes (header or footer)");
+    }
+    return results;
+  }
+
+  function showBadge(res) {
+    const fails = res.filter((r) => r.level === "FAIL").length;
+    if (fails) {
+      const pulse = document.createElement("style");
+      pulse.textContent =
+        "@keyframes vicunadator-pulse{" +
+        "0%,100%{box-shadow:0 0 6px 3px rgba(220,30,30,.35)}" +
+        "50%{box-shadow:0 0 16px 9px rgba(220,30,30,.75)}}";
+      document.head.appendChild(pulse);
+    }
+    const badge = document.createElement("div");
+    badge.id = "standards-check-badge";
+    badge.style.cssText =
+      "position:fixed;bottom:12px;right:12px;z-index:9999;cursor:pointer;" +
+      "font-size:34px;line-height:1;user-select:none;border-radius:50%;padding:4px;" +
+      (fails
+        ? "transform:rotate(180deg);background:rgba(255,220,220,.9);" +
+          "animation:vicunadator-pulse 1.6s ease-in-out infinite;"
+        : "");
+    badge.textContent = "🦙";
+    badge.title = fails ? fails + " standards check(s) failing — click for details" : "All standards checks pass — click for details";
+
+    const panel = document.createElement("div");
+    panel.style.cssText =
+      "position:fixed;bottom:56px;right:12px;z-index:9999;display:none;" +
+      "max-height:70vh;max-width:480px;overflow:auto;background:#fff;color:#222;" +
+      "border:2px solid #444;border-radius:10px;padding:10px 14px;" +
+      "font:12px/1.5 monospace;box-shadow:0 6px 18px rgba(0,0,0,.3);text-align:left;";
+    const icons = { PASS: "✅", FAIL: "❌", WARN: "⚠️", INFO: "ℹ️" };
+    panel.innerHTML = res
+      .map((r) => icons[r.level] + " " + r.rule + (r.detail ? ": " + r.detail : ""))
+      .join("<br>") +
+      "<br><br><strong>" + res.filter((r) => r.level === "PASS").length + " pass, " + fails + " fail</strong>";
+    badge.addEventListener("click", () => {
+      panel.style.display = panel.style.display === "none" ? "block" : "none";
+    });
+    document.body.appendChild(badge);
+    document.body.appendChild(panel);
+  }
+
+  // Give include-loaders a moment to inject header/footer before checking.
+  window.addEventListener("load", () => setTimeout(() => runChecks().then(showBadge), 600));
+})();
