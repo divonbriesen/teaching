@@ -1,0 +1,196 @@
+{
+  "version": 1,
+  "comment": "Layer-3 page rules consumed by the Python checker and the JS Vicunadator. Edit here only; both checkers read this file.",
+  "sites": {
+    "course": {
+      "site_checks": [
+        {
+          "type": "text",
+          "rule": "footer credit is Firm ©YEAR (space before ©, none after; company not mascot)",
+          "pattern": "\\S ©20\\d\\d",
+          "present": true
+        }
+      ],
+      "pages": {
+        "index.html": {
+          "checks": [
+            {
+              "type": "html_all",
+              "rule": "nav links to Introduction, Contract, About",
+              "patterns": [
+                "href=\"introduction.html\"",
+                "href=\"contract.html\"",
+                "href=\"about.html\""
+              ]
+            },
+            {
+              "type": "element",
+              "rule": "welcome paragraph in main",
+              "tag": "p",
+              "within": "main",
+              "min": 1
+            }
+          ]
+        },
+        "introduction.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 is Introduction",
+              "level": 2,
+              "pattern": "intro"
+            },
+            {
+              "type": "heading",
+              "rule": "h6 display name (First 'Nick' Last <divider> Mascot)",
+              "level": 6,
+              "pattern": "\\s[~|•·]\\s"
+            },
+            {
+              "type": "css",
+              "rule": "h6 display name styled large (and shouldn't wrap)",
+              "pattern": "h6[^{]*\\{[^}]*font-size"
+            },
+            {
+              "type": "element",
+              "rule": "photo in a figure",
+              "tag": "img",
+              "within": "figure",
+              "min": 1
+            },
+            {
+              "type": "element",
+              "rule": "caption is a figcaption",
+              "tag": "figcaption",
+              "within": "figure",
+              "min": 1
+            },
+            {
+              "type": "text",
+              "rule": "no acknowledgment/signature sentence (doc-only item)",
+              "pattern": "public document|anyone with the link|keep private",
+              "present": false
+            },
+            {
+              "type": "heading",
+              "rule": "no Last, First TOC heading (doc-only item)",
+              "level": 0,
+              "pattern": "^[A-Z][a-zA-Z]+, [A-Z]",
+              "present": false
+            },
+            {
+              "type": "html_all",
+              "rule": "bold labels before colons (current label set)",
+              "patterns": [
+                "Personal Background:",
+                "Professional Background:",
+                "Academic Background:",
+                "Primary Work Computer",
+                "Primary Work Location",
+                "Alternate Computer",
+                "Courses I['’]m Taking"
+              ]
+            },
+            {
+              "type": "element",
+              "rule": "courses are a nested ordered list",
+              "tag": "ol",
+              "within": "li",
+              "min": 1
+            },
+            {
+              "type": "element",
+              "rule": "quote in a blockquote",
+              "tag": "blockquote",
+              "min": 1
+            },
+            {
+              "type": "html",
+              "rule": "quote attribution starts with - or ~",
+              "pattern": "<blockquote[\\s\\S]{0,500}?[-–~]\\s*[A-Za-z]",
+              "present": true
+            }
+          ]
+        },
+        "contract.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 is Contract",
+              "level": 2,
+              "pattern": "contract"
+            },
+            {
+              "type": "text_all",
+              "rule": "contract language present",
+              "patterns": [
+                "agree to abide by the terms of the course contract",
+                "von Briesen",
+                "Signed",
+                "20\\d\\d"
+              ]
+            },
+            {
+              "type": "text",
+              "rule": "no unedited placeholders",
+              "pattern": "FIRST M\\.? LAST|SEMESTER YYYY|ABC123|NAME OF CLASS",
+              "present": false
+            }
+          ]
+        },
+        "about.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 is About",
+              "level": 2,
+              "pattern": "about"
+            },
+            {
+              "type": "html",
+              "rule": "links to the course hub",
+              "pattern": "divonbriesen\\.github\\.io/web123",
+              "present": true
+            },
+            {
+              "type": "text_all",
+              "rule": "names the course tools",
+              "patterns": [
+                "VS Code",
+                "Emmet",
+                "Filezilla|SFTP",
+                "GitHub",
+                "Accumulus"
+              ]
+            },
+            {
+              "type": "text_all",
+              "rule": "lists the planned sites",
+              "patterns": [
+                "personal",
+                "course site",
+                "design",
+                "crapp?y",
+                "whimsical|product company",
+                "client project"
+              ]
+            },
+            {
+              "type": "element",
+              "rule": "description bullets",
+              "tag": "ul",
+              "min": 1
+            },
+            {
+              "type": "element",
+              "rule": "at least two paragraphs",
+              "tag": "p",
+              "within": "main",
+              "min": 2
+            }
+          ]
+        }
+      }
+    }
+  }
+}

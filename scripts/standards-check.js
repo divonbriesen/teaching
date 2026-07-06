@@ -11,6 +11,10 @@
  */
 (function () {
   "use strict";
+  const SCRIPT_SRC = (document.currentScript && document.currentScript.src) || "";
+  const RULES_URL = SCRIPT_SRC
+    ? SCRIPT_SRC.replace(/scripts\/standards-check\.js.*$/, "standards/rules.json")
+    : "standards/rules.json";
   const BANNED_FONTS = ["times new roman", "comic sans", "papyrus"];
   const CREDIT_RE = /designed by|created by|a product of|brought to you by|production/i;
   const results = [];
@@ -258,6 +262,59 @@
       const chromeText = (header ? header.textContent : "") + footer.textContent;
       const hasTagline = /<em|<i[\s>]/.test(chrome) || /["“][^"”]{4,}["”]/.test(chromeText);
       add(hasTagline ? "PASS" : "FAIL", "tagline in italics or quotes (header or footer)");
+    }
+
+    // ===== Layer-3 page rules from rules.json (single source of truth) =====
+    if (course) {
+      let rules = null;
+      try { rules = await (await fetch(RULES_URL)).json(); } catch (e) { rules = null; }
+      const siteRules = rules && rules.sites && rules.sites.course;
+      if (siteRules) {
+        let page = location.pathname.replace(/\/+$/, "").split("/").pop() || "";
+        if (!/\.html?$/.test(page)) page = "index.html";
+        const docText = d.body ? d.body.textContent : "";
+        const docHtml = d.documentElement.outerHTML;
+        const applyChecks = (checks) => {
+          for (const c of checks || []) {
+            const rule = c.rule || "rule";
+            const want = c.present !== false;
+            try {
+              if (c.type === "element") {
+                const sel = c.within ? c.within + " " + c.tag : c.tag;
+                const n = d.querySelectorAll(sel).length;
+                const okc = n >= (c.min || 1);
+                add(okc ? "PASS" : "FAIL", rule, okc ? "" : "found " + n);
+              } else if (c.type === "text" || c.type === "html") {
+                const hay = c.type === "text" ? docText : docHtml;
+                const found = new RegExp(c.pattern, "i").test(hay);
+                const okc = found === want;
+                add(okc ? "PASS" : "FAIL", rule, okc ? "" : (want ? "missing" : "found — remove it"));
+              } else if (c.type === "text_all" || c.type === "html_all") {
+                const hay = c.type === "text_all" ? docText : docHtml;
+                const missing = (c.patterns || []).filter((p2) => !new RegExp(p2, "i").test(hay));
+                add(!missing.length ? "PASS" : "FAIL", rule,
+                  missing.length ? "missing: " + missing.slice(0, 4).join(", ") : "");
+              } else if (c.type === "heading") {
+                const sel = c.level ? "h" + c.level : "h1,h2,h3,h4,h5,h6";
+                const heads = [...d.querySelectorAll(sel)].map((h) => h.textContent.trim());
+                const found = heads.some((h) => new RegExp(c.pattern, "i").test(h));
+                const okc = found === want;
+                add(okc ? "PASS" : "FAIL", rule, okc ? "" : (want ? "missing" : "found — remove it"));
+              } else if (c.type === "css") {
+                const found = new RegExp(c.pattern, "i").test(css);
+                const okc = found === want;
+                add(okc ? "PASS" : "FAIL", rule, okc ? "" : "not found in CSS");
+              }
+            } catch (e) { add("INFO", rule, "rule error: " + e.message); }
+          }
+        };
+        applyChecks(siteRules.site_checks);
+        const pageRules = siteRules.pages && siteRules.pages[page];
+        if (pageRules) {
+          add("INFO", "page rules", page);
+          applyChecks(pageRules.checks);
+        }
+      }
     }
     return results;
   }
