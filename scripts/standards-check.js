@@ -275,18 +275,19 @@
     const badge = document.createElement("div");
     badge.id = "standards-check-badge";
     badge.style.cssText =
-      "position:fixed;bottom:60px;right:36px;z-index:9999;cursor:pointer;" +
+      "position:fixed;bottom:36px;right:36px;z-index:9999;cursor:pointer;" +
       "font-size:34px;line-height:1;user-select:none;border-radius:50%;padding:4px;" +
       (fails
         ? "transform:rotate(180deg);background:rgba(255,220,220,.9);" +
           "animation:vicunadator-pulse 1.6s ease-in-out infinite;"
-        : "");
+        : "background:rgba(225,245,225,.9);" +
+          "box-shadow:0 0 12px 6px rgba(40,170,60,.55);");
     badge.textContent = "🦙";
     badge.title = fails ? fails + " standards check(s) failing — click for details" : "All standards checks pass — click for details";
 
     const panel = document.createElement("div");
     panel.style.cssText =
-      "position:fixed;bottom:110px;right:36px;z-index:9999;display:none;" +
+      "position:fixed;bottom:86px;right:36px;z-index:9999;display:none;" +
       "max-height:70vh;max-width:480px;overflow:auto;background:#fff;color:#222;" +
       "border:2px solid #444;border-radius:10px;padding:10px 14px;" +
       "font:12px/1.5 monospace;box-shadow:0 6px 18px rgba(0,0,0,.3);text-align:left;";
