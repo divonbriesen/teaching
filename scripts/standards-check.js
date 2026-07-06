@@ -137,6 +137,9 @@
     else if (localScripts.every((s) => s.includes("scripts/"))) add("PASS", "scripts in scripts/");
     else add("FAIL", "scripts in scripts/", localScripts.filter((s) => !s.includes("scripts/")).join(", "));
 
+    add(scripts.some((s) => s.includes("standards-check")) ? "PASS" : "FAIL",
+      "Vicunadator script on the page");
+
     const headScripts = [...d.head.querySelectorAll("script")];
     if (!scripts.some((s) => s.includes("lint.page"))) add("FAIL", "validation script (lint.page) present");
     else {
@@ -208,6 +211,9 @@
     if (localImgs.length) {
       const bad = localImgs.filter((i) => !i.includes("images/"));
       add(!bad.length ? "PASS" : "FAIL", "images in images/", bad.map(short).join(", "));
+      const unclearRe = new RegExp("^(img|image|photo|pic|picture|screenshot|untitled|unnamed|dsc|mg)?[_-]?\\d*\\.\\w+$", "i");
+      const unclear = localImgs.filter((i) => unclearRe.test(i.split("/").pop()));
+      add(!unclear.length ? "PASS" : "FAIL", "image names say what they are", unclear.map(short).join(", "));
     }
 
     // comments justify divs/spans, classes/ids, inline styles
