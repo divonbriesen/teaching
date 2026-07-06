@@ -36,25 +36,42 @@
       <section>
         <h3>The Vicunadator — Vicuña + Validator</h3>
         <p>
+          <strong>When you're coding, add this validator to every page along
+          with Accumulus</strong> — the pair should be on each page from the
+          moment you create it, so problems surface while you work instead of
+          after you submit.
+        </p>
+        <p>
           Accumulus checks that your HTML is <em>valid</em>. The Vicunadator
-          checks that your page meets the
-          <a href="standards.html">Web Standards</a> and (when it detects a
-          course site) the
-          <a href="course_standards.html">Course Site Standards</a>: favicon,
-          title format, stylesheet organization, fonts, structure, nav, images,
-          comment justifications, working links, footer content, and more.
+          checks that your page meets the course rules, in three layers: the
+          <a href="standards.html">Web Standards</a> apply to every page you
+          build anywhere; the
+          <a href="course_standards.html">Course Site Standards</a> switch on
+          automatically when the page lives in a course directory (itis3135
+          and the like); and individual pages — home, introduction, contract,
+          about — get their own page-specific checks on top. It knows which
+          page it's sitting on and applies exactly the rules that page owes.
         </p>
         <p>
           It's running on this very page — and every page of this site — so
           look at the bottom-right corner right now to see it in action.
         </p>
         <p>
-          A vicuña appears in the bottom-right corner of your page:
-          <strong>standing proudly right-side up when every check passes,
-          flipped on its head with a pulsing red glow when something
-          fails.</strong> Click it either
-          way for the full report of what passed and what didn't.
+          A vicuña appears in the bottom-right corner of your page. Click it
+          either way for the full report of what passed and what didn't; click
+          anywhere else (or the ✕) to close the report. Here's what the two
+          states look like:
         </p>
+        <figure class="badge-demo-row">
+          <figure>
+            <span class="badge-demo pass">&#129433;</span>
+            <figcaption>every check passes</figcaption>
+          </figure>
+          <figure>
+            <span class="badge-demo fail">&#129433;</span>
+            <figcaption>something fails — fix and reload</figcaption>
+          </figure>
+        </figure>
 
         <h4>How To Install It</h4>
         <p>Add one line before the end of your body element:</p>

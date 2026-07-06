@@ -189,3 +189,36 @@ header {
 hgroup p {
   margin: 0 0 6px;
 }
+
+/* badge-demo: static copies of the Vicunadator's pass/fail states so the
+   validation page can show students what to look for */
+.badge-demo-row {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+  margin: 12px 0 20px;
+}
+
+.badge-demo {
+  display: inline-block;
+  font-size: 34px;
+  line-height: 1;
+  padding: 4px;
+  border-radius: 50%;
+}
+
+.badge-demo.pass {
+  background: rgba(225, 245, 225, 0.9);
+  box-shadow: 0 0 12px 6px rgba(40, 170, 60, 0.55);
+}
+
+.badge-demo.fail {
+  transform: rotate(180deg);
+  background: rgba(255, 220, 220, 0.9);
+  animation: badge-demo-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes badge-demo-pulse {
+  0%, 100% { box-shadow: 0 0 6px 3px rgba(220, 30, 30, 0.35); }
+  50% { box-shadow: 0 0 16px 9px rgba(220, 30, 30, 0.75); }
+}
