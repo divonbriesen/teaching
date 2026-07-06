@@ -202,6 +202,22 @@
       inline + (comments ? "" : ", no comments found"));
     else add("FAIL", "inline styles (2 or fewer, explained in comments)", inline + " found");
 
+    // hrefs must contain only the link — no adjacent spaces
+    const padded = anchors.map((a) => a.getAttribute("href") || "")
+      .filter((h) => h !== h.trim()).map((h) => h.trim());
+    add(!padded.length ? "PASS" : "FAIL",
+      "hrefs contain only the link (no adjacent spaces)", padded.slice(0, 5).join(", "));
+
+    // dividers need a space on both sides, everywhere on the page
+    const bodyClone = d.body.cloneNode(true);
+    bodyClone.querySelectorAll("script,style,pre,code,#standards-check-badge").forEach((el) => el.remove());
+    const bodyText = bodyClone.textContent || "";
+    const tight = [...new Set(
+      (bodyText.match(/\S[|•·~]|[|•·~]\S/g) || []).filter((t) => !t.includes("/"))
+    )].slice(0, 5);
+    add(!tight.length ? "PASS" : "FAIL",
+      "dividers have a space on both sides", tight.map((t) => JSON.stringify(t)).join(", "));
+
     // Relative links may open new tabs only when they point into another directory.
     const badBlank = anchors.filter((a) => {
       const h = a.getAttribute("href") || "";
