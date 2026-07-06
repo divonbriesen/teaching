@@ -56,10 +56,28 @@
     try { rules = await (await fetch(RULES_URL)).json(); } catch (e) { rules = null; }
     const SCRIPT_EL = d.querySelector('script[src*="standards-check"]');
     const scriptMode = SCRIPT_EL && SCRIPT_EL.dataset.mode;
-    const matchDirs = (rules && rules.sites && rules.sites.course && rules.sites.course.match_dirs) || [];
     const lowPath = location.pathname.toLowerCase();
-    const inCourseDir = matchDirs.some((dir) => lowPath.includes("/" + dir + "/"));
-    const course = scriptMode === "course" || (!scriptMode && inCourseDir);
+    // deepest match wins so hobby/ inside itis3135/ resolves to hobby
+    const dataSite = SCRIPT_EL && SCRIPT_EL.dataset.site;
+    let site = dataSite || null;
+    if (!site && rules && rules.sites) {
+      let bestPos = -1;
+      for (const [name, s] of Object.entries(rules.sites)) {
+        for (const dir of s.match_dirs || []) {
+          const pos = lowPath.lastIndexOf("/" + dir + "/");
+          if (pos > bestPos) { bestPos = pos; site = name; }
+        }
+        if (s.match_pattern) {
+          const m = lowPath.match(new RegExp(s.match_pattern, "g"));
+          if (m) {
+            const pos = lowPath.lastIndexOf(m[m.length - 1]);
+            if (pos > bestPos) { bestPos = pos; site = name; }
+          }
+        }
+      }
+    }
+    if (scriptMode === "course") site = "course";
+    const course = site === "course";
 
     add("INFO", "checking against",
       course ? "general plus course standards" : "general standards");
@@ -270,9 +288,10 @@
       add(hasTagline ? "PASS" : "FAIL", "tagline in italics or quotes (header or footer)");
     }
 
-    // ===== Layer-3 page rules from rules.json (single source of truth) =====
-    if (course) {
-      const siteRules = rules && rules.sites && rules.sites.course;
+    // ===== Layer-2/3 site and page rules from rules.json =====
+    if (site) {
+      const siteRules = rules && rules.sites && rules.sites[site];
+      add("INFO", "site rules", site);
       if (siteRules) {
         let page = location.pathname.replace(/\/+$/, "").split("/").pop() || "";
         if (!/\.html?$/.test(page)) page = "index.html";

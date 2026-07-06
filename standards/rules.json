@@ -199,6 +199,212 @@
         "itsc1110",
         "cis110"
       ]
+    },
+    "hobby": {
+      "match_dirs": [
+        "hobby"
+      ],
+      "site_checks": [
+        {
+          "type": "element",
+          "rule": "sections act as the pages",
+          "tag": "section",
+          "min": 6
+        },
+        {
+          "type": "heading",
+          "rule": "h1 is the hobby name (in header)",
+          "level": 1,
+          "pattern": "\\S"
+        },
+        {
+          "type": "element",
+          "rule": "each section topic has an h2 (Who/What/When/Where/How/Why)",
+          "tag": "h2",
+          "min": 6
+        },
+        {
+          "type": "element",
+          "rule": "figures with captions in sections",
+          "tag": "figcaption",
+          "within": "figure",
+          "min": 3
+        },
+        {
+          "type": "html",
+          "rule": "AI Prompts section (or 'only used AI for images' comment)",
+          "pattern": "AI Prompts|only used AI for images",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "italicized AI-prompt explanation with figures",
+          "pattern": "<em",
+          "present": true
+        },
+        {
+          "type": "css",
+          "rule": "embedded stylesheet does the styling",
+          "pattern": "section",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "nav switches sections (SPA-style)",
+          "pattern": "<nav",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "footer links to your design firm",
+          "pattern": "<footer[\\s\\S]*?href=\"\\.\\./",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "footer has validation buttons",
+          "pattern": "validator|validation|jigsaw\\.w3|lint\\.page",
+          "present": true
+        }
+      ],
+      "pages": {}
+    },
+    "designfirm": {
+      "match_pattern": "\\.[a-z]{2,4}/",
+      "site_checks": [
+        {
+          "type": "heading",
+          "rule": "h1 is the firm name",
+          "level": 1,
+          "pattern": "\\S"
+        },
+        {
+          "type": "element",
+          "rule": "logo next to the h1",
+          "tag": "img",
+          "within": "header",
+          "min": 1
+        },
+        {
+          "type": "heading",
+          "rule": "h2 is the page name (Services/Home/etc.)",
+          "level": 2,
+          "pattern": "\\S"
+        },
+        {
+          "type": "element",
+          "rule": "paragraphs describing company and client offer",
+          "tag": "p",
+          "within": "main",
+          "min": 2
+        },
+        {
+          "type": "element",
+          "rule": "5-10 amazing things as a list",
+          "tag": "li",
+          "within": "ul",
+          "min": 5
+        },
+        {
+          "type": "css",
+          "rule": "non-standard bullet style",
+          "pattern": "list-style",
+          "present": true
+        },
+        {
+          "type": "text",
+          "rule": "contact phone number",
+          "pattern": "\\(?\\d{3}\\)?[-. ]\\d{3}[-. ]\\d{4}",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "contact email present",
+          "pattern": "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "footer 'Page created by ...' with firm name + certification",
+          "pattern": "created by|designed by",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "no links back to course pages (standalone site)",
+          "pattern": "contract\\.html|introduction\\.html|about\\.html",
+          "present": false
+        },
+        {
+          "type": "css",
+          "rule": "styling is embedded (single page)",
+          "pattern": "\\S",
+          "present": true
+        }
+      ],
+      "pages": {}
+    },
+    "mascot": {
+      "match_dirs": [],
+      "site_checks": [
+        {
+          "type": "heading",
+          "rule": "h1 is the mascot business name",
+          "level": 1,
+          "pattern": "\\S"
+        },
+        {
+          "type": "html",
+          "rule": "slogan/tagline in header or footer (em or quotes, not both)",
+          "pattern": "<em|[\"“]",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "no b/i tags — use strong/em",
+          "pattern": "<b>|<i>",
+          "present": false
+        },
+        {
+          "type": "element",
+          "rule": "at least 2 paragraphs on the page",
+          "tag": "p",
+          "within": "main",
+          "min": 2
+        },
+        {
+          "type": "element",
+          "rule": "at least 1 content image on the page",
+          "tag": "img",
+          "within": "main",
+          "min": 1
+        },
+        {
+          "type": "html",
+          "rule": "header/footer loaded from components",
+          "pattern": "components/",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "no course links (github/freecodecamp/etc.)",
+          "pattern": "freecodecamp|codecademy|github\\.io|webpages\\.charlotte",
+          "present": false
+        },
+        {
+          "type": "html",
+          "rule": "designer/developer credit in footer",
+          "pattern": "design|develop|coded|created",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "dynamic functionality via JS (3 pieces — verified by eye)",
+          "pattern": "<script",
+          "present": true
+        }
+      ],
+      "pages": {}
     }
   }
 }
