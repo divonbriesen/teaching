@@ -173,3 +173,18 @@ li > ol {
 .centered-links {
   text-align: center;
 }
+
+/* home-logo: clickable vicuña sits inline-left of the site name; header
+   spacing tightened to keep the top of every page compact */
+.home-logo img {
+  vertical-align: -8px;
+  margin-right: 6px;
+}
+
+header {
+  padding: 6px 0;
+}
+
+hgroup p {
+  margin: 0 0 6px;
+}
