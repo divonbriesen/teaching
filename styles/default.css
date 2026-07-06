@@ -179,6 +179,7 @@ li > ol {
 .home-logo img {
   vertical-align: -8px;
   margin-right: 6px;
+  transform: scaleX(-1); /* face the site name, not the margin */
 }
 
 header {
