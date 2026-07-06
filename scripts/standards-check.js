@@ -49,10 +49,16 @@
     const d = document;
     const h1 = d.querySelector("h1");
     const h1Text = h1 ? h1.textContent.trim() : "";
-    // Course rules apply only inside a course-code directory
-    // (itis3135, web115, web250, itsc1110, ...); data-mode overrides.
-    const scriptMode = d.currentScript && d.currentScript.dataset.mode;
-    const inCourseDir = /\/[a-z]{2,4}\d{3,4}[a-z]?\//i.test(location.pathname);
+    // Self-aware mode detection: rules.json declares which directories are
+    // course sites (match_dirs); a pattern guess would misfire on things
+    // like web123 (the hub). data-mode still overrides.
+    let rules = null;
+    try { rules = await (await fetch(RULES_URL)).json(); } catch (e) { rules = null; }
+    const SCRIPT_EL = d.querySelector('script[src*="standards-check"]');
+    const scriptMode = SCRIPT_EL && SCRIPT_EL.dataset.mode;
+    const matchDirs = (rules && rules.sites && rules.sites.course && rules.sites.course.match_dirs) || [];
+    const lowPath = location.pathname.toLowerCase();
+    const inCourseDir = matchDirs.some((dir) => lowPath.includes("/" + dir + "/"));
     const course = scriptMode === "course" || (!scriptMode && inCourseDir);
 
     add("INFO", "checking against",
@@ -266,8 +272,6 @@
 
     // ===== Layer-3 page rules from rules.json (single source of truth) =====
     if (course) {
-      let rules = null;
-      try { rules = await (await fetch(RULES_URL)).json(); } catch (e) { rules = null; }
       const siteRules = rules && rules.sites && rules.sites.course;
       if (siteRules) {
         let page = location.pathname.replace(/\/+$/, "").split("/").pop() || "";
