@@ -35,8 +35,10 @@
   function isLocal(u) {
     if (!u) return false;
     const low = u.toLowerCase();
-    return !low.startsWith("http://") && !low.startsWith("https://") && !low.startsWith("//") &&
-      !low.startsWith("data:") && !low.startsWith("mailto:") && !low.startsWith("#");
+    // slashes built by concat: some validators misread "//" in a string as a comment
+    const ss = "/" + "/";
+    const external = ["http:" + ss, "https:" + ss, ss, "data:", "mailto:", "#"];
+    return !external.some(function (p) { return low.startsWith(p); });
   }
 
   async function runChecks() {
