@@ -349,7 +349,8 @@
       pulse.textContent =
         "@keyframes vicunadator-pulse{" +
         "0%,100%{box-shadow:0 0 6px 3px rgba(220,30,30,.35)}" +
-        "50%{box-shadow:0 0 16px 9px rgba(220,30,30,.75)}}";
+        "50%{box-shadow:0 0 16px 9px rgba(220,30,30,.75)}}" +
+        "@keyframes vicunadator-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}";
       document.head.appendChild(pulse);
     }
     const badge = document.createElement("div");
@@ -359,7 +360,7 @@
       "font-size:34px;line-height:1;user-select:none;border-radius:50%;padding:4px;" +
       (fails
         ? "transform:rotate(180deg);background:rgba(255,220,220,.9);" +
-          "animation:vicunadator-pulse 1.6s ease-in-out infinite;"
+          "animation:vicunadator-pulse 1.6s ease-in-out infinite, vicunadator-spin 2.2s linear infinite;"
         : "background:rgba(225,245,225,.9);" +
           "box-shadow:0 0 12px 6px rgba(40,170,60,.55);");
     badge.textContent = "🦙";
@@ -381,6 +382,12 @@
       "<br><br><strong>" + res.filter((r) => r.level === "PASS").length + " pass, " + fails + " fail</strong>";
     badge.addEventListener("click", (e) => {
       e.stopPropagation();
+      if (fails) {
+        // stop the spin so the report is readable; settle upside down.
+        // A reload starts it spinning again (assuming it still fails).
+        badge.style.animation = "vicunadator-pulse 1.6s ease-in-out infinite";
+        badge.style.transform = "rotate(180deg)";
+      }
       panel.style.display = panel.style.display === "none" ? "block" : "none";
     });
     panel.addEventListener("click", (e) => {

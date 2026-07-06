@@ -207,15 +207,21 @@ hgroup p {
   border-radius: 50%;
 }
 
-.badge-demo.pass {
+.badge-demo-pass {
   background: rgba(225, 245, 225, 0.9);
   box-shadow: 0 0 12px 6px rgba(40, 170, 60, 0.55);
 }
 
-.badge-demo.fail {
+.badge-demo-fail {
   transform: rotate(180deg);
   background: rgba(255, 220, 220, 0.9);
-  animation: badge-demo-pulse 1.6s ease-in-out infinite;
+  animation: badge-demo-pulse 1.6s ease-in-out infinite,
+    badge-demo-spin 2.2s linear infinite;
+}
+
+@keyframes badge-demo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes badge-demo-pulse {
