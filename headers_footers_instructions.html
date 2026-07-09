@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITIS3135 | con von Briesen | Common Headers/Footers Instructions</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script src="scripts/include-repeated-code.js" defer></script>
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <h2>Common Headers/Footers Instructions</h2>
+      <p>
+        Professional sites don't copy the same header and footer into every
+        page — they reuse one copy. Update once, apply everywhere; every page
+        stays identical to the pixel. That's this assignment.
+      </p>
+
+      <section>
+        <h3>The Setup</h3>
+        <ol>
+          <li>
+            Get Paul Browne's HTMLInclude script (HTMLInclude.min.js from
+            GitHub) and put it in your scripts folder (e.g.
+            scripts/include.min.js). You may build another mechanism instead —
+            AI help is fine — as long as your pages still validate fully with
+            Accumulus and it follows the same shape described here (or a
+            comment explains why it shouldn't).
+          </li>
+          <li>
+            Create a <strong>components</strong> folder containing
+            <strong>header.html</strong> and <strong>footer.html</strong>. Cut
+            your header and footer into them —
+            <strong>including the header/footer elements themselves</strong>.
+          </li>
+          <li>
+            In each page, replace the entire header/footer with the include
+            element (the div from the HTMLInclude instructions), and add the
+            script element at the bottom of the page.
+          </li>
+        </ol>
+      </section>
+
+      <section>
+        <h3>What We Check</h3>
+        <ul>
+          <li>
+            components/header.html and components/footer.html exist and
+            contain the header/footer elements.
+          </li>
+          <li>
+            Your page <em>source</em> contains only the include — no header or
+            footer tags. (View source: if you can see a header element in the
+            page file, it's in the wrong place.)
+          </li>
+          <li>Some retrieval code is present and the includes actually load.</li>
+          <li>
+            Every page still passes Accumulus and the
+            <a href="validation.html">Vicunadator</a> after the conversion.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Submitting</h3>
+        <p>
+          Submit your course site URL — the includes show there, and we may
+          check your GitHub repo to confirm the components folder. Then peer
+          review at least two classmates who don't already have two reviews.
+        </p>
+      </section>
+    </main>
+    <footer></footer>
+    <script src="scripts/standards-check.js" defer></script>
+  </body>
+</html>

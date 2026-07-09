@@ -400,6 +400,23 @@
             figs.length ? (bare ? bare + " figure(s) without one" : "") : "no figures");
         }
         if (site === "course") {
+          // M5B: header/footer live in components; raw page holds only the include
+          const rawSrc = await getText(location.href);
+          const compH = await getText("components/header.html");
+          const compF = await getText("components/footer.html");
+          const okH = /<header[\s>]/i.test(compH);
+          const okF = /<footer[\s>]/i.test(compF);
+          if (okH && okF) add("PASS", "components/header.html + footer.html contain the elements");
+          else add("FAIL", "components/header.html + footer.html contain the elements",
+            "missing or element-less: " + [!okH && "header", !okF && "footer"].filter(Boolean).join(", "));
+          const hasInclude = /components\/|data-include/i.test(rawSrc);
+          const rawHeader = /<header[\s>]/i.test(rawSrc);
+          const rawFooter = /<footer[\s>]/i.test(rawSrc);
+          if (!hasInclude) add("FAIL", "page includes header/footer from components", "no include mechanism found");
+          else if (rawHeader || rawFooter) add("FAIL", "page source holds only the include, not header/footer tags",
+            "found inline: " + [rawHeader && "header", rawFooter && "footer"].filter(Boolean).join(", ") + " (commented alternates: judge by eye)");
+          else add("PASS", "page source holds only the include, not header/footer tags");
+
           const navs = [...d.querySelectorAll("nav")];
           const hasHobby = (n) => n && [...n.querySelectorAll("a")].some((a) => (a.getAttribute("href") || "").toLowerCase().includes("hobby"));
           if (hasHobby(navs[0])) add("FAIL", "Hobby link lives in the secondary nav (second <nav>)", "found in the primary nav");
