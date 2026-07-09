@@ -387,6 +387,118 @@
         }
       ],
       "pages": {}
+    },
+    "crappy": {
+      "match_dirs": [
+        "stuff"
+      ],
+      "inverse": true,
+      "comment": "Sin checklist — PASS means the badness is present. Code-side checks add filename sins, heading order, inline-style count, and (JS) aspect distortion.",
+      "site_checks": [
+        {
+          "type": "html",
+          "rule": "image forced to a size with width/height attributes",
+          "pattern": "<img[^>]*width=[^>]*height=",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "enormous terrible alt text",
+          "pattern": "alt=\"[^\"]{80,}\"",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "caption is a heading (not figcaption) after the image",
+          "pattern": "<img[^>]*>\\s*<h\\d",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "Papyrus somewhere",
+          "pattern": "papyrus",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "Comic Sans somewhere else",
+          "pattern": "comic sans",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "a serif font too",
+          "pattern": "font-family[^;\"]*serif",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "black font color",
+          "pattern": "color:\\s*(black|#000)",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "white background",
+          "pattern": "background(-color)?:\\s*(white|#fff)",
+          "present": true
+        },
+        {
+          "type": "css",
+          "rule": "default link colors (no a selector anywhere)",
+          "pattern": "(^|[^-\\w])a\\s*[,{:]",
+          "present": false
+        },
+        {
+          "type": "html",
+          "rule": "centered bulleted list",
+          "pattern": "<ul[^>]*center|ul[^{}]*\\{[^}]*text-align:\\s*center",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "centered paragraph",
+          "pattern": "<p[^>]*center|(^|[^-\\w])p[^{}]*\\{[^}]*text-align:\\s*center",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "comically large font size",
+          "pattern": "font-size:\\s*([4-9]\\d|\\d{3,})px",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "underlined things that aren't links",
+          "pattern": "<(?!a[\\s>])[a-z]+[^>]*text-decoration:\\s*underline|<u[\\s>]",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "text with its own background color",
+          "pattern": "<(p|span|h\\d)[^>]*background",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "extra blank lines jammed in",
+          "pattern": "(<br[^>]*>\\s*){2,}|&nbsp;\\s*</p>|<p>\\s*(&nbsp;|\\s)*</p>",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "a very large border",
+          "pattern": "border[^;:]*:\\s*[^;]*\\d{2,}px",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "each border side different",
+          "pattern": "border-top[^;]*;[\\s\\S]{0,200}border-(left|right|bottom)",
+          "present": true
+        }
+      ],
+      "pages": {}
     }
   }
 }

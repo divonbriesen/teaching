@@ -80,8 +80,36 @@
     const course = site === "course";
 
     add("INFO", "checking against",
-      course ? "general plus course standards" : "general standards");
+      site === "crappy" ? "CRAPpy standards (inverted — sins required)"
+        : course ? "general plus course standards" : "general standards");
     add("PASS", "page loads");
+
+    if (site === "crappy") {
+      const docHtml0 = d.documentElement.outerHTML;
+      const css0 = [...d.querySelectorAll("style")].map((s) => s.textContent).join("\n");
+      for (const c of (rules.sites.crappy.site_checks || [])) {
+        const hay = c.type === "css" ? css0 : docHtml0;
+        const found = new RegExp(c.pattern, "i").test(hay);
+        add(found === (c.present !== false) ? "PASS" : "FAIL", c.rule,
+          found === (c.present !== false) ? "" : "missing");
+      }
+      const fname = decodeURIComponent(location.pathname.split("/").pop() || "");
+      add(/\.htm$/i.test(fname) && !/\.html$/i.test(fname) ? "PASS" : "FAIL", "file is .HTM, not .html", fname);
+      add(/[A-Z]/.test(fname) && /[a-z]/.test(fname) ? "PASS" : "FAIL", "fiLeNaMe MiXeS cAsE", fname);
+      add(fname.includes(" ") ? "PASS" : "FAIL", "filename has space(s)", fname);
+      add(/[^\w .%-]/.test(fname) ? "PASS" : "FAIL", "filename has a weird character (emoji, symbol, ...)", fname);
+      const h1p = docHtml0.toLowerCase().indexOf("<h1");
+      const h2p = docHtml0.toLowerCase().indexOf("<h2");
+      add(h2p !== -1 && (h1p === -1 || h2p < h1p) ? "PASS" : "FAIL", "headings out of order (h2 before h1)");
+      const inl = [...d.querySelectorAll("[style]")].filter((el) => el.id !== "standards-check-badge").length;
+      add(inl >= 5 ? "PASS" : "FAIL", "repeated inline styles instead of a stylesheet", inl + " inline styles");
+      const extless = [...d.querySelectorAll("img")].some((i) => !((i.getAttribute("src") || "").split("/").pop() || "").includes("."));
+      add(extless ? "PASS" : "FAIL", "image src missing its file extension");
+      const stretched = [...d.querySelectorAll("img")].some((i) =>
+        i.naturalWidth && i.width && Math.abs((i.width / i.height) / (i.naturalWidth / i.naturalHeight) - 1) > 0.15);
+      add(stretched ? "PASS" : "FAIL", "aspect ratio properly ruined (stretched/squashed)");
+      return results;
+    }
 
     // ===== HEAD =====
     const icon = d.querySelector('link[rel~="icon"]');
@@ -385,6 +413,7 @@
 
   function showBadge(res) {
     const fails = res.filter((r) => r.level === "FAIL").length;
+    const crappy = res.some((r) => r.rule === "checking against" && /crappy/i.test(r.detail));
     if (fails) {
       const pulse = document.createElement("style");
       pulse.textContent =
@@ -399,13 +428,18 @@
     badge.style.cssText =
       "position:fixed;bottom:36px;right:36px;z-index:9999;cursor:pointer;" +
       "font-size:34px;line-height:1;user-select:none;border-radius:50%;padding:4px;" +
-      (fails
+      (crappy && !fails
+        ? "transform:rotate(180deg);background:rgba(225,245,225,.9);" +
+          "box-shadow:0 0 12px 6px rgba(40,170,60,.55);"
+        : fails
         ? "transform:rotate(180deg);background:rgba(255,220,220,.9);" +
           "animation:vicunadator-pulse 1.6s ease-in-out infinite, vicunadator-spin 2.2s linear infinite;"
         : "background:rgba(225,245,225,.9);" +
           "box-shadow:0 0 12px 6px rgba(40,170,60,.55);");
     badge.textContent = "🦙";
-    badge.title = fails ? fails + " standards check(s) failing — click for details" : "All standards checks pass — click for details";
+    badge.title = crappy
+      ? (fails ? fails + " sin(s) still missing — make it worse" : "perfectly terrible 🎉 — click for details")
+      : fails ? fails + " standards check(s) failing — click for details" : "All standards checks pass — click for details";
 
     const panel = document.createElement("div");
     panel.style.cssText =
