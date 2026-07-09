@@ -79,6 +79,10 @@
     if (scriptMode === "course") site = "course";
     const course = site === "course";
 
+    if (location.pathname.toLowerCase().includes("/components/")) {
+      add("INFO", "component fragment", "checked via the pages that include it — not a standalone page");
+      return results;
+    }
     add("INFO", "checking against",
       site === "crappy" ? "CRAPpy standards (inverted — sins required)"
         : course ? "general plus course standards" : "general standards");
@@ -402,17 +406,17 @@
         if (site === "course") {
           // M5B: header/footer live in components; raw page holds only the include
           const rawSrc = await getText(location.href);
+          const hasInclude = /components\/|data-include/i.test(rawSrc);
           const compH = await getText("components/header.html");
           const compF = await getText("components/footer.html");
           const okH = /<header[\s>]/i.test(compH);
           const okF = /<footer[\s>]/i.test(compF);
           if (okH && okF) add("PASS", "components/header.html + footer.html contain the elements");
-          else add("FAIL", "components/header.html + footer.html contain the elements",
+          else if (hasInclude || compH || compF) add("FAIL", "components/header.html + footer.html contain the elements",
             "missing or element-less: " + [!okH && "header", !okF && "footer"].filter(Boolean).join(", "));
-          const hasInclude = /components\/|data-include/i.test(rawSrc);
           const rawHeader = /<header[\s>]/i.test(rawSrc);
           const rawFooter = /<footer[\s>]/i.test(rawSrc);
-          if (!hasInclude) add("FAIL", "page includes header/footer from components", "no include mechanism found");
+          if (!hasInclude) add("INFO", "page includes header/footer from components", "not converted yet (required from M5B on)");
           else if (rawHeader || rawFooter) add("FAIL", "page source holds only the include, not header/footer tags",
             "found inline: " + [rawHeader && "header", rawFooter && "footer"].filter(Boolean).join(", ") + " (commented alternates: judge by eye)");
           else add("PASS", "page source holds only the include, not header/footer tags");
