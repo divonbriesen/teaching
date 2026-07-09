@@ -499,6 +499,12 @@
         }
       ],
       "pages": {}
+    },
+    "personal": {
+      "match": "webspace root (host-aware, code-side)",
+      "comment": "M3A: the personal home page. Code checks: personal h1/title, single course link, no shared assets, embedded styles.",
+      "site_checks": [],
+      "pages": {}
     }
   }
 }

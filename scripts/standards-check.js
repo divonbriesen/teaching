@@ -76,6 +76,11 @@
         }
       }
     }
+    if (!site && rules && rules.sites && rules.sites.personal) {
+      const depth = lowPath.split("/").filter((s) => s && !/\.html?$/.test(s)).length;
+      if ((location.host.includes("webpages.charlotte.edu") && depth === 1) ||
+          (location.host.endsWith("github.io") && depth === 0)) site = "personal";
+    }
     if (scriptMode === "course") site = "course";
     const course = site === "course";
 
@@ -402,6 +407,26 @@
           add(figs.length && !bare ? "PASS" : "FAIL",
             "each figure has an italic prompt/source note",
             figs.length ? (bare ? bare + " figure(s) without one" : "") : "no figures");
+        }
+        if (site === "personal") {
+          const courseDirs = (rules.sites.course && rules.sites.course.match_dirs) || ["itis3135"];
+          const firmRe = new RegExp((rules.sites.designfirm && rules.sites.designfirm.match_pattern) || "\\.[a-z]{2,4}/", "i");
+          const isCourseRef = (u) => courseDirs.some((dir) => u.toLowerCase().includes(dir)) && !firmRe.test(u);
+          const headsAll = [...d.querySelectorAll("h1")].map((h) => h.textContent).concat([title]);
+          const coursey = headsAll.filter((t) => /[A-Z]{2,4}\d{3,4}/.test(t));
+          add(!coursey.length ? "PASS" : "FAIL", "title/h1 read as YOUR page, not the course's",
+            coursey.slice(0, 2).join("; ").trim());
+          const courseLinks = anchors.map((a) => a.getAttribute("href") || "").filter(isCourseRef);
+          if (courseLinks.length === 1) add("PASS", "exactly one link to the course site", courseLinks[0]);
+          else if (!courseLinks.length) add("FAIL", "exactly one link to the course site", "none found");
+          else add("FAIL", "exactly one link to the course site", courseLinks.length + " found: " + courseLinks.slice(0, 3).join(", "));
+          const shared = [...sheets, ...scripts, ...imgs].filter((s) => isLocal(s) && isCourseRef(s));
+          add(!shared.length ? "PASS" : "FAIL", "no styles/images/scripts shared with the course site",
+            shared.slice(0, 4).map(short).join(", "));
+          if (embedded.trim() && !localSheets.length) add("PASS", "embedded stylesheet does the styling");
+          else add("FAIL", "embedded stylesheet does the styling",
+            localSheets.length ? "linked: " + localSheets.slice(0, 2).join(", ") : "no embedded styles");
+          add("INFO", "CLT and GitHub Pages copies match", "compare the pair by eye");
         }
         if (site === "course") {
           // M5B: header/footer live in components; raw page holds only the include
