@@ -96,9 +96,10 @@
     }
 
     const title = d.title.trim();
+    const dividerRe = site === "hobby" ? /[^\w\s'".,]/ : /[|~•·—-]/;
     if (!title) add("FAIL", "title element present");
-    else if (!/[|~•·—-]/.test(title)) add("FAIL", "title combines h1 (site name) + divider + h2 (page name)", "no divider: " + title);
-    else add("PASS", "title has a divider", title);
+    else if (!dividerRe.test(title)) add("FAIL", "title combines h1 (site name) + divider + h2 (page name)", "no divider: " + title);
+    else add("PASS", "title has a divider" + (site === "hobby" ? " (unique symbol ok here)" : ""), title);
 
     const sheets = [...d.querySelectorAll('link[rel~="stylesheet"]')].map((l) => l.getAttribute("href") || "");
     const localSheets = sheets.filter(isLocal);
@@ -342,6 +343,40 @@
         if (pageRules) {
           add("INFO", "page rules", page);
           applyChecks(pageRules.checks);
+        }
+        if (site === "hobby") {
+          const h2texts = [...d.querySelectorAll("h2")].map((h) => h.textContent.trim().toLowerCase());
+          const ends = h2texts.some((h) => h && title.toLowerCase().endsWith(h));
+          add(ends ? "PASS" : "FAIL",
+            "title ends with the visible section's h2 (JS updates it per section)",
+            ends ? "" : "title doesn't end with any section h2");
+          const thin = [], noFig = [];
+          for (const s of d.querySelectorAll("section")) {
+            const h2 = s.querySelector("h2");
+            const name = (h2 ? h2.textContent.trim() : "(no h2)").slice(0, 24);
+            const items = [...s.querySelectorAll("p,table,form,ul,ol")]
+              .filter((el) => !el.closest("figure")).length
+              + s.querySelectorAll("figure").length;
+            if (items < 3) thin.push(name + " (" + items + ")");
+            if (!s.querySelector("figure") && !/ai prompt/i.test(name)) noFig.push(name);
+          }
+          add(!thin.length ? "PASS" : "FAIL",
+            "every section has 3+ items (p/figure/table/form/list; headings don't count)",
+            thin.slice(0, 4).join(", "));
+          add(!noFig.length ? "PASS" : "FAIL",
+            "every section has a figure (AI Prompts exempt)", noFig.slice(0, 4).join(", "));
+          const figs = [...d.querySelectorAll("figure")];
+          const bare = figs.filter((f) => !f.querySelector("em,i")).length;
+          add(figs.length && !bare ? "PASS" : "FAIL",
+            "each figure has an italic prompt/source note",
+            figs.length ? (bare ? bare + " figure(s) without one" : "") : "no figures");
+        }
+        if (site === "course") {
+          const navs = [...d.querySelectorAll("nav")];
+          const hasHobby = (n) => n && [...n.querySelectorAll("a")].some((a) => (a.getAttribute("href") || "").toLowerCase().includes("hobby"));
+          if (hasHobby(navs[0])) add("FAIL", "Hobby link lives in the secondary nav (second <nav>)", "found in the primary nav");
+          else if (navs.slice(1).some(hasHobby)) add("PASS", "Hobby link lives in the secondary nav (second <nav>)");
+          else add("INFO", "Hobby link lives in the secondary nav (second <nav>)", "no hobby link yet (required once the midterm is up)");
         }
       }
     }

@@ -207,39 +207,26 @@
       "site_checks": [
         {
           "type": "element",
-          "rule": "sections act as the pages",
+          "rule": "sections act as the pages (Who/What/When/Where/How/Why + AI Prompts)",
           "tag": "section",
           "min": 6
         },
         {
-          "type": "heading",
-          "rule": "h1 is the hobby name (in header)",
-          "level": 1,
-          "pattern": "\\S"
-        },
-        {
           "type": "element",
-          "rule": "each section topic has an h2 (Who/What/When/Where/How/Why)",
+          "rule": "each section topic has an h2",
           "tag": "h2",
           "min": 6
         },
         {
-          "type": "element",
-          "rule": "figures with captions in sections",
-          "tag": "figcaption",
-          "within": "figure",
-          "min": 3
+          "type": "html",
+          "rule": "no includes — header/footer written directly in the file",
+          "pattern": "data-include|components/",
+          "present": false
         },
         {
           "type": "html",
           "rule": "AI Prompts section (or 'only used AI for images' comment)",
           "pattern": "AI Prompts|only used AI for images",
-          "present": true
-        },
-        {
-          "type": "html",
-          "rule": "italicized AI-prompt explanation with figures",
-          "pattern": "<em",
           "present": true
         },
         {
@@ -259,15 +246,10 @@
           "rule": "footer links to your design firm",
           "pattern": "<footer[\\s\\S]*?href=\"\\.\\./",
           "present": true
-        },
-        {
-          "type": "html",
-          "rule": "footer has validation buttons",
-          "pattern": "validator|validation|jigsaw\\.w3|lint\\.page",
-          "present": true
         }
       ],
-      "pages": {}
+      "pages": {},
+      "title_divider": "unique"
     },
     "designfirm": {
       "match_pattern": "\\.[a-z]{2,4}/",
