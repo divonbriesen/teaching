@@ -26,6 +26,18 @@
         font-size: 0.9rem;
       }
 
+      #grading-tool button#mock-btn {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        border: 1.5px solid #aaa;
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        white-space: nowrap;
+        color: #555;
+      }
+
       #grading-tool button#evaluate-btn {
         padding: 0.5rem 1.25rem;
         border-radius: 6px;
@@ -168,6 +180,7 @@
               placeholder="https://student.github.io/project/"
             />
             <button id="evaluate-btn">Evaluate</button>
+            <button id="mock-btn" title="Test the UI without an API key">Mock Run</button>
           </div>
           <p class="key-note">
             Your API key is used only in your browser and never stored or sent anywhere else.
