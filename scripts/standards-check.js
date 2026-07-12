@@ -305,6 +305,21 @@
     add(!tight.length ? "PASS" : "FAIL",
       "dividers have a space on both sides", tight.map((t) => JSON.stringify(t)).join(", "));
 
+    // Internal references must be relative: an absolute URL back into the
+    // student's own webspace (links or assets) should be a relative path.
+    const ownRoot = (location.host + "/" + (location.pathname.split("/").filter(Boolean)[0] || "")).toLowerCase();
+    const allRefs = [...anchors.map((a) => a.getAttribute("href") || ""), ...sheets, ...scripts, ...imgs];
+    const absInternal = allRefs.filter((h) => {
+      if (!/^https?:\/\//i.test(h)) return false;
+      let u; try { u = new URL(h); } catch (e) { return false; }
+      const hRoot = (u.host + "/" + (u.pathname.split("/").filter(Boolean)[0] || "")).toLowerCase();
+      return u.host.toLowerCase() === location.host.toLowerCase() &&
+        (location.host.toLowerCase().endsWith("github.io") || hRoot === ownRoot);
+    });
+    add(!absInternal.length ? "PASS" : "FAIL",
+      "internal links/assets are relative, not absolute URLs",
+      absInternal.slice(0, 4).map(short).join(", "));
+
     // Relative links may open new tabs only when they point into another directory.
     const badBlank = anchors.filter((a) => {
       const h = a.getAttribute("href") || "";
