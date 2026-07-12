@@ -327,63 +327,23 @@
       "pages": {}
     },
     "mascot": {
-      "match_dirs": [],
+      "match": "unrecognized folder, any location (code-side; folder is the student's mascot name)",
+      "exclude_dirs": [
+        "web123",
+        "images",
+        "components",
+        "styles",
+        "scripts",
+        "standards",
+        "evaluator",
+        "GRADING-intros"
+      ],
       "site_checks": [
         {
-          "type": "heading",
-          "rule": "h1 is the mascot business name",
-          "level": 1,
-          "pattern": "\\S"
-        },
-        {
-          "type": "html",
-          "rule": "slogan/tagline in header or footer (em or quotes, not both)",
-          "pattern": "<em|[\"“]",
-          "present": true
-        },
-        {
-          "type": "html",
-          "rule": "no b/i tags — use strong/em",
-          "pattern": "<b>|<i>",
+          "type": "text",
+          "rule": "no course links (github, freecodecamp, codecademy) on the business site",
+          "pattern": "github\\.com|freecodecamp\\.org|codecademy\\.com",
           "present": false
-        },
-        {
-          "type": "element",
-          "rule": "at least 2 paragraphs on the page",
-          "tag": "p",
-          "within": "main",
-          "min": 2
-        },
-        {
-          "type": "element",
-          "rule": "at least 1 content image on the page",
-          "tag": "img",
-          "within": "main",
-          "min": 1
-        },
-        {
-          "type": "html",
-          "rule": "header/footer loaded from components",
-          "pattern": "components/",
-          "present": true
-        },
-        {
-          "type": "html",
-          "rule": "no course links (github/freecodecamp/etc.)",
-          "pattern": "freecodecamp|codecademy|github\\.io|webpages\\.charlotte",
-          "present": false
-        },
-        {
-          "type": "html",
-          "rule": "designer/developer credit in footer",
-          "pattern": "design|develop|coded|created",
-          "present": true
-        },
-        {
-          "type": "html",
-          "rule": "dynamic functionality via JS (3 pieces — verified by eye)",
-          "pattern": "<script",
-          "present": true
         }
       ],
       "pages": {}

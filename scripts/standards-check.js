@@ -81,6 +81,21 @@
       if ((location.host.includes("webpages.charlotte.edu") && depth === 1) ||
           (location.host.endsWith("github.io") && depth === 0)) site = "personal";
     }
+    // mascot: folder is named after each student's mascot, so no fixed dir
+    // can match — an unrecognized folder (any location) resolves to mascot
+    if ((!site || site === "course") && rules && rules.sites && rules.sites.mascot) {
+      const dirs = lowPath.split("/").filter((s) => s && !/\.html?$/.test(s));
+      const last = dirs[dirs.length - 1];
+      const minDepth = location.host.includes("webpages.charlotte.edu") ? 2 : 1;
+      if (last && dirs.length >= minDepth) {
+        const known = new Set();
+        for (const s of Object.values(rules.sites)) for (const dir of s.match_dirs || []) known.add(dir);
+        const excluded = new Set(rules.sites.mascot.exclude_dirs || []);
+        const firmPat = rules.sites.designfirm && rules.sites.designfirm.match_pattern;
+        const firmHit = firmPat && new RegExp(firmPat, "i").test("/" + last + "/");
+        if (!known.has(last) && !excluded.has(last) && !firmHit) site = "mascot";
+      }
+    }
     if (scriptMode === "course") site = "course";
     const course = site === "course";
 
@@ -428,8 +443,41 @@
             localSheets.length ? "linked: " + localSheets.slice(0, 2).join(", ") : "no embedded styles");
           add("INFO", "CLT and GitHub Pages copies match", "compare the pair by eye");
         }
-        if (site === "course") {
-          // M5B: header/footer live in components; raw page holds only the include
+        if (site === "mascot") {
+          const hf = [...d.querySelectorAll("header,footer")];
+          const hfText = hf.map((e) => e.textContent).join("\n");
+          const hasEm = hf.some((e) => e.querySelector("em"));
+          const hasQuotes = /["“”][^"“”<>]{4,120}["“”]/.test(hfText);
+          const SLOGAN = "slogan/tagline in header or footer (italics OR quotes, not both)";
+          if (hasEm && hasQuotes) add("WARN", SLOGAN, "found both em and quoted text — pick one style");
+          else if (hasEm || hasQuotes) add("PASS", SLOGAN, hasEm ? "em" : "quotes");
+          else add("FAIL", SLOGAN, "no em or quoted text found in header/footer");
+
+          add(d.querySelector("b,i") ? "FAIL" : "PASS", "uses strong/em, not b/i");
+
+          const navHrefs = new Set([...d.querySelectorAll("nav a")]
+            .map((a) => (a.getAttribute("href") || "").toLowerCase())
+            .filter((h) => h && !h.startsWith("http") && !h.startsWith("#") && !h.startsWith("mailto:")));
+          const h2count = d.querySelectorAll("h2").length;
+          const PAGES = "home + 4 more pages (or SPA sections)";
+          if (navHrefs.size >= 4 || h2count >= 5) add("PASS", PAGES, navHrefs.size + " nav links, " + h2count + " h2s");
+          else add("FAIL", PAGES, "only " + navHrefs.size + " local nav links / " + h2count + " h2s");
+
+          const paras = d.querySelectorAll("main p").length || d.querySelectorAll("p").length;
+          add(paras >= 2 ? "PASS" : "FAIL", "at least 2 paragraphs on the page", paras + " found");
+
+          const footText = [...d.querySelectorAll("footer")].map((e) => e.textContent).join(" ");
+          if (/design|develop|coder|coded|created|built/i.test(footText))
+            add("PASS", "designer/developer credit in the footer");
+          else add("FAIL", "designer/developer credit in the footer",
+            "footer should refer to you as designer/developer/coder");
+
+          add("INFO", "3 dynamic JS functionalities (M15)", "not auto-checked — summarize them in your submission");
+          add("INFO", "look and feel differs from your course/hobby/firm sites", "judged by eye");
+        }
+        if (site === "course" || site === "mascot") {
+          // M5B: header/footer live in components; raw page holds only the
+          // include. The mascot final (M15) carries the same requirement.
           const rawSrc = await getText(location.href);
           const hasInclude = /components\/|data-include/i.test(rawSrc);
           const compH = await getText("components/header.html");
@@ -441,11 +489,16 @@
             "missing or element-less: " + [!okH && "header", !okF && "footer"].filter(Boolean).join(", "));
           const rawHeader = /<header[\s>]/i.test(rawSrc);
           const rawFooter = /<footer[\s>]/i.test(rawSrc);
-          if (!hasInclude) add("INFO", "page includes header/footer from components", "not converted yet (required from M5B on)");
+          if (!hasInclude) {
+            if (site === "mascot") add("FAIL", "page includes header/footer from components",
+              "required on the mascot site (single header/footer files in components/)");
+            else add("INFO", "page includes header/footer from components", "not converted yet (required from M5B on)");
+          }
           else if (rawHeader || rawFooter) add("FAIL", "page source holds only the include, not header/footer tags",
             "found inline: " + [rawHeader && "header", rawFooter && "footer"].filter(Boolean).join(", ") + " (commented alternates: judge by eye)");
           else add("PASS", "page source holds only the include, not header/footer tags");
-
+        }
+        if (site === "course") {
           const navs = [...d.querySelectorAll("nav")];
           const hasHobby = (n) => n && [...n.querySelectorAll("a")].some((a) => (a.getAttribute("href") || "").toLowerCase().includes("hobby"));
           if (hasHobby(navs[0])) add("FAIL", "Hobby link lives in the secondary nav (second <nav>)", "found in the primary nav");
