@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITIS3135 | con von Briesen | University Webspace Setup Instructions</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script src="scripts/include-repeated-code.js" defer></script>
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <h2>University Webspace Setup (M0G)</h2>
+      <p>
+        Get your Charlotte webspace live and mirroring your GitHub repo. No
+        HTML writing here — just requesting the space, connecting with SFTP,
+        and putting files where they belong. When it's done, your name is on
+        the web at <strong>webpages.charlotte.edu/yourninernetid/</strong> —
+        that's what gets checked.
+      </p>
+
+      <section>
+        <h3>Request the Space</h3>
+        <ul>
+          <li>
+            Request your personal webpage via the
+            <a href="https://services.help.charlotte.edu/TDClient/33/Portal/KB/?CategoryID=26">UNC Charlotte knowledge base</a>,
+            wait ~10 minutes, then load
+            https://webpages.charlotte.edu/&lt;your ninernet id&gt; — you
+            should see a generic placeholder page with the school logo.
+          </li>
+          <li>
+            Working off-campus? You need the
+            <a href="https://services.help.charlotte.edu/TDClient/33/Portal/KB/ArticleDet?ID=677">school VPN</a>
+            installed and connected before SFTP will work.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Connect &amp; Arrange Files</h3>
+        <ul>
+          <li>
+            Install an SFTP client (<strong>FileZilla</strong>, Fetch, or
+            WinSCP): hostname <strong>webpages.uncc.edu</strong>, port
+            <strong>22</strong>, your school login. Show date/time columns;
+            go full screen and learn cmd/ctrl-tab.
+          </li>
+          <li>
+            Local side: navigate to your repo folder
+            (…/ITIS3135Work/yourgithubid.github.io/). Server side: work only
+            <strong>inside public_html</strong>.
+          </li>
+          <li>
+            Rename the server's existing index.html to
+            <strong>original_index.html</strong> and move it down into your
+            local repo folder, next to (not inside) itis3135/ — leaving you
+            two index files locally if done right.
+          </li>
+          <li>
+            In your local root index.html add:
+            <strong>&lt;a href="itis3135/"&gt;Click to go to my ITIS3135
+            Site&lt;/a&gt;</strong> — test with Live Server.
+          </li>
+          <li>
+            Copy everything from the repo to public_html: index,
+            original_index, and the whole itis3135 folder. Watch
+            date/time/size so you don't nest a folder inside itself or
+            overwrite the wrong index.
+          </li>
+          <li>
+            Commit/push the GitHub side too — the two sites should
+            <strong>match</strong>.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Test</h3>
+        <ul>
+          <li>
+            http://webpages.charlotte.edu/yourninernetid/ shows your first
+            page (with your name) and the course link.
+          </li>
+          <li>The link loads your itis3135 index page.</li>
+          <li>
+            Fails? Re-read the steps, check file times on the server, ask the
+            duck, then the class forum.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Submitting</h3>
+        <ul>
+          <li>
+            A screenshot (gif/jpg/png) of your SFTP client with
+            yourgithubid.github.io/itis3135/ on the left and
+            public_html/itis3135/ on the right, contents visible.
+          </li>
+          <li>The clickable URL for your Charlotte itis3135 folder.</li>
+          <li>Your github.com and github.io URLs, as before.</li>
+          <li>Anything you'd like to note.</li>
+          <li>
+            Then review two peers with constructive feedback — something they
+            should improve or fix.
+          </li>
+        </ul>
+        <p>
+          <strong>What gets checked:</strong> your webpages.charlotte.edu site
+          loads, and your name appears somewhere on the page.
+        </p>
+      </section>
+    </main>
+    <footer></footer>
+    <script src="scripts/standards-check.js" defer></script>
+  </body>
+</html>

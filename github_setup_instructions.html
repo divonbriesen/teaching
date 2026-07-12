@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITIS3135 | con von Briesen | GitHub Setup Instructions</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script src="scripts/include-repeated-code.js" defer></script>
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <h2>GitHub &amp; GitHub Pages Setup (M0F)</h2>
+      <p>
+        Set up the tooling and hosting you'll use all semester: VSCode, a
+        sensible work folder, a GitHub account, and a live GitHub Pages site.
+        When it's done, your name is on the web at
+        <strong>yourgithubid.github.io</strong> — that's what gets checked.
+      </p>
+
+      <section>
+        <h3>Tools &amp; Account</h3>
+        <ul>
+          <li>Install <strong>VSCode</strong>.</li>
+          <li>
+            Make a work folder somewhere sensible (like Documents), e.g.
+            <strong>ITIS3135Work</strong>. Not Downloads, not Desktop, not a
+            random spot — know how to navigate to it.
+          </li>
+          <li>
+            Create a <strong>GitHub account</strong> (personal or school
+            email — personal keeps access after you leave CLT) and install
+            <strong>GitHub Desktop</strong>.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>The Repo &amp; Pages</h3>
+        <ul>
+          <li>
+            In GitHub Desktop, create a repo named exactly
+            <strong>yourgithubid.github.io</strong> (login Bobby77 → repo
+            Bobby77.github.io), inside your work folder.
+            <strong>Public</strong>, not private — these are webpages. A
+            readme is a good idea.
+          </li>
+          <li>
+            On github.com, in the repo's settings, turn on
+            <strong>GitHub Pages</strong> with main as the web root.
+          </li>
+          <li>
+            In VSCode: create <strong>index.html</strong> ("Yo it's so-and-so,
+            and this is the root of my website!"). Turn on auto-save (on
+            focus change) and install the <strong>Live Server</strong>
+            extension (Ritwick Dey) — Go Live previews your page properly.
+          </li>
+          <li>
+            In GitHub Desktop: <strong>commit</strong>, then
+            <strong>push to origin</strong>. Test at
+            http://yourgithubid.github.io (may take a few minutes) and see the
+            files at http://github.com/yourgithubid (instant).
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Course Folder Structure</h3>
+        <ul>
+          <li>
+            Inside the repo, make an <strong>itis3135</strong> folder with its
+            own index.html: "&lt;h1&gt;I am so-and-so and this is my ITIS3135
+            First Course Page&lt;/h1&gt;" — with <strong>your name</strong>.
+          </li>
+          <li>
+            Also inside itis3135, create: <strong>images/</strong>,
+            <strong>components/</strong> (empty header.html + footer.html),
+            <strong>scripts/</strong> (empty include_components.js),
+            <strong>styles/</strong> (empty default.css), and
+            <strong>z_archives/</strong> (for junk you're afraid to delete).
+            GitHub ignores empty folders until they have files — that's fine.
+          </li>
+          <li>Commit and push again; confirm itis3135/ loads on your Pages site.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Submitting</h3>
+        <ul>
+          <li>The URL of your repo on github.com.</li>
+          <li>The URL of your GitHub Pages site (yourgithubid.github.io).</li>
+          <li>Anything you'd like to note.</li>
+          <li>
+            Then reply to two peers with <strong>constructive</strong>
+            feedback — find a real problem and tell them politely.
+          </li>
+        </ul>
+        <p>
+          <strong>What gets checked:</strong> your github.io site loads, and
+          your name appears somewhere on the page.
+        </p>
+      </section>
+    </main>
+    <footer></footer>
+    <script src="scripts/standards-check.js" defer></script>
+  </body>
+</html>
