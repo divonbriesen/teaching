@@ -244,7 +244,7 @@
         {
           "type": "html",
           "rule": "footer links to your design firm",
-          "pattern": "<footer[\\s\\S]*?href=\"\\.\\./",
+          "pattern": "<footer[\\s\\S]*?href=\"(\\.\\./|[^\"]*/[a-z0-9-]+\\.[a-z]{2,4}/)",
           "present": true
         }
       ],
