@@ -103,9 +103,9 @@
       add("INFO", "component fragment", "checked via the pages that include it — not a standalone page");
       return results;
     }
-    add("INFO", "checking against",
-      site === "crappy" ? "CRAPpy standards (inverted — sins required)"
-        : course ? "general plus course standards" : "general standards");
+    add("HEAD", "CHECKING AGAINST: " +
+      (site === "crappy" ? "CRAPPY STANDARDS (INVERTED — SINS REQUIRED)"
+        : course ? "GENERAL PLUS COURSE STANDARDS" : "GENERAL STANDARDS"));
     add("PASS", "page loads");
 
     if (site === "crappy") {
@@ -365,7 +365,7 @@
     // ===== Layer-2/3 site and page rules from rules.json =====
     if (site) {
       const siteRules = rules && rules.sites && rules.sites[site];
-      add("INFO", "site rules", site);
+      add("HEAD", "SITE RULES: " + site.toUpperCase());
       if (siteRules) {
         let page = location.pathname.replace(/\/+$/, "").split("/").pop() || "";
         if (!/\.html?$/.test(page)) page = "index.html";
@@ -414,7 +414,7 @@
         applyChecks(siteRules.site_checks);
         const pageRules = siteRules.pages && siteRules.pages[page];
         if (pageRules) {
-          add("INFO", "page rules", page);
+          add("HEAD", "PAGE RULES: " + page.toUpperCase());
           applyChecks(pageRules.checks);
         }
         if (site === "hobby") {
@@ -533,7 +533,7 @@
 
   function showBadge(res) {
     const fails = res.filter((r) => r.level === "FAIL").length;
-    const crappy = res.some((r) => r.rule === "checking against" && /crappy/i.test(r.detail));
+    const crappy = res.some((r) => /^checking against/i.test(r.rule) && /crappy/i.test(r.rule + r.detail));
     if (fails) {
       const pulse = document.createElement("style");
       pulse.textContent =
@@ -572,7 +572,9 @@
     const closeX = '<span data-vicuna-close style="position:sticky;top:0;float:right;' +
       'cursor:pointer;font:bold 14px/1 sans-serif;color:#666;padding:0 2px;">&#10005;</span>';
     panel.innerHTML = closeX + res
-      .map((r) => icons[r.level] + " " + esc(r.rule) + (r.detail ? ": " + esc(r.detail) : ""))
+      .map((r) => r.level === "HEAD"
+        ? "<br>&gt;&gt;&gt;&gt;&gt;&gt; <strong>" + esc(r.rule) + "</strong>"
+        : icons[r.level] + " " + esc(r.rule) + (r.detail ? ": " + esc(r.detail) : ""))
       .join("<br>") +
       "<br><br><strong>" + res.filter((r) => r.level === "PASS").length + " pass, " + fails + " fail</strong>";
     badge.addEventListener("click", (e) => {
