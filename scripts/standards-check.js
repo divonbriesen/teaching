@@ -370,7 +370,13 @@
                 const hay = c.type === "text" ? docText : docHtml;
                 const found = new RegExp(c.pattern, "i").test(hay);
                 const okc = found === want;
-                add(okc ? "PASS" : "FAIL", rule, okc ? "" : (want ? "missing" : "found — remove it"));
+                let detail = okc ? "" : (want ? "missing" : "found — remove it");
+                // near-miss hint: strict pattern failed but a looser one
+                // matches — say what's wrong instead of "missing"
+                if (!okc && c.fail_hint_pattern && new RegExp(c.fail_hint_pattern, "i").test(hay)) {
+                  detail = c.fail_hint || detail;
+                }
+                add(okc ? "PASS" : "FAIL", rule, detail);
               } else if (c.type === "text_all" || c.type === "html_all") {
                 const hay = c.type === "text_all" ? docText : docHtml;
                 const missing = (c.patterns || []).filter((p2) => !new RegExp(p2, "i").test(hay));

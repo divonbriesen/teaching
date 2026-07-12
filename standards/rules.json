@@ -244,8 +244,10 @@
         {
           "type": "html",
           "rule": "footer links to your design firm",
-          "pattern": "<footer[\\s\\S]*?href=\"(\\.\\./|[^\"]*/[a-z0-9-]+\\.[a-z]{2,4}/)",
-          "present": true
+          "pattern": "<footer[\\s\\S]*?href=\"\\.\\./",
+          "present": true,
+          "fail_hint_pattern": "<footer[\\s\\S]*?href=\"[^\"]*/[a-z0-9-]+\\.[a-z]{2,4}/",
+          "fail_hint": "firm is linked with an absolute URL — use a relative link (../yourfirm.tld/)"
         }
       ],
       "pages": {},
