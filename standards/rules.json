@@ -26,6 +26,12 @@
           "rule": "nav links the CRAP evaluations page (M8A on)",
           "pattern": "href=\"website_evaluations\\.html\"",
           "present": true
+        },
+        {
+          "type": "html",
+          "rule": "primary nav links the Pictures/Images page (M11 on)",
+          "pattern": "href=\"(pictures|images)\\.html\"",
+          "present": true
         }
       ],
       "pages": {
@@ -334,6 +340,174 @@
               "tag": "li",
               "within": "ul",
               "min": 8
+            }
+          ]
+        },
+        "pictures.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 says Everything Pictures/Images",
+              "level": 2,
+              "pattern": "picture|image"
+            },
+            {
+              "type": "element",
+              "rule": "explanatory paragraph in main",
+              "tag": "p",
+              "within": "main",
+              "min": 1
+            },
+            {
+              "type": "element",
+              "rule": "one section per image (2)",
+              "tag": "section",
+              "within": "main",
+              "min": 2
+            },
+            {
+              "type": "element",
+              "rule": "h3 titling each section",
+              "tag": "h3",
+              "within": "section",
+              "min": 2
+            },
+            {
+              "type": "element",
+              "rule": "horizontal rule between the sections",
+              "tag": "hr",
+              "within": "main",
+              "min": 1
+            },
+            {
+              "type": "element",
+              "rule": "articles for each demonstration (6+)",
+              "tag": "article",
+              "within": "section",
+              "min": 6
+            },
+            {
+              "type": "element",
+              "rule": "h4 on each article",
+              "tag": "h4",
+              "within": "article",
+              "min": 6
+            },
+            {
+              "type": "element",
+              "rule": "figures with images",
+              "tag": "img",
+              "within": "figure",
+              "min": 2
+            },
+            {
+              "type": "element",
+              "rule": "figcaption on each figure",
+              "tag": "figcaption",
+              "within": "figure",
+              "min": 2
+            },
+            {
+              "type": "html",
+              "rule": "original-image links open in a new tab",
+              "pattern": "<a[^>]*href=\"[^\"]*images/[^\"]*\"[^>]*target=\"_blank\"",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "CSS-resizing demonstrations (inline width/height on images)",
+              "pattern": "<img[^>]*style=\"[^\"]*(width|height)",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "image names carry source and photographer (name@photographer_source)",
+              "pattern": "images/[a-z0-9-]+@[a-z0-9-]+",
+              "present": true
+            }
+          ]
+        },
+        "images.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 says Everything Pictures/Images",
+              "level": 2,
+              "pattern": "picture|image"
+            },
+            {
+              "type": "element",
+              "rule": "explanatory paragraph in main",
+              "tag": "p",
+              "within": "main",
+              "min": 1
+            },
+            {
+              "type": "element",
+              "rule": "one section per image (2)",
+              "tag": "section",
+              "within": "main",
+              "min": 2
+            },
+            {
+              "type": "element",
+              "rule": "h3 titling each section",
+              "tag": "h3",
+              "within": "section",
+              "min": 2
+            },
+            {
+              "type": "element",
+              "rule": "horizontal rule between the sections",
+              "tag": "hr",
+              "within": "main",
+              "min": 1
+            },
+            {
+              "type": "element",
+              "rule": "articles for each demonstration (6+)",
+              "tag": "article",
+              "within": "section",
+              "min": 6
+            },
+            {
+              "type": "element",
+              "rule": "h4 on each article",
+              "tag": "h4",
+              "within": "article",
+              "min": 6
+            },
+            {
+              "type": "element",
+              "rule": "figures with images",
+              "tag": "img",
+              "within": "figure",
+              "min": 2
+            },
+            {
+              "type": "element",
+              "rule": "figcaption on each figure",
+              "tag": "figcaption",
+              "within": "figure",
+              "min": 2
+            },
+            {
+              "type": "html",
+              "rule": "original-image links open in a new tab",
+              "pattern": "<a[^>]*href=\"[^\"]*images/[^\"]*\"[^>]*target=\"_blank\"",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "CSS-resizing demonstrations (inline width/height on images)",
+              "pattern": "<img[^>]*style=\"[^\"]*(width|height)",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "image names carry source and photographer (name@photographer_source)",
+              "pattern": "images/[a-z0-9-]+@[a-z0-9-]+",
+              "present": true
             }
           ]
         }
