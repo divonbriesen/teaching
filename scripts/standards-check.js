@@ -104,8 +104,7 @@
       return results;
     }
     if (site === "crappy") add("HEAD", "CRAPPY STANDARDS (INVERTED — SINS REQUIRED)");
-    add("PASS", "page loads");
-    if (site !== "crappy") add("HEAD", "GENERAL RULES (EVERY PAGE)");
+    else add("HEAD", "GENERAL RULES (EVERY PAGE)");
 
     if (site === "crappy") {
       const docHtml0 = d.documentElement.outerHTML;
@@ -364,7 +363,7 @@
     // ===== Layer-2/3 site and page rules from rules.json =====
     if (site) {
       const siteRules = rules && rules.sites && rules.sites[site];
-      add("HEAD", "SITE RULES: " + site.toUpperCase());
+      add("HEAD", "SITE RULES: " + site.toUpperCase() + " SITE");
       if (siteRules) {
         let page = location.pathname.replace(/\/+$/, "").split("/").pop() || "";
         if (!/\.html?$/.test(page)) page = "index.html";
