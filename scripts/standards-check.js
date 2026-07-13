@@ -103,9 +103,7 @@
       add("INFO", "component fragment", "checked via the pages that include it — not a standalone page");
       return results;
     }
-    add("HEAD", "CHECKING AGAINST: " +
-      (site === "crappy" ? "CRAPPY STANDARDS (INVERTED — SINS REQUIRED)"
-        : course ? "GENERAL PLUS COURSE STANDARDS" : "GENERAL STANDARDS"));
+    if (site === "crappy") add("HEAD", "CRAPPY STANDARDS (INVERTED — SINS REQUIRED)");
     add("PASS", "page loads");
     if (site !== "crappy") add("HEAD", "GENERAL RULES (EVERY PAGE)");
 
@@ -534,7 +532,7 @@
 
   function showBadge(res) {
     const fails = res.filter((r) => r.level === "FAIL").length;
-    const crappy = res.some((r) => /^checking against/i.test(r.rule) && /crappy/i.test(r.rule + r.detail));
+    const crappy = res.some((r) => r.level === "HEAD" && /crappy/i.test(r.rule));
     if (fails) {
       const pulse = document.createElement("style");
       pulse.textContent =
