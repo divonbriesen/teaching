@@ -107,6 +107,7 @@
       (site === "crappy" ? "CRAPPY STANDARDS (INVERTED — SINS REQUIRED)"
         : course ? "GENERAL PLUS COURSE STANDARDS" : "GENERAL STANDARDS"));
     add("PASS", "page loads");
+    if (site !== "crappy") add("HEAD", "GENERAL RULES (EVERY PAGE)");
 
     if (site === "crappy") {
       const docHtml0 = d.documentElement.outerHTML;
@@ -412,11 +413,6 @@
           }
         };
         applyChecks(siteRules.site_checks);
-        const pageRules = siteRules.pages && siteRules.pages[page];
-        if (pageRules) {
-          add("HEAD", "PAGE RULES: " + page.toUpperCase());
-          applyChecks(pageRules.checks);
-        }
         if (site === "hobby") {
           const h2texts = [...d.querySelectorAll("h2")].map((h) => h.textContent.trim().toLowerCase());
           const ends = h2texts.some((h) => h && title.toLowerCase().endsWith(h));
@@ -525,6 +521,11 @@
           if (hasHobby(navs[0])) add("FAIL", "Hobby link lives in the secondary nav (second <nav>)", "found in the primary nav");
           else if (navs.slice(1).some(hasHobby)) add("PASS", "Hobby link lives in the secondary nav (second <nav>)");
           else add("INFO", "Hobby link lives in the secondary nav (second <nav>)", "no hobby link yet (required once the midterm is up)");
+        }
+        const pageRules = siteRules.pages && siteRules.pages[page];
+        if (pageRules) {
+          add("HEAD", "PAGE RULES: " + page.toUpperCase());
+          applyChecks(pageRules.checks);
         }
       }
     }
