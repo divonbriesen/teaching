@@ -20,6 +20,12 @@
             "href=\"documentation.html\"",
             "href=\"product.html\""
           ]
+        },
+        {
+          "type": "html",
+          "rule": "nav links the CRAP evaluations page (M8A on)",
+          "pattern": "href=\"website_evaluations\\.html\"",
+          "present": true
         }
       ],
       "pages": {
@@ -290,6 +296,44 @@
               "tag": "img",
               "within": "main",
               "min": 1
+            }
+          ]
+        },
+        "website_evaluations.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 names the page",
+              "level": 2,
+              "pattern": "\\S"
+            },
+            {
+              "type": "element",
+              "rule": "one section per evaluated site (2+)",
+              "tag": "section",
+              "within": "main",
+              "min": 2
+            },
+            {
+              "type": "heading",
+              "rule": "h3 per site (Ex: Apple)",
+              "level": 3,
+              "pattern": "\\S"
+            },
+            {
+              "type": "html",
+              "rule": "site names are links opening in a new tab",
+              "pattern": "<h3[^>]*>\\s*<a[^>]*target=\"_blank\"",
+              "fail_hint_pattern": "<h3[^>]*>\\s*<a",
+              "fail_hint": "the h3 links are there but don't open in a new tab (target=\"_blank\")",
+              "present": true
+            },
+            {
+              "type": "element",
+              "rule": "4 CRAP items per evaluation (8+ list items)",
+              "tag": "li",
+              "within": "ul",
+              "min": 8
             }
           ]
         }
