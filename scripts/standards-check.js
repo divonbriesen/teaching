@@ -271,13 +271,18 @@
     let comments = 0;
     const tw = d.createTreeWalker(d.documentElement, NodeFilter.SHOW_COMMENT);
     while (tw.nextNode()) if (tw.currentNode.data.trim()) comments++;
-    const badge = d.getElementById("standards-check-badge");
-    const divSpan = [...d.querySelectorAll("div,span")]
-      .filter((el) => !el.dataset.include && !(badge && badge.contains(el)) && el !== badge).length;
-    const classId = [...d.querySelectorAll("[class],[id]")]
-      .filter((el) => !(badge && badge.contains(el)) && el !== badge).length;
-    const inline = [...d.querySelectorAll("[style]")]
-      .filter((el) => !(badge && badge.contains(el)) && el !== badge).length;
+    // count from the raw source: browsers/extensions (Edge features,
+    // translators, dark-mode tools) inject styles, classes, and elements
+    // into the live DOM that the student never wrote
+    let rawCounted = await getText(location.href);
+    for (const part of ["header", "footer"]) {
+      const frag = await getText("components/" + part + ".html");
+      if (frag) rawCounted += frag;
+    }
+    const divSpan = (rawCounted.match(/<(div|span)[\s>]/gi) || []).length
+      - (rawCounted.match(/<div[^>]*data-include/gi) || []).length;
+    const classId = (rawCounted.match(/\s(class|id)\s*=\s*["']/gi) || []).length;
+    const inline = (rawCounted.match(/\sstyle\s*=\s*["']/gi) || []).length;
     add(!divSpan || comments ? "PASS" : "FAIL", "divs/spans explained in comments",
       divSpan ? divSpan + " used" + (comments ? "" : ", no comments found") : "none used");
     add(!classId || comments ? "PASS" : "FAIL", "classes/ids explained in comments",
