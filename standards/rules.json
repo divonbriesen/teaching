@@ -9,6 +9,17 @@
           "rule": "footer credit is Firm ©YEAR (space before ©, none after; company not mascot)",
           "pattern": "\\S ©20\\d\\d",
           "present": true
+        },
+        {
+          "type": "html_all",
+          "rule": "primary nav links the five cert pages (M6B on)",
+          "patterns": [
+            "href=\"survey.html\"",
+            "href=\"cards.html\"",
+            "href=\"inventory.html\"",
+            "href=\"documentation.html\"",
+            "href=\"product.html\""
+          ]
         }
       ],
       "pages": {
@@ -187,6 +198,98 @@
               "tag": "p",
               "within": "main",
               "min": 2
+            }
+          ]
+        },
+        "survey.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 names the page",
+              "level": 2,
+              "pattern": "\\S"
+            },
+            {
+              "type": "element",
+              "rule": "a form with 3+ inputs",
+              "tag": "input",
+              "within": "form",
+              "min": 3
+            }
+          ]
+        },
+        "cards.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 names the page",
+              "level": 2,
+              "pattern": "\\S"
+            },
+            {
+              "type": "element",
+              "rule": "6+ themed card images",
+              "tag": "img",
+              "within": "main",
+              "min": 6
+            }
+          ]
+        },
+        "inventory.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 names the page",
+              "level": 2,
+              "pattern": "\\S"
+            },
+            {
+              "type": "element",
+              "rule": "inventory rows in a table",
+              "tag": "tr",
+              "within": "table",
+              "min": 3
+            }
+          ]
+        },
+        "documentation.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 names the page",
+              "level": 2,
+              "pattern": "\\S"
+            },
+            {
+              "type": "element",
+              "rule": "3+ documentation sections",
+              "tag": "section",
+              "within": "main",
+              "min": 3
+            }
+          ]
+        },
+        "product.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 names the page",
+              "level": 2,
+              "pattern": "\\S"
+            },
+            {
+              "type": "element",
+              "rule": "2+ landing sections",
+              "tag": "section",
+              "within": "main",
+              "min": 2
+            },
+            {
+              "type": "element",
+              "rule": "a product image",
+              "tag": "img",
+              "within": "main",
+              "min": 1
             }
           ]
         }
