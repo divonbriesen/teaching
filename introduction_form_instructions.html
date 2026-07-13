@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITIS3135 | con von Briesen | Introduction Form Instructions</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script src="scripts/include-repeated-code.js" defer></script>
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <h2>Introduction Form (M12 Collecting Data / M13 HTML/JSON/XML Out)</h2>
+      <p>
+        Build a form that lets a visitor create their own introduction page —
+        <strong>Part 1 (M12)</strong> collects the data and rebuilds the page
+        on submit; <strong>Part 2 (M13)</strong> adds raw HTML, JSON, and XML
+        output. AI expected on both.
+      </p>
+
+      <section>
+        <h3>The Acid Test (how we evaluate M12)</h3>
+        <ul>
+          <li>
+            We follow your link and click <strong>Submit</strong> untouched —
+            the result must be <strong>indistinguishable from your real
+            introduction page</strong> (spacing, colors, fonts, footer links)
+            except the h2 says "Introduction Form" and the title matches.
+          </li>
+          <li>We edit prefilled values — the new values must appear on submit, <strong>including a different uploaded image</strong> (the most-missed feature: your image is the default, but an upload overrides it).</li>
+          <li>We clear the form — optional fields may stay blank; the rest must be required.</li>
+          <li>We add and remove courses — JS must add course field groups (department, number, name, reason) with a delete button beside each.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Setup &amp; Form (M12)</h3>
+        <ul>
+          <li>
+            <strong>introduction_form.html</strong> in your itis3135 folder,
+            linked from your common primary menu (one place — your header is a
+            component by now). Title and h2 follow the usual pattern.
+          </li>
+          <li>h3: "Please submit the form below."</li>
+          <li>
+            One <strong>form</strong> asking for everything on the
+            introduction: first/middle(opt)/nickname(opt)/last name,
+            acknowledgment statement and date, mascot adjective and animal,
+            divider, picture (defaulting to yours, uploadable), picture
+            caption, personal statement, the 7 main bullets, courses with
+            department/number/name/reason each, quote and author, funny thing
+            (opt), something to share (opt), and your 5 footer links.
+          </li>
+          <li><strong>Prefill your values</strong> with the value attribute; add <strong>placeholders</strong> that show when cleared.</li>
+          <li>
+            Buttons: <strong>Submit</strong> (type="submit"),
+            <strong>Reset</strong> (type="reset"), and
+            <strong>Clear</strong> (type="button", empties every field).
+          </li>
+          <li>
+            <strong>scripts/introduction.js</strong>: prevent submit without
+            required fields, prevent the default page refresh, reset progress,
+            add/remove course rows, and on submit swap the form for the built
+            introduction — with a reset link at the bottom so a visitor can go
+            again.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Generate Output (M13)</h3>
+        <ul>
+          <li>
+            Add buttons — <strong>Generate HTML</strong>,
+            <strong>Generate JSON</strong>, <strong>Generate XML</strong>, in
+            that order.
+          </li>
+          <li>
+            Each appends a <strong>text area</strong> at the bottom holding
+            the raw code for whatever is currently in the form — nicely
+            formatted JSON, the HTML itself as code, and an XML representation.
+            Change the form, click again, and the output reflects it.
+          </li>
+          <li>Everything from M12 must keep working alongside.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Submitting (each part)</h3>
+        <ul>
+          <li>The URL of your form page.</li>
+          <li>A brief summary of what you did, what you asked AI to do, and impressions.</li>
+          <li>Peer reviews: these instructions as a GO/NO-GO checklist on at least two classmates who don't already have two reviews.</li>
+        </ul>
+        <p>
+          <strong>What gets checked:</strong> the page is in the primary nav;
+          the form has 15+ inputs with prefilled values and placeholders, a
+          file-upload input, Submit/Reset/Clear buttons, and
+          scripts/introduction.js; from M13 on, the Generate HTML/JSON/XML
+          buttons. The submit-result fidelity is judged by eye against your
+          real introduction.
+        </p>
+      </section>
+    </main>
+    <footer></footer>
+    <script src="scripts/standards-check.js" defer></script>
+  </body>
+</html>

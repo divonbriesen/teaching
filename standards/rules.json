@@ -32,6 +32,12 @@
           "rule": "primary nav links the Pictures/Images page (M11 on)",
           "pattern": "href=\"(pictures|images)\\.html\"",
           "present": true
+        },
+        {
+          "type": "html",
+          "rule": "primary nav links the Introduction Form page (M12 on)",
+          "pattern": "href=\"(introduction_form|intro_form)\\.html\"",
+          "present": true
         }
       ],
       "pages": {
@@ -507,6 +513,152 @@
               "type": "html",
               "rule": "image names carry source and photographer (name@photographer_source)",
               "pattern": "images/[a-z0-9-]+@[a-z0-9-]+",
+              "present": true
+            }
+          ]
+        },
+        "introduction_form.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 is Introduction Form",
+              "level": 2,
+              "pattern": "introduction form"
+            },
+            {
+              "type": "heading",
+              "rule": "h3 asks to submit the form",
+              "level": 3,
+              "pattern": "submit"
+            },
+            {
+              "type": "element",
+              "rule": "form with the introduction fields (15+ inputs)",
+              "tag": "input",
+              "within": "form",
+              "min": 15
+            },
+            {
+              "type": "html",
+              "rule": "fields prefilled with your values",
+              "pattern": "<input[^>]*value=\"[^\"]",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "placeholders shown when the form is empty",
+              "pattern": "<input[^>]*placeholder=\"[^\"]",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "image upload input (defaults to your picture)",
+              "pattern": "<input[^>]*type=\"file\"",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "Submit button",
+              "pattern": "<button[^>]*type=\"submit\"",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "Reset button",
+              "pattern": "<button[^>]*type=\"reset\"",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "Clear button",
+              "pattern": "<button[^>]*type=\"button\"",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "introduction.js in the scripts folder drives the form",
+              "pattern": "scripts/introduction\\.js",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "M13: Generate HTML / JSON / XML buttons",
+              "pattern": "generate\\s*(html|json|xml)",
+              "fail_hint_pattern": "<button",
+              "fail_hint": "buttons found, but no Generate HTML/JSON/XML — required from M13 on",
+              "present": true
+            }
+          ]
+        },
+        "intro_form.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 is Introduction Form",
+              "level": 2,
+              "pattern": "introduction form"
+            },
+            {
+              "type": "heading",
+              "rule": "h3 asks to submit the form",
+              "level": 3,
+              "pattern": "submit"
+            },
+            {
+              "type": "element",
+              "rule": "form with the introduction fields (15+ inputs)",
+              "tag": "input",
+              "within": "form",
+              "min": 15
+            },
+            {
+              "type": "html",
+              "rule": "fields prefilled with your values",
+              "pattern": "<input[^>]*value=\"[^\"]",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "placeholders shown when the form is empty",
+              "pattern": "<input[^>]*placeholder=\"[^\"]",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "image upload input (defaults to your picture)",
+              "pattern": "<input[^>]*type=\"file\"",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "Submit button",
+              "pattern": "<button[^>]*type=\"submit\"",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "Reset button",
+              "pattern": "<button[^>]*type=\"reset\"",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "Clear button",
+              "pattern": "<button[^>]*type=\"button\"",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "introduction.js in the scripts folder drives the form",
+              "pattern": "scripts/introduction\\.js",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "M13: Generate HTML / JSON / XML buttons",
+              "pattern": "generate\\s*(html|json|xml)",
+              "fail_hint_pattern": "<button",
+              "fail_hint": "buttons found, but no Generate HTML/JSON/XML — required from M13 on",
               "present": true
             }
           ]
