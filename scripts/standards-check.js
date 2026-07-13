@@ -191,12 +191,19 @@
     add(scripts.some((s) => s.includes("standards-check")) ? "PASS" : "FAIL",
       "Vicunadator script on the page");
 
-    const headScripts = [...d.head.querySelectorAll("script")];
     if (!scripts.some((s) => s.includes("lint.page"))) add("FAIL", "validation script (lint.page) present");
     else {
-      const last = headScripts[headScripts.length - 1];
-      add(last && (last.src || "").includes("lint.page") ? "PASS" : "FAIL",
-        "validation script is last line of head");
+      // judge from the raw source: lint.page (and other tooling) injects
+      // elements into the live head at runtime
+      const rawHeadSrc = await getText(location.href);
+      const headMatch = rawHeadSrc.match(/<head[\s\S]*?<\/head>/i);
+      const headTags = headMatch
+        ? (headMatch[0].match(/<(script|link|meta|title|style)[\s>]/gi) || [])
+        : [];
+      const lastIsScript = headTags.length &&
+        /script/i.test(headTags[headTags.length - 1]) &&
+        /lint\.page[\s\S]{0,120}<\/head>/i.test(headMatch ? headMatch[0].slice(-300) : "");
+      add(lastIsScript ? "PASS" : "FAIL", "validation script is last line of head");
     }
 
     // ===== BODY =====
@@ -303,7 +310,7 @@
     bodyClone.querySelectorAll("script,style,pre,code,#standards-check-badge").forEach((el) => el.remove());
     const bodyText = bodyClone.textContent || "";
     const tight = [...new Set(
-      (bodyText.match(/\S[|•·~]|[|•·~]\S/g) || []).filter((t) => !t.includes("/"))
+      (bodyText.match(/[^\s|•·~][|•·~]|[|•·~][^\s|•·~]/g) || []).filter((t) => !t.includes("/"))
     )].slice(0, 5);
     add(!tight.length ? "PASS" : "FAIL",
       "dividers have a space on both sides", tight.map((t) => JSON.stringify(t)).join(", "));
