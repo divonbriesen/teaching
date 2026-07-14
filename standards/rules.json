@@ -6,9 +6,11 @@
       "site_checks": [
         {
           "type": "text",
-          "rule": "footer credit is Firm ©YEAR (space before ©, none after; company not mascot)",
-          "pattern": "\\S ©20\\d\\d",
-          "present": true
+          "rule": "copyright (optional) is Firm ©YEAR — name, space, © tight against the year",
+          "pattern": "©(?!20\\d\\d)|(?<!\\S )©",
+          "present": false,
+          "fail_hint_pattern": "©",
+          "fail_hint": "© found but malformed — needs: YourFirmName ©2026 (space before ©, none after)"
         },
         {
           "type": "html_all",

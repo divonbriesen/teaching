@@ -383,7 +383,9 @@
       if (siteRules) {
         let page = location.pathname.replace(/\/+$/, "").split("/").pop() || "";
         if (!/\.html?$/.test(page)) page = "index.html";
-        const docText = d.body ? d.body.textContent : "";
+        // collapse whitespace runs so indentation/newlines don't break
+        // position-sensitive patterns (e.g. "word before ©")
+        const docText = (d.body ? d.body.textContent : "").replace(/\s+/g, " ");
         const docHtml = d.documentElement.outerHTML;
         const applyChecks = (checks) => {
           for (const c of checks || []) {
