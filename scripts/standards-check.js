@@ -317,8 +317,12 @@
 
     // Internal references must be relative: an absolute URL back into the
     // student's own webspace (links or assets) should be a relative path.
+    // Footer links are exempt: the CLT and GH copies are identical files,
+    // so the footer's site/home links must be absolute to point at a fixed
+    // home no matter which copy you're reading.
     const ownRoot = (location.host + "/" + (location.pathname.split("/").filter(Boolean)[0] || "")).toLowerCase();
-    const allRefs = [...anchors.map((a) => a.getAttribute("href") || ""), ...sheets, ...scripts, ...imgs];
+    const allRefs = [...anchors.filter((a) => !a.closest("footer")).map((a) => a.getAttribute("href") || ""),
+      ...sheets, ...scripts, ...imgs];
     const absInternal = allRefs.filter((h) => {
       if (!/^https?:\/\//i.test(h)) return false;
       let u; try { u = new URL(h); } catch (e) { return false; }
