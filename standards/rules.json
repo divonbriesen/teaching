@@ -695,7 +695,7 @@
         {
           "type": "html",
           "rule": "no includes — header/footer written directly in the file",
-          "pattern": "data-include|components/",
+          "pattern": "data-include|components/(header|footer)",
           "present": false
         },
         {
