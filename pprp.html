@@ -12,10 +12,13 @@
       .pprp-note { border: 2px dashed #b58900; padding: 8px 14px; margin: 12px 0; }
       .pprp-tabs { display: flex; gap: 4px; margin: 18px 0 0; }
       .pprp-tab { padding: 8px 18px; border: 1px solid #888; border-bottom: none;
-                  border-radius: 8px 8px 0 0; background: #e8e8e8; color: #333; }
+                  border-radius: 8px 8px 0 0; background: #e8e8e8; color: #333;
+                  cursor: pointer; }
       .pprp-tab.active { background: #fff; font-weight: bold; }
       .pprp-panel { border: 1px solid #888; padding: 16px; background: #fff; color: #222;
                     text-align: left; border-radius: 0 8px 8px 8px; }
+      .pprp-screen { display: none; }
+      .pprp-screen.active { display: block; }
       .pprp-card { border: 1px solid #bbb; border-radius: 6px; padding: 4px 10px;
                    margin: 4px 0; background: #fafafa; display: flex;
                    align-items: center; gap: 10px; }
@@ -39,14 +42,18 @@
       .instructor { border-left: 4px solid #d0a848; margin: 6px 0 6px 24px; padding: 4px 12px;
                     background: #fdf8ec; }
       .pprp-form label { display: block; font-weight: bold; margin-top: 10px; }
-      .pprp-form input[type="text"], .pprp-form textarea {
-        width: 95%; padding: 6px; font: inherit; border: 1px solid #999; border-radius: 4px; }
+      .pprp-form textarea {
+        width: 95%; padding: 6px; font: inherit; border: 1px solid #999;
+        border-radius: 4px; min-height: 2.4em; }
       .pprp-form .hint { font-size: 0.85em; color: #666; margin: 2px 0 0; }
       .pprp-btn { display: inline-block; padding: 6px 16px; border: 1px solid #666;
-                  border-radius: 6px; background: #e0e8f0; margin-top: 10px; color: #222; }
+                  border-radius: 6px; background: #e0e8f0; margin-top: 10px; color: #222;
+                  cursor: pointer; }
       .queue-row { display: flex; justify-content: space-between; border-bottom: 1px solid #ddd;
-                   padding: 6px 2px; }
+                   padding: 6px 2px; cursor: pointer; }
+      .queue-row:hover { background: #f4f7fa; }
       .muted { color: #777; font-size: 0.9em; }
+      .clicky { cursor: pointer; }
     </style>
     <script
       src="https://lint.page/kit/4d0fe3.js"
@@ -58,58 +65,59 @@
     <main>
       <h2>PPRP — Pilot Peer Review Prototype</h2>
       <div class="pprp-note">
-        ⚠️ <strong>Non-functional mockup.</strong> Nothing here saves, submits,
-        or talks to Canvas — this page exists to show how the peer-review
-        application would look and flow. Names are fictional.
+        ⚠️ <strong>Non-functional mockup.</strong> Nothing saves or talks to
+        Canvas — but the tabs and items are clickable so you can walk the
+        screens. Names are fictional.
       </div>
 
-      <!-- ===================== screen 1: gallery ===================== -->
       <div class="pprp-tabs">
-        <span class="pprp-tab active">Gallery</span>
-        <span class="pprp-tab">My Submission</span>
-        <span class="pprp-tab">My Reviews (2)</span>
-        <span class="pprp-tab">Instructor Queue</span>
+        <span class="pprp-tab active" data-screen="gallery">Gallery</span>
+        <span class="pprp-tab" data-screen="submission">My Submission</span>
+        <span class="pprp-tab" data-screen="reviews">My Reviews (2)</span>
+        <span class="pprp-tab" data-screen="queue">Instructor Queue</span>
       </div>
-      <div class="pprp-panel">
+
+      <!-- ===================== screen: gallery ===================== -->
+      <div class="pprp-panel pprp-screen active" id="screen-gallery">
         <h3>M3A: Home Page Submission — Gallery</h3>
         <p class="muted">
           Sorted least-reviewed first. Claim two. Full submissions can't be
-          claimed. Everything below is public to the class.
+          claimed. Everything below is public to the class. Click a name to
+          open the submission; click Claim to open the review form.
         </p>
 
         <div class="pprp-card">
-          <span class="who">Emily Sanchez</span>
-          <span class="grow"><a href="#">esanch12</a>
+          <span class="who clicky" data-goto="submission">Emily Sanchez</span>
+          <span class="grow"><a href="#" onclick="return false">esanch12</a>
             <span class="badge pass">33 ✓ / 0 ✗</span>
             <span class="muted">rev: Jordan G · Mon 9/8</span></span>
           <span class="slots open">1 of 2 open</span>
-          <span class="pprp-btn">Claim</span>
+          <span class="pprp-btn" data-goto="reviews">Claim</span>
         </div>
 
         <div class="pprp-card">
-          <span class="who">Tariq Odom</span>
-          <span class="grow"><a href="#">todom3</a>
+          <span class="who clicky" data-goto="submission">Tariq Odom</span>
+          <span class="grow"><a href="#" onclick="return false">todom3</a>
             <span class="badge fail">21 ✓ / 4 ✗</span>
             <span class="muted">no reviews · Tue 9/9</span></span>
           <span class="slots open">2 of 2 open</span>
-          <span class="pprp-btn">Claim</span>
+          <span class="pprp-btn" data-goto="reviews">Claim</span>
         </div>
 
         <div class="pprp-card">
-          <span class="who">Kara Blevins</span>
-          <span class="grow"><a href="#">kblevin4</a>
+          <span class="who clicky" data-goto="submission">Kara Blevins</span>
+          <span class="grow"><a href="#" onclick="return false">kblevin4</a>
             <span class="badge pass">30 ✓ / 1 ✗</span>
             <span class="muted">rev: Sean T, Suman J · Sun 9/7</span></span>
           <span class="slots full">Full</span>
         </div>
       </div>
 
-      <!-- ============ screen 2: a submission with its reviews ============ -->
-      <h3 style="margin-top:28px">Screen: a submission, its reviews, and the exchange</h3>
-      <div class="pprp-panel">
-        <h3>Tariq Odom — M3A: Home Page Submission</h3>
+      <!-- ============ screen: my submission (author view) ============ -->
+      <div class="pprp-panel pprp-screen" id="screen-submission">
+        <h3>My Submission — Tariq Odom, M3A: Home Page Submission</h3>
         <p>
-          <a href="#">https://webpages.charlotte.edu/todom3/</a>
+          <a href="#" onclick="return false">https://webpages.charlotte.edu/todom3/</a>
           <span class="badge fail">checks: 21 ✓ / 4 ✗</span>
           <span class="muted">(favicon missing · one font · title divider · nav order)</span>
         </p>
@@ -159,42 +167,77 @@
             guidelines</a>: each slot needs a location or something you tested.
             Revise by Sunday for review credit.</p>
         </div>
+
+        <div class="pprp-form">
+          <label>Reply to your reviewers</label>
+          <textarea placeholder="e.g. fixed, please re-look…"></textarea>
+          <span class="pprp-btn">Post reply</span>
+        </div>
       </div>
 
-      <!-- ============ screen 3: the review form ============ -->
-      <h3 style="margin-top:28px">Screen: writing a review (form enforces the format)</h3>
-      <div class="pprp-panel pprp-form">
-        <h3>Reviewing: Tariq Odom — M3A</h3>
-        <p class="muted">@Tariq Odom is addressed automatically. Slots expire in
-          46h if unsubmitted.</p>
-        <label>FIRST LOOK</label>
-        <input type="text" value="clean and readable — the blue works." />
-        <p class="hint">Your honest gut reaction, before you check anything. This slot may be pure reaction.</p>
-        <label>STOP</label>
-        <input type="text" value="using Arial alone: the standards need at least 2 fonts." />
-        <p class="hint">✓ names a location and cites a rule</p>
-        <label>START</label>
-        <input type="text" value="" />
-        <p class="hint">⚠️ empty — something missing that the instructions require, with the rule</p>
-        <label>CONTINUE</label>
-        <input type="text" value="good job" />
-        <p class="hint">⚠️ praise without evidence — say what you checked</p>
-        <span class="pprp-btn">Submit review</span>
+      <!-- ============ screen: my reviews / review form ============ -->
+      <div class="pprp-panel pprp-screen" id="screen-reviews">
+        <h3>My Reviews</h3>
+        <div class="pprp-card">
+          <span class="who">Tariq Odom</span>
+          <span class="grow"><span class="muted">claimed Wed · expires in 46h</span></span>
+          <span class="slots open">writing now ↓</span>
+        </div>
+        <div class="pprp-card">
+          <span class="who clicky" data-goto="submission">Emily Sanchez</span>
+          <span class="grow"><span class="muted">submitted Thu · author replied — click name to view</span></span>
+          <span class="slots full">done</span>
+        </div>
+
+        <div class="pprp-form">
+          <h3 style="margin-top:18px">Reviewing: Tariq Odom — M3A</h3>
+          <p class="muted">@Tariq Odom is addressed automatically.</p>
+          <label>FIRST LOOK</label>
+          <textarea>clean and readable — the blue works. I expected the nav on top though.</textarea>
+          <p class="hint">Your honest gut reaction, before you check anything. This slot may be pure reaction.</p>
+          <label>STOP</label>
+          <textarea>using Arial alone: the standards need at least 2 fonts.</textarea>
+          <p class="hint">✓ names a location and cites a rule</p>
+          <label>START</label>
+          <textarea></textarea>
+          <p class="hint">⚠️ empty — something missing that the instructions require, with the rule</p>
+          <label>CONTINUE</label>
+          <textarea>good job</textarea>
+          <p class="hint">⚠️ praise without evidence — say what you checked</p>
+          <span class="pprp-btn">Submit review</span>
+        </div>
       </div>
 
-      <!-- ============ screen 4: instructor queue ============ -->
-      <h3 style="margin-top:28px">Screen: instructor queue (private)</h3>
-      <div class="pprp-panel">
+      <!-- ============ screen: instructor queue ============ -->
+      <div class="pprp-panel pprp-screen" id="screen-queue">
+        <h3>Instructor Queue <span class="muted">(private — students never see this)</span></h3>
         <p class="muted">The one screen replacing the missing Canvas orange dots.
-          Each row links straight to the item. Grades post to Canvas on confirm.</p>
-        <div class="queue-row"><span>🟠 <strong>Tariq Odom</strong> — M3A submission, ungraded</span><span class="muted">2 reviews in · checks 21/4</span></div>
-        <div class="queue-row"><span>🟠 <strong>Wendy Okafor</strong> — review of Tariq, flagged weak</span><span class="muted">score review →</span></div>
-        <div class="queue-row"><span>🔵 <strong>Emily Sanchez</strong> — replied since your grade</span><span class="muted">"fixed, please re-look" · Thu</span></div>
-        <div class="queue-row"><span>🟣 <strong>Jordan Getz</strong> — has claimed 0 of 2 reviews</span><span class="muted">nudge →</span></div>
-        <div class="queue-row"><span>🟢 <strong>Kara Blevins</strong> — complete: graded, reviews scored</span><span class="muted">done Fri</span></div>
+          Click any row to open the item. Grades post to Canvas on confirm.</p>
+        <div class="queue-row" data-goto="submission"><span>🟠 <strong>Tariq Odom</strong> — M3A submission, ungraded</span><span class="muted">2 reviews in · checks 21/4</span></div>
+        <div class="queue-row" data-goto="submission"><span>🟠 <strong>Wendy Okafor</strong> — review of Tariq, flagged weak</span><span class="muted">score review →</span></div>
+        <div class="queue-row" data-goto="submission"><span>🔵 <strong>Emily Sanchez</strong> — replied since your grade</span><span class="muted">"fixed, please re-look" · Thu</span></div>
+        <div class="queue-row" data-goto="reviews"><span>🟣 <strong>Jordan Getz</strong> — has claimed 0 of 2 reviews</span><span class="muted">nudge →</span></div>
+        <div class="queue-row" data-goto="submission"><span>🟢 <strong>Kara Blevins</strong> — complete: graded, reviews scored</span><span class="muted">done Fri</span></div>
       </div>
     </main>
     <footer></footer>
+    <script>
+      // prototype-only navigation: tabs and data-goto items switch screens
+      function pprpShow(name) {
+        document.querySelectorAll(".pprp-screen").forEach(function (p) {
+          p.classList.toggle("active", p.id === "screen-" + name);
+        });
+        document.querySelectorAll(".pprp-tab").forEach(function (t) {
+          t.classList.toggle("active", t.dataset.screen === name);
+        });
+      }
+      document.querySelectorAll(".pprp-tab").forEach(function (t) {
+        t.addEventListener("click", function () { pprpShow(t.dataset.screen); });
+      });
+      document.querySelectorAll("[data-goto]").forEach(function (el) {
+        el.addEventListener("click", function () { pprpShow(el.dataset.goto); });
+      });
+    </script>
     <script src="scripts/standards-check.js" defer></script>
   </body>
 </html>
