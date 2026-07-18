@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ITIS3135 | con von Briesen | PPRP — Pilot Peer Review Prototype</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script src="scripts/include-repeated-code.js" defer></script>
+    <style>
+      /* prototype-only styling: mock application chrome */
+      .pprp-note { border: 2px dashed #b58900; padding: 8px 14px; margin: 12px 0; }
+      .pprp-tabs { display: flex; gap: 4px; margin: 18px 0 0; }
+      .pprp-tab { padding: 8px 18px; border: 1px solid #888; border-bottom: none;
+                  border-radius: 8px 8px 0 0; background: #e8e8e8; color: #333; }
+      .pprp-tab.active { background: #fff; font-weight: bold; }
+      .pprp-panel { border: 1px solid #888; padding: 16px; background: #fff; color: #222;
+                    text-align: left; border-radius: 0 8px 8px 8px; }
+      .pprp-card { border: 1px solid #bbb; border-radius: 8px; padding: 10px 14px;
+                   margin: 10px 0; background: #fafafa; }
+      .pprp-card h4 { margin: 0 0 4px; }
+      .slots { float: right; font-size: 0.85em; padding: 2px 10px; border-radius: 10px; }
+      .slots.open { background: #d8f0d8; }
+      .slots.full { background: #eee; color: #888; }
+      .badge { font-size: 0.8em; padding: 1px 8px; border-radius: 8px; margin-left: 6px; }
+      .badge.pass { background: #d8f0d8; }
+      .badge.fail { background: #f6d6d6; }
+      .badge.flag { background: #fdf0c2; }
+      .review { border-left: 4px solid #8aa8d0; margin: 10px 0 10px 12px; padding: 6px 12px; }
+      .review .who { font-weight: bold; }
+      .reply { border-left: 4px solid #c8b8e8; margin: 6px 0 6px 40px; padding: 4px 12px; }
+      .instructor { border-left: 4px solid #d0a848; margin: 6px 0 6px 24px; padding: 4px 12px;
+                    background: #fdf8ec; }
+      .pprp-form label { display: block; font-weight: bold; margin-top: 10px; }
+      .pprp-form input[type="text"], .pprp-form textarea {
+        width: 95%; padding: 6px; font: inherit; border: 1px solid #999; border-radius: 4px; }
+      .pprp-form .hint { font-size: 0.85em; color: #666; margin: 2px 0 0; }
+      .pprp-btn { display: inline-block; padding: 6px 16px; border: 1px solid #666;
+                  border-radius: 6px; background: #e0e8f0; margin-top: 10px; color: #222; }
+      .queue-row { display: flex; justify-content: space-between; border-bottom: 1px solid #ddd;
+                   padding: 6px 2px; }
+      .muted { color: #777; font-size: 0.9em; }
+    </style>
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <h2>PPRP — Pilot Peer Review Prototype</h2>
+      <div class="pprp-note">
+        ⚠️ <strong>Non-functional mockup.</strong> Nothing here saves, submits,
+        or talks to Canvas — this page exists to show how the peer-review
+        application would look and flow. Names are fictional.
+      </div>
+
+      <!-- ===================== screen 1: gallery ===================== -->
+      <div class="pprp-tabs">
+        <span class="pprp-tab active">Gallery</span>
+        <span class="pprp-tab">My Submission</span>
+        <span class="pprp-tab">My Reviews (2)</span>
+        <span class="pprp-tab">Instructor Queue</span>
+      </div>
+      <div class="pprp-panel">
+        <h3>M3A: Home Page Submission — Gallery</h3>
+        <p class="muted">
+          Sorted least-reviewed first. Claim two. Full submissions can't be
+          claimed. Everything below is public to the class.
+        </p>
+
+        <div class="pprp-card">
+          <span class="slots open">1 of 2 review slots open</span>
+          <h4>Emily Sanchez</h4>
+          <a href="#">https://webpages.charlotte.edu/esanch12/</a>
+          <span class="badge pass">checks: 33 ✓ / 0 ✗</span>
+          <p class="muted">Reviewed by Jordan Getz · submitted Mon Sep 8</p>
+          <span class="pprp-btn">Claim review slot</span>
+        </div>
+
+        <div class="pprp-card">
+          <span class="slots open">2 of 2 review slots open</span>
+          <h4>Tariq Odom</h4>
+          <a href="#">https://webpages.charlotte.edu/todom3/</a>
+          <span class="badge fail">checks: 21 ✓ / 4 ✗</span>
+          <p class="muted">No reviews yet · submitted Tue Sep 9</p>
+          <span class="pprp-btn">Claim review slot</span>
+        </div>
+
+        <div class="pprp-card">
+          <span class="slots full">Full — 2 reviews claimed</span>
+          <h4>Kara Blevins</h4>
+          <a href="#">https://webpages.charlotte.edu/kblevin4/</a>
+          <span class="badge pass">checks: 30 ✓ / 1 ✗</span>
+          <p class="muted">Reviewed by Sean Tran, Suman Joshi · submitted Sun Sep 7</p>
+        </div>
+      </div>
+
+      <!-- ============ screen 2: a submission with its reviews ============ -->
+      <h3 style="margin-top:28px">Screen: a submission, its reviews, and the exchange</h3>
+      <div class="pprp-panel">
+        <h3>Tariq Odom — M3A: Home Page Submission</h3>
+        <p>
+          <a href="#">https://webpages.charlotte.edu/todom3/</a>
+          <span class="badge fail">checks: 21 ✓ / 4 ✗</span>
+          <span class="muted">(favicon missing · one font · title divider · nav order)</span>
+        </p>
+
+        <div class="review">
+          <p><span class="who">Review by Sean Tran</span> — Wed Sep 10
+            <span class="badge pass">review quality: good</span></p>
+          <p><strong>FIRST LOOK:</strong> clean and readable — the blue works. I
+            expected the nav on top though; took a second to find it.</p>
+          <p><strong>STOP:</strong> using Arial alone: the standards need at
+            least 2 fonts.</p>
+          <p><strong>START:</strong> adding a favicon in images/ (standards:
+            favicon present, resolves, in images/).</p>
+          <p><strong>CONTINUE:</strong> your link colors — I checked visited and
+            unvisited, both styled, no default blue.</p>
+        </div>
+
+        <div class="reply">
+          <p><span class="who">Tariq Odom (author)</span> — Thu Sep 11</p>
+          <p>Fixed the favicon and added Georgia for headings — can you re-look?</p>
+        </div>
+
+        <div class="reply">
+          <p><span class="who">Sean Tran</span> — Thu Sep 11</p>
+          <p>Both look good now ✓ — marking those two resolved.</p>
+        </div>
+
+        <div class="instructor">
+          <p><span class="who">Instructor</span> — Fri Sep 12</p>
+          <p>Good exchange. Tariq: nav placement still pending — see Sean's
+            FIRST LOOK, he's right. Sean: model CONTINUE — this is what
+            "praise that proves work" means, class.</p>
+        </div>
+
+        <div class="review">
+          <p><span class="who">Review by Wendy Okafor</span> — Wed Sep 10
+            <span class="badge flag">review quality: needs work — no tested observation</span></p>
+          <p><strong>FIRST LOOK:</strong> looks nice!</p>
+          <p><strong>STOP:</strong> nothing I could find.</p>
+          <p><strong>START:</strong> maybe more content?</p>
+          <p><strong>CONTINUE:</strong> good job on everything.</p>
+        </div>
+
+        <div class="instructor">
+          <p><span class="who">Instructor</span> — Fri Sep 12</p>
+          <p>Wendy — see the <a href="peer_review_guidelines.html">review
+            guidelines</a>: each slot needs a location or something you tested.
+            Revise by Sunday for review credit.</p>
+        </div>
+      </div>
+
+      <!-- ============ screen 3: the review form ============ -->
+      <h3 style="margin-top:28px">Screen: writing a review (form enforces the format)</h3>
+      <div class="pprp-panel pprp-form">
+        <h3>Reviewing: Tariq Odom — M3A</h3>
+        <p class="muted">@Tariq Odom is addressed automatically. Slots expire in
+          46h if unsubmitted.</p>
+        <label>FIRST LOOK</label>
+        <input type="text" value="clean and readable — the blue works." />
+        <p class="hint">Your honest gut reaction, before you check anything. This slot may be pure reaction.</p>
+        <label>STOP</label>
+        <input type="text" value="using Arial alone: the standards need at least 2 fonts." />
+        <p class="hint">✓ names a location and cites a rule</p>
+        <label>START</label>
+        <input type="text" value="" />
+        <p class="hint">⚠️ empty — something missing that the instructions require, with the rule</p>
+        <label>CONTINUE</label>
+        <input type="text" value="good job" />
+        <p class="hint">⚠️ praise without evidence — say what you checked</p>
+        <span class="pprp-btn">Submit review</span>
+      </div>
+
+      <!-- ============ screen 4: instructor queue ============ -->
+      <h3 style="margin-top:28px">Screen: instructor queue (private)</h3>
+      <div class="pprp-panel">
+        <p class="muted">The one screen replacing the missing Canvas orange dots.
+          Each row links straight to the item. Grades post to Canvas on confirm.</p>
+        <div class="queue-row"><span>🟠 <strong>Tariq Odom</strong> — M3A submission, ungraded</span><span class="muted">2 reviews in · checks 21/4</span></div>
+        <div class="queue-row"><span>🟠 <strong>Wendy Okafor</strong> — review of Tariq, flagged weak</span><span class="muted">score review →</span></div>
+        <div class="queue-row"><span>🔵 <strong>Emily Sanchez</strong> — replied since your grade</span><span class="muted">"fixed, please re-look" · Thu</span></div>
+        <div class="queue-row"><span>🟣 <strong>Jordan Getz</strong> — has claimed 0 of 2 reviews</span><span class="muted">nudge →</span></div>
+        <div class="queue-row"><span>🟢 <strong>Kara Blevins</strong> — complete: graded, reviews scored</span><span class="muted">done Fri</span></div>
+      </div>
+    </main>
+    <footer></footer>
+    <script src="scripts/standards-check.js" defer></script>
+  </body>
+</html>
