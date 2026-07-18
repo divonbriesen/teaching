@@ -16,12 +16,19 @@
       .pprp-tab.active { background: #fff; font-weight: bold; }
       .pprp-panel { border: 1px solid #888; padding: 16px; background: #fff; color: #222;
                     text-align: left; border-radius: 0 8px 8px 8px; }
-      .pprp-card { border: 1px solid #bbb; border-radius: 8px; padding: 10px 14px;
-                   margin: 10px 0; background: #fafafa; }
-      .pprp-card h4 { margin: 0 0 4px; }
-      .slots { float: right; font-size: 0.85em; padding: 2px 10px; border-radius: 10px; }
+      .pprp-card { border: 1px solid #bbb; border-radius: 6px; padding: 4px 10px;
+                   margin: 4px 0; background: #fafafa; display: flex;
+                   align-items: center; gap: 10px; }
+      .pprp-card .who { font-weight: bold; font-size: 0.95em; min-width: 130px;
+                        text-align: left; }
+      .pprp-card .grow { flex: 1; text-align: left; white-space: nowrap;
+                         overflow: hidden; text-overflow: ellipsis; }
+      .slots { font-size: 0.8em; padding: 4px 10px; border-radius: 6px;
+               border: 1px solid #999; white-space: nowrap; }
       .slots.open { background: #d8f0d8; }
       .slots.full { background: #eee; color: #888; }
+      .pprp-card .pprp-btn { margin-top: 0; padding: 4px 12px; font-size: 0.8em;
+                             white-space: nowrap; }
       .badge { font-size: 0.8em; padding: 1px 8px; border-radius: 8px; margin-left: 6px; }
       .badge.pass { background: #d8f0d8; }
       .badge.fail { background: #f6d6d6; }
@@ -71,29 +78,29 @@
         </p>
 
         <div class="pprp-card">
-          <span class="slots open">1 of 2 review slots open</span>
-          <h4>Emily Sanchez</h4>
-          <a href="#">https://webpages.charlotte.edu/esanch12/</a>
-          <span class="badge pass">checks: 33 ✓ / 0 ✗</span>
-          <p class="muted">Reviewed by Jordan Getz · submitted Mon Sep 8</p>
-          <span class="pprp-btn">Claim review slot</span>
+          <span class="who">Emily Sanchez</span>
+          <span class="grow"><a href="#">esanch12</a>
+            <span class="badge pass">33 ✓ / 0 ✗</span>
+            <span class="muted">rev: Jordan G · Mon 9/8</span></span>
+          <span class="slots open">1 of 2 open</span>
+          <span class="pprp-btn">Claim</span>
         </div>
 
         <div class="pprp-card">
-          <span class="slots open">2 of 2 review slots open</span>
-          <h4>Tariq Odom</h4>
-          <a href="#">https://webpages.charlotte.edu/todom3/</a>
-          <span class="badge fail">checks: 21 ✓ / 4 ✗</span>
-          <p class="muted">No reviews yet · submitted Tue Sep 9</p>
-          <span class="pprp-btn">Claim review slot</span>
+          <span class="who">Tariq Odom</span>
+          <span class="grow"><a href="#">todom3</a>
+            <span class="badge fail">21 ✓ / 4 ✗</span>
+            <span class="muted">no reviews · Tue 9/9</span></span>
+          <span class="slots open">2 of 2 open</span>
+          <span class="pprp-btn">Claim</span>
         </div>
 
         <div class="pprp-card">
-          <span class="slots full">Full — 2 reviews claimed</span>
-          <h4>Kara Blevins</h4>
-          <a href="#">https://webpages.charlotte.edu/kblevin4/</a>
-          <span class="badge pass">checks: 30 ✓ / 1 ✗</span>
-          <p class="muted">Reviewed by Sean Tran, Suman Joshi · submitted Sun Sep 7</p>
+          <span class="who">Kara Blevins</span>
+          <span class="grow"><a href="#">kblevin4</a>
+            <span class="badge pass">30 ✓ / 1 ✗</span>
+            <span class="muted">rev: Sean T, Suman J · Sun 9/7</span></span>
+          <span class="slots full">Full</span>
         </div>
       </div>
 
