@@ -45,11 +45,10 @@ header nav a {
   letter-spacing: 0.06em;
 }
 
-/* second nav = the course list; sits under the primary one, a touch smaller
-   so the two read as separate menus rather than one wrapped row */
+/* second nav sits under the primary one; spacing alone separates them, at
+   the same type size */
 header nav + nav {
   margin-top: 2px;
-  font-size: 0.92em;
 }
 
 footer {
@@ -189,8 +188,10 @@ li > ol {
   transform: scaleX(-1); /* face the site name, not the margin */
 }
 
-/* companion vicuna closing the h1 on the right: the source art already faces
-   left, so unlike .home-logo it needs no flip to look back at the site name */
+/* companion vicuna closing the h1: sits inline after the heading text and
+   faces back toward it, so the pair looks inward like the footer camels.
+   The source art already faces left, so it needs no flip here — unlike
+   .home-logo, which does. */
 .home-logo-end {
   vertical-align: -8px;
   margin-left: 6px;
