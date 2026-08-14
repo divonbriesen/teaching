@@ -48,9 +48,13 @@ Published link: https://docs.google.com/document/d/e/2PACX-1vRJVn0RQegqA83z3kcO5
 
 **Relevant files**
 
-- /Users/d.i.vonbriesen/Documents/!WebWork/teaching/web123/shared_introductions_instructions.html — source of compliance rules to encode.
-- /Users/d.i.vonbriesen/Documents/!WebWork/teaching/web123/scripts/include-repeated-code.js — style/pattern reference for async helpers and error handling.
-- /Users/d.i.vonbriesen/Documents/!WebWork/teaching/web123/GRADING-intros/evaluate-introductions.js — new file to create for the evaluator.
+Paths below are relative to this repository's root, which is the
+`teaching-web` monorepo. This content used to live in a standalone `web123`
+repo; that move is why any older absolute paths in your notes are stale.
+
+- `itis3135/shared_introductions_instructions.html` — source of compliance rules to encode.
+- `itis3135/scripts/include-repeated-code.js` — style/pattern reference for async helpers and error handling.
+- `itis3135/GRADING-intros/evaluate-introductions.js` — new file to create for the evaluator.
 
 **Verification**
 

@@ -20,7 +20,7 @@ still open. Delete it once the two remaining items below are settled.
   fetches. The old full-content repo is private at `web123-archive-2026`.
 - **The evaluator Worker is tracked** at `tools/evaluator-worker/` — it had
   never been committed anywhere. Deploying from this new location is untested;
-  the original copy is still in `teaching/web123-archive/worker`.
+  its original untracked copy has since been deleted.
 - **Live at** https://divonbriesen.github.io/teaching-web/
 
 ## Still open
