@@ -189,6 +189,13 @@ li > ol {
   transform: scaleX(-1); /* face the site name, not the margin */
 }
 
+/* companion vicuna closing the h1 on the right: the source art already faces
+   left, so unlike .home-logo it needs no flip to look back at the site name */
+.home-logo-end {
+  vertical-align: -8px;
+  margin-left: 6px;
+}
+
 header {
   padding: 6px 0;
 }
