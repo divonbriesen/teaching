@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D.I. von Briesen's Dynamic Vicuna Buck | Web Standards</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- classes below are styling hooks with no semantic element available:
+         site-header/site-footer match the shared stylesheet's landmark rules,
+         home-logo sizes the vicuna, callout sets apart the rule that overrides
+         the others, and mirrored flips the second camel inward -->
+    <header class="site-header">
+      <hgroup>
+        <h1>
+          <a href="index.html" class="home-logo"
+            ><img
+              src="images/vicuna.svg"
+              alt="Camelid Software vicuna logo — home"
+              width="40"
+              height="40"
+          /></a>
+          D.I. von Briesen's Dynamic Vicuna Buck
+        </h1>
+        <p><em>Web Standards — what every page you build must satisfy</em></p>
+      </hgroup>
+      <nav aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="course-standards.html">Course Standards</a>
+        <a href="web-standards.html">Web Standards</a>
+        <a href="itis3135/">ITIS 3135</a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Web Standards</h2>
+
+      <p>
+        These apply in every web course I teach — WEB 115, WEB 215, WEB 250,
+        and ITIS 3135. They are the letter of the law: each one is checkable,
+        and each one is actually checked. How you work, as opposed to what you
+        build, is covered by
+        <a href="course-standards.html">Course Standards</a>.
+      </p>
+
+      <h3>They are machine-checked, not a matter of taste</h3>
+      <p>
+        Every page on this site loads the Vicunadator — the llama in the
+        corner. Right side up means every rule passed; upside down means
+        something failed, and clicking it tells you exactly what. The same
+        script runs on your pages, so you can see your grade forming before
+        you submit.
+      </p>
+      <p>
+        Add it to any page you build, and link this copy rather than saving
+        your own, because a copy goes stale the moment a standard changes:
+      </p>
+      <pre>&lt;script src="https://divonbriesen.github.io/teaching-web/tools/standards-check.js" defer&gt;&lt;/script&gt;</pre>
+      <p>
+        Pages that predate the teaching hub link an older frozen copy at
+        <code>divonbriesen.github.io/web123/scripts/standards-check.js</code>.
+        That URL still works and will keep working, but new work should use
+        the one above.
+      </p>
+
+      <h3>The rules come in three layers</h3>
+      <p>
+        The checker reports them in this order, and it is worth understanding
+        why a rule applies before you argue with it.
+      </p>
+      <ul>
+        <li>
+          <strong>General rules</strong> apply to every page, in every course,
+          always. Semantic structure, a favicon that resolves, stylesheets in
+          <code>styles/</code> with <code>default.css</code> first, scripts in
+          a folder rather than loose, at least two fonts, no banned fonts,
+          link colors you chose on purpose, images in <code>images/</code>
+          with names that say what they are, dividers spaced, and hrefs with
+          no stray whitespace.
+        </li>
+        <li>
+          <strong>Site rules</strong> depend on what kind of site the page
+          belongs to — a course site, a hobby site, a design firm, a mascot
+          company. The checker works this out from the folder the page is in,
+          so a page inside <code>web115/</code> is held to course-site rules
+          without you telling it anything.
+        </li>
+        <li>
+          <strong>Page rules</strong> are specific to the assignment: what an
+          introduction page must contain, what the pictures page must show,
+          which links the navigation must carry by which module.
+        </li>
+      </ul>
+
+      <blockquote class="callout">
+        <p>
+          The authoritative list is not this page — it is
+          <a href="standards/rules.json">standards/rules.json</a>, which is
+          what the checker actually reads. If this page and the checker
+          disagree, the checker is right, and tell me so I can fix the prose.
+        </p>
+      </blockquote>
+
+      <h3>The rules that catch people out</h3>
+      <ul>
+        <li>
+          <strong>Relative links inside your own site.</strong> An absolute URL
+          pointing back into your own webspace is a failure, because your CLT
+          and GitHub copies must both work. The exception is the footer's
+          home and site links, which are deliberately absolute so they point
+          at one fixed home regardless of which copy the reader landed on.
+        </li>
+        <li>
+          <strong>Explain the non-semantic bits.</strong> Prefer a real element
+          to a <code>div</code> or <code>span</code>, and defend every class,
+          id, and inline style you keep with a comment saying why it exists.
+          The checker counts them and asks.
+        </li>
+        <li>
+          <strong>Every page needs a real image.</strong> The favicon does not
+          count, no matter how you include it.
+        </li>
+        <li>
+          <strong>Spacing around dividers.</strong> A <code>|</code> or
+          <code>&bull;</code> or <code>~</code> gets a space on each side,
+          everywhere on the page, including in your title.
+        </li>
+        <li>
+          <strong>Validate while you build.</strong> Both validators, every
+          page, all green — not a cleanup pass the night before it is due.
+        </li>
+      </ul>
+
+      <h3>Course-specific additions</h3>
+      <p>
+        Individual courses add requirements on top of these — the exact
+        navigation, the footer credit line, which pages must exist by which
+        module. For ITIS 3135, those live on the course's own
+        <a href="itis3135/standards.html">Standards</a> page, alongside the
+        <a href="itis3135/commandments.html">Commandments</a>, which are the
+        spirit of the law to these rules' letter.
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <em
+          >If you keep on doin' what you've been doin' yer gonna keep on
+          gettin' what you've been gettin!</em
+        >
+      </p>
+      <p>
+        <span class="mirrored">&#128042;</span> This site is a Camelid Software
+        Production, who'd-wanna-copy-this 2026 &#128043;
+      </p>
+    </footer>
+    <script src="tools/standards-check.js" defer data-mode="general"></script>
+  </body>
+</html>

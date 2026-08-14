@@ -1,16 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teaching | WEB 215</title>
-</head>
-<body>
-  <header><h1>WEB 215</h1></header>
-  <main>
-    <h2>Coming soon</h2>
-    <p>This course site is under construction.</p>
-    <p><a href="../">Back to Teaching home</a></p>
-  </main>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D.I. von Briesen's Dynamic Vicuna Buck | WEB215 | Home</title>
+    <link rel="stylesheet" href="../styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- classes below are styling hooks with no semantic element available:
+         site-header/site-footer match the shared stylesheet's landmark rules,
+         home-logo sizes the vicuna, callout sets the catalog block apart, and
+         mirrored flips the second camel so the pair faces inward -->
+    <header class="site-header">
+      <hgroup>
+        <h1>
+          <a href="../index.html" class="home-logo"
+            ><img
+              src="../images/vicuna.svg"
+              alt="Camelid Software vicuna logo — teaching hub"
+              width="40"
+              height="40"
+          /></a>
+          D.I. von Briesen's Dynamic Vicuna Buck | WEB215
+        </h1>
+        <p><em>Advanced Markup and Scripting</em></p>
+      </hgroup>
+      <nav aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="../course-standards.html">Course Standards</a>
+        <a href="../web-standards.html">Web Standards</a>
+        <a href="../index.html">Teaching Hub</a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Home</h2>
+
+      <p>WEB 215 &bull; Advanced Markup and Scripting</p>
+
+      <h3>Catalog description</h3>
+      <blockquote class="callout">
+        <p>This course covers the advanced programming skills required to design Internet applications and interactive web content. Emphasis is placed on the programming techniques required to develop Internet applications, interactive web content, frameworks, and using libraries.</p>
+      </blockquote>
+      <p><small>Official description from the Combined Course Library of the North Carolina Community College System. Contact hours and prerequisites are set by each college, so check your own college's catalog for the section you are enrolled in.</small></p>
+
+      <h3>Details</h3>
+      <ul>
+        <li>3 credit hours</li>
+        <li>2 class hours, 3 lab hours</li>
+        <li>Prerequisite: WEB 115, at most colleges</li>
+        <li>North Carolina Community College System</li>
+      </ul>
+
+      <h3>What to expect</h3>
+      <p>The step from writing pages to writing applications. Frameworks and libraries enter here, and so does the habit of reading someone else's code.</p>
+      <p>
+        Check Canvas for what is due and when. The rules that apply no matter
+        which of my courses you are in live under
+        <a href="../course-standards.html">Course Standards</a>, and the rules every page you build must satisfy live under <a href="../web-standards.html">Web Standards</a>.
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <em
+          >If you keep on doin' what you've been doin' yer gonna keep on
+          gettin' what you've been gettin!</em
+        >
+      </p>
+      <p>
+        <span class="mirrored">&#128042;</span> This site is a Camelid Software
+        Production, who'd-wanna-copy-this 2026 &#128043;
+      </p>
+    </footer>
+    <script src="../tools/standards-check.js" defer data-mode="general"></script>
+  </body>
 </html>
