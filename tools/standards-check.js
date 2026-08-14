@@ -190,9 +190,14 @@
 
     const scripts = [...d.querySelectorAll("script[src]")].map((s) => s.getAttribute("src") || "");
     const localScripts = scripts.filter(isLocal);
-    if (!localScripts.length) add("PASS", "scripts in scripts/", "no local scripts on this page");
-    else if (localScripts.every((s) => s.includes("scripts/"))) add("PASS", "scripts in scripts/");
-    else add("FAIL", "scripts in scripts/", localScripts.filter((s) => !s.includes("scripts/")).join(", "));
+    // tools/ counts alongside scripts/: the shared validator lives in the
+    // teaching hub's tools/ folder, and the rule's point is that scripts sit
+    // in a folder rather than loose at the site root
+    const inCodeFolder = (s) => s.includes("scripts/") || s.includes("tools/");
+    const CODE_RULE = "scripts in scripts/ (or tools/)";
+    if (!localScripts.length) add("PASS", CODE_RULE, "no local scripts on this page");
+    else if (localScripts.every(inCodeFolder)) add("PASS", CODE_RULE);
+    else add("FAIL", CODE_RULE, localScripts.filter((s) => !inCodeFolder(s)).join(", "));
 
     add(scripts.some((s) => s.includes("standards-check")) ? "PASS" : "FAIL",
       "Vicunadator script on the page");

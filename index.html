@@ -1,45 +1,103 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>D. von Briesen Teaching | Home</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
-  <style>
-    body { font-family: system-ui, sans-serif; max-width: 46rem; margin: 3rem auto; padding: 0 1rem; line-height: 1.5; color: #222; }
-    header h1 { margin-bottom: .25rem; }
-    header p { margin-top: 0; color: #555; }
-    main h2 { margin-top: 2.5rem; }
-    ul.courses { list-style: none; padding: 0; }
-    ul.courses li { margin: .6rem 0; padding: .8rem 1rem; border: 1px solid #ddd; border-radius: 8px; }
-    ul.courses a { text-decoration: none; font-weight: 600; }
-    ul.courses .status { font-size: .85em; color: #777; margin-left: .5rem; font-weight: normal; }
-    footer { margin-top: 3rem; font-size: .85em; color: #777; }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Teaching</h1>
-    <p><em>Course sites, standards, and tools — one hub for everything.</em></p>
-  </header>
-  <main>
-    <h2>Courses</h2>
-    <ul class="courses">
-      <li><a href="itis3135/">ITIS 3135 — Front-End Web Application Development</a></li>
-      <li><a href="cis110/">CIS 110</a><span class="status">coming soon</span></li>
-      <li><a href="itsc1110/">ITSC 1110</a><span class="status">coming soon</span></li>
-      <li><a href="web115/">WEB 115</a><span class="status">coming soon</span></li>
-      <li><a href="web215/">WEB 215</a><span class="status">coming soon</span></li>
-      <li><a href="web250/">WEB 250</a><span class="status">coming soon</span></li>
-    </ul>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D.I. von Briesen's Dynamic Vicuña Buck | Home</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- classes below are styling hooks with no semantic element available:
+         site-header/site-footer match the shared stylesheet's landmark rules,
+         home-logo sizes the vicuña, courses spaces the course lists, and
+         mirrored flips the second camel so the pair faces inward -->
+    <header class="site-header">
+      <hgroup>
+        <h1>
+          <a href="index.html" class="home-logo"
+            ><img
+              src="images/vicuna.svg"
+              alt="Camelid Software vicuña logo — home"
+              width="40"
+              height="40"
+          /></a>
+          D.I. von Briesen's Dynamic Vicuña Buck
+        </h1>
+        <p><em>Teaching Hub — course sites, standards, and tools</em></p>
+      </hgroup>
+      <nav aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="course-standards.html">Course Standards</a>
+        <a href="web-standards.html">Web Standards</a>
+        <a href="itis3135/">ITIS 3135</a>
+      </nav>
+    </header>
 
-    <h2>Shared tools</h2>
-    <p>The standards self-check validator used across all course sites lives at
-      <code>tools/standards-check.js</code>, with its rules in <code>standards/rules.json</code>.
-      Link the tools copy — don't duplicate it.</p>
-  </main>
-  <footer>
-    <p>D. von Briesen</p>
-  </footer>
-</body>
+    <main>
+      <h2>Home</h2>
+
+      <p>
+        One hub for every course I teach, at both a state university and a
+        community college. Each course has its own site below; the rules and
+        tools they share live here at the top level so there is exactly one
+        copy of each.
+      </p>
+
+      <h3>University courses</h3>
+      <p><em>UNC Charlotte — part of the University of North Carolina System</em></p>
+      <ul class="courses">
+        <li>
+          <a href="itis3135/">ITIS 3135</a> — Web-Based Application Design and
+          Development
+        </li>
+        <li><a href="itsc1110/">ITSC 1110</a> — Introduction to Programming</li>
+      </ul>
+
+      <h3>Community college courses</h3>
+      <p><em>North Carolina Community College System</em></p>
+      <ul class="courses">
+        <li><a href="cis110/">CIS 110</a> — Introduction to Computers</li>
+        <li><a href="web115/">WEB 115</a> — Web Markup and Scripting</li>
+        <li><a href="web215/">WEB 215</a> — Advanced Markup and Scripting</li>
+        <li><a href="web250/">WEB 250</a> — Database Driven Websites</li>
+      </ul>
+
+      <h3>Shared standards</h3>
+      <p>
+        Two sets of rules apply across these courses. The
+        <a href="course-standards.html">Course Standards</a> govern how you
+        work in any course of mine, whatever the subject. The
+        <a href="web-standards.html">Web Standards</a> govern what every page
+        you build must contain, and they are what the Vicuñadator checks.
+      </p>
+
+      <h3>Shared tools</h3>
+      <p>
+        The standards self-check validator lives at
+        <code>tools/standards-check.js</code>, with its rules in
+        <code>standards/rules.json</code>. Link that copy from your pages —
+        don't duplicate it, because a copy goes stale the moment the standards
+        change.
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <em
+          >If you keep on doin' what you've been doin' yer gonna keep on
+          gettin' what you've been gettin!</em
+        >
+      </p>
+      <p>
+        <span class="mirrored">&#128042;</span> This site is a Camelid Software
+        Production, who'd-wanna-copy-this 2026 &#128043;
+      </p>
+    </footer>
+    <script src="tools/standards-check.js" defer data-mode="general"></script>
+  </body>
 </html>
