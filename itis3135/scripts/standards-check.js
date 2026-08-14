@@ -97,6 +97,7 @@
       }
     }
     if (scriptMode === "course") site = "course";
+    else if (scriptMode === "general") site = null;
     const course = site === "course";
 
     if (location.pathname.toLowerCase().includes("/components/")) {
