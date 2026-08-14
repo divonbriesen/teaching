@@ -201,7 +201,9 @@ header {
   padding: 6px 0;
 }
 
-hgroup p {
+/* tagline: the line under the site name in the header. It sits outside
+   hgroup because older validators reject a <p> inside one. */
+.tagline {
   margin: 0 0 6px;
 }
 
