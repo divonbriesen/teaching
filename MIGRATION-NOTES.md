@@ -33,16 +33,21 @@ mechanical find-replace across 39 files, after which
 deleted. Until then the shared `tools/` copy is the canonical one but is loaded
 by nothing.
 
-**2. Instructor pages now fail the course ruleset — confirmed live.** Because
-these pages sit under `/itis3135/`, the Vicunadator's `match_dirs` detection now
-applies the *student submission* rules to them. The hub page currently shows 8
-failures, all of them rules it was never meant to satisfy: the "Name's Mascot |
-COURSEID" site-name format, the footer "Certified in ..." line, required nav
-links to the cert/CRAP/Pictures/Introduction-Form pages, and the
-`components/header.html` requirement. Nothing is graded against this, but the
-llama reads as broken on your own hub. The fix is `data-mode="general"` on the
-script tag of each instructor-facing page (`index.html`, `assignments.html`,
-`standards.html`, `validation.html`, `commandments.html`, `pprp.html`).
+## Resolved
+
+**Instructor pages failing the course ruleset — fixed 2026-08-14.** Moving this
+content under `/itis3135/` made `match_dirs` classify the hub's own pages as
+student course sites, producing 8 failures on the hub against rules it was never
+meant to meet. All 39 pages now carry `data-mode="general"`, restoring the
+behavior they had at the web123 root (where the hub matched no site at all —
+which is why `web123` is in the mascot `exclude_dirs`).
+
+Note for anyone reading the validator: `data-mode="general"` was documented in
+the file header but never implemented — only `"course"` was honored, so the
+attribute silently did nothing. The missing `else if (scriptMode === "general")`
+branch was added to both `tools/standards-check.js` and the itis3135 copy. The
+frozen `web123` shim was deliberately left alone, so that copy still has the
+documented-but-inert attribute.
 
 ## Known loose ends
 
