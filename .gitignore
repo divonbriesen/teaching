@@ -1,1 +1,5 @@
 .DS_Store
+
+# Wrangler's local state holds the Cloudflare account id
+.wrangler/
+node_modules/
