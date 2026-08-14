@@ -3,3 +3,9 @@
 # Wrangler's local state holds the Cloudflare account id
 .wrangler/
 node_modules/
+
+# Student data never belongs in this repo — it is public.
+# Grading output stays on the local machine only.
+RESULTS-*.txt
+RESULTS-*.md
+grading-output/
