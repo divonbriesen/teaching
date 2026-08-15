@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
-"""Regenerate schedule.html from the academic calendars.
+"""Regenerate schedule.html from the two academic calendars.
 
-Weeks run Monday–Sunday. Instructional weeks get a number; a week with no
-class meetings at all gets a letter code instead and does not consume a
-number. The separator character between the two dates flags what interrupts
-that week, matching the convention students already know:
+Weeks run Monday-Sunday. A week that carries class meetings gets a number; a
+week with none gets a letter code instead and does not consume a number, so
+week numbers stay in step with module numbers.
 
-    -  an ordinary week
-    *  a holiday closing (Labor Day, MLK Day)
-    +  a recess of one or more days
-    ^  Thanksgiving, or a no-class weekend
-    x  classes end this week
-    =  final examinations only
+The character between the two dates flags what interrupts that week, and the
+legend under each block spells it out. Output is monospace and column-aligned
+so it survives a copy and paste into Canvas or a syllabus.
 
-Edit TERMS below when the calendars come out, then run:  python3 tools/make-schedule.py
+Edit TERMS when the calendars come out, then run:
+    python3 tools/make-schedule.py
 """
 import datetime as dt
 import pathlib
@@ -21,53 +18,79 @@ import pathlib
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = "D.I. von Briesen's Dapper Innovative Vicuña Buck"
 
-# (start, end) are the first and last dates the term touches, including exams.
-# events maps a date to (separator, note). A note on a week with no classes
-# also supplies the letter code via code=.
 TERMS = [
     dict(
-        name="Fall 2026",
-        school="UNC Charlotte",
-        source="https://registrar.charlotte.edu/calendar-schedules/",
+        name="Fall 2026", school="Central Piedmont",
         first_class=dt.date(2026, 8, 17),
-        last_class=dt.date(2026, 12, 2),
-        term_end=dt.date(2026, 12, 10),
+        term_end=dt.date(2026, 12, 15),
         marks=[
-            (dt.date(2026, 9, 7), "*", "Labor Day — university closed (Mon)"),
-            (dt.date(2026, 10, 12), "+", "Student Recess (Mon–Tue)"),
-            (dt.date(2026, 11, 25), "^", "Thanksgiving — no classes (Wed–Sat)"),
-            (dt.date(2026, 12, 2), "x", "Last day of classes (Wed) • Reading Day (Thu) • exams begin (Fri)"),
-            (dt.date(2026, 12, 7), "=", "Final examinations, through Thu 10 Dec"),
+            (dt.date(2026, 9, 7), "*"),
+            (dt.date(2026, 11, 26), "^"),
+            (dt.date(2026, 12, 15), "x"),
         ],
-        exam_only_from=dt.date(2026, 12, 7),
+        break_weeks={dt.date(2026, 10, 12): ("FB", "+")},
+        legend=[
+            "*Labor & PD Days (Mon-Tue)",
+            "+Fall Break (Mon-Fri)",
+            "^Thanksgiving (Thu-Sun)",
+            "xEnd of Term (Tuesday 12/15)",
+        ],
     ),
     dict(
-        name="Spring 2027",
-        school="UNC Charlotte",
-        source="https://registrar.charlotte.edu/calendar-schedules/",
+        name="Spring 2027", school="Central Piedmont",
         first_class=dt.date(2027, 1, 11),
-        last_class=dt.date(2027, 4, 28),
+        term_end=dt.date(2027, 5, 11),
+        marks=[
+            (dt.date(2027, 1, 18), "*"),
+            (dt.date(2027, 3, 26), "^"),
+            (dt.date(2027, 5, 11), "x"),
+        ],
+        break_weeks={dt.date(2027, 3, 8): ("SB", "+")},
+        legend=[
+            "*MLK & PD Days (Mon-Tue)",
+            "+Spring Break (Mon-Sun)",
+            "^Spring Holiday (Fri-Sun)",
+            "xEnd of Term (Tuesday 5/11)",
+        ],
+    ),
+    dict(
+        name="Fall 2026", school="Charlotte",
+        first_class=dt.date(2026, 8, 17),
+        term_end=dt.date(2026, 12, 10),
+        marks=[
+            (dt.date(2026, 9, 7), "*"),
+            (dt.date(2026, 10, 12), "+"),
+            (dt.date(2026, 11, 25), "^"),
+            (dt.date(2026, 12, 2), "x"),
+        ],
+        exam_from=dt.date(2026, 12, 7),
+        legend=[
+            "*Labor Day (Mon)",
+            "+Student Recess (Mon-Tue)",
+            "^Thanksgiving (Wed-Sat)",
+            "xLast Class 12/2, Reading Day 12/3, Exams begin 12/4",
+            "=Exams only, through Thursday 12/10",
+        ],
+    ),
+    dict(
+        name="Spring 2027", school="Charlotte",
+        first_class=dt.date(2027, 1, 11),
         term_end=dt.date(2027, 5, 6),
         marks=[
-            (dt.date(2027, 1, 18), "*", "Dr. Martin Luther King Jr. Day — university closed (Mon)"),
-            (dt.date(2027, 3, 8), "+", "Student Spring Recess (Mon–Sat) — no classes all week"),
-            (dt.date(2027, 4, 9), "^", "Refresh Weekend — no classes (Fri–Sat)"),
-            (dt.date(2027, 4, 28), "x", "Last day of classes (Wed) • Reading Day (Thu) • exams begin (Fri)"),
-            (dt.date(2027, 5, 3), "=", "Final examinations, through Thu 6 May"),
+            (dt.date(2027, 1, 18), "*"),
+            (dt.date(2027, 4, 9), "^"),
+            (dt.date(2027, 4, 28), "x"),
         ],
-        exam_only_from=dt.date(2027, 5, 3),
-        no_class_weeks=[dt.date(2027, 3, 8)],
-        no_class_code="SR",
+        break_weeks={dt.date(2027, 3, 8): ("SR", "+")},
+        exam_from=dt.date(2027, 5, 3),
+        legend=[
+            "*MLK Day (Mon)",
+            "+Student Spring Recess (Mon-Sat)",
+            "^Refresh Weekend (Fri-Sat)",
+            "xLast Class 4/28, Reading Day 4/29, Exams begin 4/30",
+            "=Exams only, through Thursday 5/6",
+        ],
     ),
-]
-
-LEGEND = [
-    ("-", "an ordinary week"),
-    ("*", "a holiday closing"),
-    ("+", "a recess of one or more days"),
-    ("^", "Thanksgiving, or a no-class weekend"),
-    ("x", "classes end this week"),
-    ("=", "final examinations only"),
 ]
 
 
@@ -75,29 +98,27 @@ def fmt(d):
     return f"{d.day:02d}{d.strftime('%b')}"
 
 
-def build(term):
-    start = term["first_class"] - dt.timedelta(days=term["first_class"].weekday())
-    rows, n = [], 0
-    d = start
+def block(term):
+    monday = term["first_class"] - dt.timedelta(days=term["first_class"].weekday())
+    lines, n, d = [], 0, monday
     while d <= term["term_end"]:
         end = min(d + dt.timedelta(days=6), term["term_end"])
-        sep, notes = "-", []
-        for when, ch, text in term["marks"]:
+        sep = "-"
+        for when, ch in term["marks"]:
             if d <= when <= end:
                 sep = ch
-                notes.append(text)
-        exam_only = term.get("exam_only_from") and d >= term["exam_only_from"]
-        no_class = any(d <= w <= end for w in term.get("no_class_weeks", []))
-        if exam_only:
-            code = "EX"
-        elif no_class:
-            code = term.get("no_class_code", "BR")
-        else:
+        code = None
+        for start, (label, ch) in term.get("break_weeks", {}).items():
+            if d <= start <= end:
+                code, sep = label, ch
+        if code is None and term.get("exam_from") and d >= term["exam_from"]:
+            code, sep = "EX", "="
+        if code is None:
             n += 1
             code = f"{n:02d}"
-        rows.append((code, fmt(d), sep, fmt(end), " • ".join(notes)))
+        lines.append(f"{code}) {fmt(d)} {sep} {fmt(end)}")
         d += dt.timedelta(days=7)
-    return rows
+    return lines, n
 
 
 def esc(s):
@@ -105,22 +126,12 @@ def esc(s):
 
 
 def term_html(term):
-    rows = build(term)
-    out = [f'      <h3>{esc(term["name"])} — {esc(term["school"])}</h3>',
-           '      <table>',
-           f'        <caption>Weeks run Monday through Sunday. Dates from the '
-           f'<a href="{term["source"]}">{esc(term["school"])} academic calendar</a>.</caption>',
-           '        <thead>',
-           '          <tr><th scope="col">Week</th><th scope="col">Dates</th>'
-           '<th scope="col">What is different</th></tr>',
-           '        </thead>',
-           '        <tbody>']
-    for code, a, sep, b, note in rows:
-        out.append(f'          <tr><th scope="row">{code}</th>'
-                   f'<td class="dates">{a} {esc(sep)} {b}</td>'
-                   f'<td>{esc(note)}</td></tr>')
-    out += ['        </tbody>', '      </table>']
-    return "\n".join(out)
+    lines, weeks = block(term)
+    body = ["SCHEDULE", "Week/Module #", "(Monday - Sunday)", ""]
+    body += lines
+    body += [""] + term["legend"]
+    return (f'      <h3>{esc(term["school"])} &bull; {esc(term["name"])}</h3>\n'
+            f'      <pre>{esc(chr(10).join(body))}</pre>'), weeks
 
 
 PAGE = """<!doctype html>
@@ -140,8 +151,7 @@ PAGE = """<!doctype html>
     <!-- classes below are styling hooks with no semantic element available:
          site-header/site-footer match the shared stylesheet's landmark rules,
          home-logo and home-logo-end size the two facing vicuñas, note boxes a
-         rule or caveat, dates keeps a week's date range on one line, and
-         mirrored flips the second camel so the pair faces
+         rule or caveat, and mirrored flips the second camel so the pair faces
          inward -->
     <header class="site-header">
       <h1>
@@ -187,9 +197,10 @@ PAGE = """<!doctype html>
 
       <p>
         Module numbers on my assignments refer to these week numbers. Week 01
-        is the first week that carries class meetings, weeks run Monday
-        through Sunday, and a week with no meetings at all takes a letter code
-        instead of a number so the numbering keeps pace with the modules.
+        is the first week carrying class meetings, weeks run Monday through
+        Sunday, and a week with no meetings takes a letter code instead of a
+        number so the numbering keeps pace with the modules. Copy any block
+        below straight into a syllabus; the columns hold their alignment.
       </p>
 
       <blockquote class="note">
@@ -200,11 +211,13 @@ PAGE = """<!doctype html>
         </p>
       </blockquote>
 
-{terms}
+      <p>
+        Central Piedmont runs CIS110, WEB115, WEB215, and WEB250. Charlotte
+        runs ITSC1110 and ITIS3135. The two calendars differ, so read the one
+        matching your course.
+      </p>
 
-      <h3>Reading the separator</h3>
-      <ul>
-{legend}      </ul>
+{terms}
     </main>
 
     <footer class="site-footer">
@@ -224,13 +237,13 @@ PAGE = """<!doctype html>
 </html>
 """
 
-terms = "\n\n".join(term_html(t) for t in TERMS)
-legend = "".join(f"        <li><strong>{esc(ch)}</strong> — {text}</li>\n"
-                 for ch, text in LEGEND)
-(ROOT / "schedule.html").write_text(
-    PAGE.format(site=SITE, terms=terms, legend=legend), encoding="utf-8")
-print("wrote schedule.html")
+parts, summary = [], []
 for t in TERMS:
-    rows = build(t)
-    print(f"  {t['name']}: {sum(1 for r in rows if r[0].isdigit())} numbered weeks, "
-          f"{len(rows)} rows")
+    html, weeks = term_html(t)
+    parts.append(html)
+    summary.append(f"  {t['school']:18} {t['name']:12} {weeks} numbered weeks")
+
+(ROOT / "schedule.html").write_text(
+    PAGE.format(site=SITE, terms="\n\n".join(parts)), encoding="utf-8")
+print("wrote schedule.html")
+print("\n".join(summary))

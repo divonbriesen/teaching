@@ -264,26 +264,3 @@ header {
   0%, 100% { box-shadow: 0 0 6px 3px rgba(220, 30, 30, 0.35); }
   50% { box-shadow: 0 0 16px 9px rgba(220, 30, 30, 0.75); }
 }
-
-/* schedule table: keep a date range on one line so "17Aug - 23Aug" never
-   splits across two, and let the whole table scroll rather than squeeze */
-.dates {
-  white-space: nowrap;
-}
-
-table {
-  border-collapse: collapse;
-  margin: 0 0 12px;
-}
-
-th,
-td {
-  text-align: left;
-  vertical-align: top;
-  padding: 4px 12px 4px 0;
-}
-
-caption {
-  text-align: left;
-  padding-bottom: 8px;
-}
