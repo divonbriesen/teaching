@@ -1,8 +1,7 @@
 # Migration notes: web123 → teaching-web monorepo
 
 Migration completed 2026-08-14. This file records what was decided and what is
-still open. Delete it once every item below is settled — the last of them is
-scheduled for December 2026.
+still open. Delete it once every item below is settled.
 
 ## What happened
 
@@ -34,10 +33,11 @@ mechanical find-replace across 39 files, after which
 deleted. Until then the shared `tools/` copy is the canonical one but is loaded
 by nothing.
 
-## Deferred to December 2026 (decided 2026-08-15)
+## Deferred, but not for long (revised 2026-08-15)
 
-Both of these concern the old repo, and both wait until the end of 2026 so
-that students still linking the old script URL have a full term to move.
+Both concern the old repo. The original plan waited until December 2026 to
+protect students still linking the old script URL; that is no longer the
+constraint — a couple of extra weeks of link life is enough.
 
 **2. Delete `web123-archive-2026`.** The private repo holding the original
 full-content web123, including the student-data commits purged from history
@@ -47,10 +47,10 @@ there is no urgency — but it is the last copy of those records anywhere.
 **3. Retire the `web123` shim.** The public three-file repo exists only to keep
 `https://divonbriesen.github.io/web123/scripts/standards-check.js` resolving for
 pages built in past terms, which hardcode that URL in their HTML. Deleting it
-takes the badge off every one of those pages until each student edits their own
-file — which returning students can do and former students will not. Web
-Standards no longer mentions the old URL, so anything built from now on links
-the teaching-hub copy.
+takes the badge off those pages — a cosmetic loss on old work, and one nobody
+minds after a couple more weeks. Web Standards no longer mentions the old URL,
+so anything built from now on links the teaching-hub copy. Safe to delete from
+early September 2026.
 
 ## Resolved
 
