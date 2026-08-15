@@ -189,6 +189,7 @@ PAGE = """<!doctype html>
         <a href="peer-review-guidelines.html">Peer Reviews</a>
         <a href="review-checklist.html">Review Checklist</a>
         <a href="validation.html">Validation</a>
+        <a href="resources.html">Resources</a>
       </nav>
       <nav aria-label="Courses">
         <a href="cis110/">CIS110</a>
