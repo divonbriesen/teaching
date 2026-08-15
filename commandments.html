@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>D.I. von Briesen's Dapper Innovative Vicuña Buck | Teaching | Home</title>
+    <title>D.I. von Briesen's Dapper Innovative Vicuña Buck | Teaching | Commandments</title>
     <link rel="stylesheet" href="styles/default.css" />
     <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
     <script
@@ -14,8 +14,9 @@
   <body>
     <!-- classes below are styling hooks with no semantic element available:
          site-header/site-footer match the shared stylesheet's landmark rules,
-         home-logo and home-logo-end size the facing vicuñas, courses spaces the course lists, and
-         mirrored flips the second camel so the pair faces inward -->
+         home-logo and home-logo-end size the two facing vicuñas, note boxes a
+         rule or caveat, con-note carries the wordplay tooltip, and mirrored
+         flips the second camel so the pair faces inward -->
     <header class="site-header">
       <h1>
         <a href="index.html" class="home-logo"
@@ -25,8 +26,7 @@
             width="40"
             height="40"
         /></a>
-        D.I. von Briesen's Dapper Innovative Vicuña Buck
-        | Teaching
+        D.I. von Briesen's Dapper Innovative Vicuña Buck | Teaching
         <img
           class="home-logo-end"
           src="images/vicuna.svg"
@@ -35,7 +35,7 @@
           height="40"
         />
       </h1>
-      <p class="tagline"><em>Teaching Hub — course sites, standards, and tools</em></p>
+      <p class="tagline"><em>Commandments — the spirit of the standards</em></p>
       <nav aria-label="Teaching">
         <a href="index.html">Home</a>
         <a href="about.html">About DI</a>
@@ -63,60 +63,44 @@
     </header>
 
     <main>
-      <h2>Home</h2>
-
+      <h2>Web Coding Commandments</h2>
       <p>
-        One hub for every course I teach, at both a state university and a
-        community college. Each course has its own site below; the rules and
-        tools they share live here at the top level so there is exactly one
-        copy of each.
+        The <a href="web-standards.html">Web Standards</a> are the letter of the
+        law — every rule, checkable and checked. These commandments are its
+        spirit: the developer you're becoming when you follow them.
       </p>
-
-      <h3>Community college courses</h3>
-      <p><em>North Carolina Community College System</em></p>
-      <ul class="courses">
-        <li><a href="cis110/">CIS110</a> — Introduction to Computers</li>
-        <li><a href="web115/">WEB115</a> — Web Markup and Scripting</li>
-        <li><a href="web215/">WEB215</a> — Advanced Markup and Scripting</li>
-        <li><a href="web250/">WEB250</a> — Database Driven Websites</li>
-      </ul>
-
-      <h3>University courses</h3>
-      <p><em>UNC Charlotte — part of the University of North Carolina System</em></p>
-      <ul class="courses">
+      <ol>
         <li>
-          <a href="itsc1110/">ITSC1110</a> — Introduction to Computer Science
-          Principles
+          Write code another developer can read without asking you questions.
         </li>
         <li>
-          <a href="itis3135/">ITIS3135</a> — Front-End Web Application
-          Development
+          Semantic first — avoid spans, divs, classes, and ids where
+          tags/elements will do, and defend the ones you keep with a comment.
         </li>
-      </ul>
-
-      <h3>Shared standards</h3>
+        <li>
+          One site, one look — pages that belong together should feel like it.
+        </li>
+        <li>
+          Validate as you build, not after you're done. Both validators, every
+          page, all green.
+        </li>
+        <li>
+          Design on purpose with the CRAP principles: Contrast, Repetition,
+          Alignment, Proximity.
+        </li>
+        <li>
+          Name things — files, images, folders — so their names answer the
+          question.
+        </li>
+        <li>
+          Test, test, test: readability, other browsers, other devices, and
+          someone who didn't build it. Your grandma counts.
+        </li>
+      </ol>
       <p>
-        Two sets of rules apply across these courses. The
-        <a href="course-standards.html">Course Standards</a> govern how you
-        work in any course of mine, whatever the subject. The
-        <a href="web-standards.html">Web Standards</a> govern what every page
-        you build must contain, and they are what the Vicunadator checks.
-      </p>
-
-      <h3>When things happen</h3>
-      <p>
-        Module numbers on my assignments refer to week numbers, and the
-        <a href="schedule.html">Schedule</a> lists every week of 2026&ndash;27
-        with the breaks marked. Canvas still owns the due dates.
-      </p>
-
-      <h3>Shared tools</h3>
-      <p>
-        The standards self-check validator lives at
-        <code>tools/standards-check.js</code>, with its rules in
-        <code>standards/rules.json</code>. Link that copy from your pages —
-        don't duplicate it, because a copy goes stale the moment the standards
-        change.
+        When a commandment and a standard seem to disagree, the
+        <a href="web-standards.html">standards</a> win — and tell me, because one
+        of them needs fixing.
       </p>
     </main>
 
