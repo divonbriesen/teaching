@@ -14,7 +14,8 @@
   <body>
     <!-- classes below are styling hooks with no semantic element available:
          site-header/site-footer match the shared stylesheet's landmark rules,
-         home-logo and home-logo-end size the two facing vicuñas, note boxes a rule or caveat, and mirrored flips the second camel so the pair faces
+         home-logo and home-logo-end size the two facing vicuñas, note boxes a
+         rule or caveat, and mirrored flips the second camel so the pair faces
          inward -->
     <header class="site-header">
       <h1>
@@ -38,6 +39,7 @@
       <nav aria-label="WEB250">
         <a href="index.html">Home</a>
         <a href="assignments.html">Assignments</a>
+        <a href="../review-checklist.html">Review Checklist</a>
         <a href="../index.html">Teaching</a>
       </nav>
     </header>
@@ -49,25 +51,103 @@
 
       <h3>Catalog description</h3>
       <blockquote class="note">
-        <p>This course introduces dynamic (database-driven) website development. Topics include the use of basic database CRUD statements (create, read, update and delete) incorporated into web applications, as well as in software architecture principles.</p>
+        <p>
+          This course introduces dynamic (database-driven) website development.
+          Topics include the use of basic database CRUD statements (create,
+          read, update and delete) incorporated into web applications, as well
+          as in software architecture principles.
+        </p>
       </blockquote>
-      <p><small>Official description from the Combined Course Library of the North Carolina Community College System. Each college sets its own contact hours and prerequisites, so check your own college's catalog for the section you take.</small></p>
+      <p>
+        <small
+          >Official description from the Combined Course Library of the North
+          Carolina Community College System. 3 credit hours, 2 class hours and
+          3 lab hours.</small
+        >
+      </p>
 
-      <h3>Details</h3>
+      <h3>Where the site stops being files and starts being data</h3>
+      <p>
+        You arrive able to build pages. You leave able to build something that
+        remembers. The path runs through PHP on your own machine, then PHP on a
+        real host, then SQL, then a login page, then create, read, update, and
+        delete against a live database — CRUD, which is simple to describe and
+        unforgiving to get wrong.
+      </p>
+      <p>
+        The reading is <em>The Joy of PHP</em>, and recorded lectures cover the
+        parts that go faster with someone talking over them.
+      </p>
+
+      <h3>How grading works here</h3>
+      <p>
+        Assignments come in three kinds. Autograded work shows a grade the
+        moment you finish it. Simple-graded work gets a grade when I review it,
+        usually after the due date. Peer-reviewed work carries three scores:
+        your submission and two reviews you write.
+      </p>
+      <p>
+        <strong>Your submission is worth two thirds</strong>, and the two
+        reviews split the rest. On a 30-point assignment that is 20 for your
+        work and 5 for each review.
+      </p>
+      <blockquote class="note">
+        <p>
+          A score of 1 always means the same thing: that piece needs work, and
+          feedback follows telling you what. Fix it and the score follows.
+        </p>
+      </blockquote>
+      <p>
+        Because the total sums three separate scores, the number tells you
+        exactly what is missing once you know the pattern:
+      </p>
+      <pre>
+ 1  work submitted, needs updates
+ 2  still needs updates after a second pass
+ 5  you did one peer review, but did not submit your own work
+10  you did two peer reviews, but did not submit your own work
+11  two reviews, plus a submission that needs updates
+19  work almost there, no peer reviews
+20  work is good, peer reviews still missing
+25  good work, one good review
+30  everything done
+33  everything done, plus a little extra credit
+</pre>
+      <p>
+        Scale it up for larger assignments. If your total puzzles you, look at
+        the three posts individually — the numbers on each will say which part
+        needs attention.
+      </p>
+
+      <h3>Assignments marked NPR</h3>
+      <p>
+        No Peer Review. These are generally completion links or screenshots,
+        where a review would have nothing useful to say.
+      </p>
+
+      <h3>Accounts and materials</h3>
       <ul>
-        <li>3 credit hours</li>
-        <li>2 class hours, 3 lab hours</li>
-        <li>North Carolina Community College System</li>
+        <li>GitHub, with GitHub Pages, plus a hosted account that runs PHP</li>
+        <li>Codecademy — the PHP and SQL course sets</li>
+        <li><em>The Joy of PHP</em></li>
       </ul>
 
-      <h3>What to expect</h3>
-      <p>Where the site stops being files and starts being data. CRUD is simple to describe and unforgiving to get wrong.</p>
+      <h3>The rules your pages must satisfy</h3>
       <p>
-        Check Brightspace for what is due and when, and see
-        <a href="assignments.html">Assignments</a> for how to do each piece of
-        work and what counts as finished. The rules that apply no matter
-        which of my courses you are in live under
-        <a href="../course-standards.html">Course Standards</a>, and the rules every page you build must satisfy live under <a href="../web-standards.html">Web Standards</a>.
+        The checker tests everything you build against the
+        <a href="../web-standards.html">Web Standards</a>, and your whole site against the
+        <a href="../course-site-standards.html">Course Site Standards</a>. Run
+        the checker before you submit — see
+        <a href="../validation.html">Validation</a> — and use the
+        <a href="../review-checklist.html">review checklist</a> on your own work
+        before anyone else sees it.
+      </p>
+      <p>
+        <a href="../course-standards.html">Course Standards</a> covers how to
+        work in any course of mine, and the
+        <a href="../faq.html">FAQ</a> explains why journals, work logs, and peer
+        reviews exist at all. <a href="assignments.html">Assignments</a> lists
+        the modules in order.
       </p>
     </main>
 
