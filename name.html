@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      D.I. von Briesen's Dapper Innovative Vicuña Buck | Teaching | My Name
+    </title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- classes below are styling hooks with no semantic element available:
+         site-header/site-footer match the shared stylesheet's landmark rules,
+         home-logo and home-logo-end size the two facing vicuñas, note boxes a
+         rule or caveat, con-note carries the wordplay tooltip, and mirrored
+         flips the second camel so the pair faces inward -->
+    <header class="site-header">
+      <h1>
+        <a href="index.html" class="home-logo"
+          ><img
+            src="images/vicuna.svg"
+            alt="Camelid Software vicuña logo — home"
+            width="40"
+            height="40"
+        /></a>
+        D.I. von Briesen's Dapper Innovative Vicuña Buck | Teaching
+        <img
+          class="home-logo-end"
+          src="images/vicuna.svg"
+          alt=""
+          width="40"
+          height="40"
+        />
+      </h1>
+      <p class="tagline"><em>My Name — what the von is doing there</em></p>
+      <nav aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="about.html">About DI</a>
+        <a href="philosophy.html">Philosophy</a>
+        <a href="course-standards.html">Course Standards</a>
+        <a href="web-standards.html">Web Standards</a>
+      </nav>
+      <nav aria-label="Courses">
+        <a href="cis110/">CIS110</a>
+        <a href="web115/">WEB115</a>
+        <a href="web215/">WEB215</a>
+        <a href="web250/">WEB250</a>
+        <a href="itsc1110/">ITSC1110</a>
+        <a href="itis3135/">ITIS3135</a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>My Name</h2>
+
+      <p>
+        My surname is <strong>von Briesen</strong> — two words, lowercase v,
+        and both words together make the name. Not "Briesen." Not "Von." The
+        whole thing.
+      </p>
+
+      <h3>What the von is doing there</h3>
+      <p>
+        <em>Von</em> is German for "of" or "from," and in a surname it
+        originally pointed at a place — the family of, or from, Briesen. It
+        behaves like a preposition rather than a name, which is why it stays
+        lowercase in the middle of a sentence and why it does not stand alone.
+        Calling me "Mr. Von" makes about as much sense as calling Manuel
+        Pérez-Quiñones "Dr. Y."
+      </p>
+      <p>
+        Where it gets interesting is what computers do with it. Alphabetize me
+        and you will find me under B in one system, V in another, and
+        occasionally under a space in a third. Ask a form for my last name and
+        it will frequently take "von" as a middle name, or eat the space, or
+        capitalize it against my wishes. I have been Vonbriesen, VON BRIESEN,
+        von briesen, and — my favorite — Briesen, von D.I., which is a real
+        person somewhere in a state database.
+      </p>
+
+      <h3>Read this too</h3>
+      <p>
+        My colleague
+        <a href="https://mapq.github.io/twolastnames.html"
+          >Dr. Manuel A. Pérez-Quiñones has written the definitive page on
+          Hispanic surnames</a
+        >, and it makes the point better than I can. Hispanic naming uses two
+        apellidos, the father's first surname followed by the mother's, and
+        neither one is a middle name, a hyphen accident, or optional. His page
+        walks through how that works across generations and what organizations
+        should do about it.
+      </p>
+      <p>
+        We arrive at the same place from different directions. His name
+        carries more information than an American form expects; mine carries a
+        word that an American form does not know how to hold. In both cases
+        the software is confidently wrong, and in both cases the fix is the
+        same: store what the person tells you, print it back the way they gave
+        it, and stop assuming everyone's name has exactly two parts with
+        capital letters at the front.
+      </p>
+
+      <blockquote class="note">
+        <p>
+          This matters in a web course for a practical reason. When you build
+          a form, you decide whose names fit in it. A single "Last Name" field
+          with a capitalization rule is a decision, and it excludes people.
+          Ask for the whole name, let them type it, and show it back exactly
+          as they wrote it.
+        </p>
+      </blockquote>
+
+      <h3>And the con</h3>
+      <p>
+        On my ITIS 3135 site I sign the header
+        <em class="con-note" tabindex="0">con</em> von Briesen. That is not a
+        typo and it is not my first name. <em>Con</em> is "with" in Spanish,
+        as in con queso, and set next to <em>von</em> it makes a small joke in
+        two languages at once: with-of Briesen. It also gives students a first
+        lesson in reading a name carefully before assuming they know what it
+        says.
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <em
+          >If you keep on doin' what you've been doin' yer gonna keep on
+          gettin' what you've been gettin!</em
+        >
+      </p>
+      <p>
+        <span class="mirrored">&#128042;</span> This site is a Camelid Software
+        Production, who'd-wanna-copy-this 2026 &#128043;
+      </p>
+    </footer>
+    <script src="tools/standards-check.js" defer data-mode="general"></script>
+  </body>
+</html>
