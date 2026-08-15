@@ -45,6 +45,25 @@ header nav a {
   letter-spacing: 0.06em;
 }
 
+/* note: a boxed aside carrying a rule or caveat. Unlike .callout (a small
+   annotation chip), this holds real paragraphs, so it reads at body size,
+   left-aligned — centering wraps badly past one line — and pads equally
+   above and below the text inside its border. */
+.note {
+  background: #eef3ee;
+  color: #3c6e47;
+  border: 1px solid #3c6e47;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 0 0 12px;
+  font-style: italic;
+  text-align: left;
+}
+
+.note p {
+  margin: 0;
+}
+
 /* second nav sits under the primary one; spacing alone separates them, at
    the same type size */
 header nav + nav {
