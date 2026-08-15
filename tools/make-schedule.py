@@ -178,6 +178,7 @@ PAGE = """<!doctype html>
         <a href="faq.html">FAQ</a>
         <a href="schedule.html">Schedule</a>
         <a href="ai-policy.html">AI Policy</a>
+        <a href="grading.html">Grading</a>
       </nav>
       <nav aria-label="Standards">
         <a href="course-standards.html">Course Standards</a>
@@ -185,6 +186,7 @@ PAGE = """<!doctype html>
         <a href="course-site-standards.html">Course Site Standards</a>
         <a href="commandments.html">Commandments</a>
         <a href="peer-review-guidelines.html">Peer Reviews</a>
+        <a href="review-checklist.html">Review Checklist</a>
         <a href="validation.html">Validation</a>
       </nav>
       <nav aria-label="Courses">
