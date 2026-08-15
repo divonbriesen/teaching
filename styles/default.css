@@ -207,7 +207,7 @@ li > ol {
   transform: scaleX(-1); /* face the site name, not the margin */
 }
 
-/* companion vicuna closing the h1: sits inline after the heading text and
+/* companion vicuña closing the h1: sits inline after the heading text and
    faces back toward it, so the pair looks inward like the footer camels.
    The source art already faces left, so it needs no flip here — unlike
    .home-logo, which does. */

@@ -596,7 +596,7 @@
       "font:12px/1.5 monospace;box-shadow:0 6px 18px rgba(0,0,0,.3);text-align:left;";
     const icons = { PASS: "✅", FAIL: "❌", WARN: "⚠️", INFO: "ℹ️" };
     const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    const closeX = '<span data-vicuna-close style="position:sticky;top:0;float:right;' +
+    const closeX = '<span data-vicuña-close style="position:sticky;top:0;float:right;' +
       'cursor:pointer;font:bold 14px/1 sans-serif;color:#666;padding:0 2px;">&#10005;</span>';
     panel.innerHTML = closeX + res
       .map((r) => r.level === "HEAD"
@@ -615,7 +615,7 @@
       panel.style.display = panel.style.display === "none" ? "block" : "none";
     });
     panel.addEventListener("click", (e) => {
-      if (e.target.hasAttribute && e.target.hasAttribute("data-vicuna-close")) {
+      if (e.target.hasAttribute && e.target.hasAttribute("data-vicuña-close")) {
         panel.style.display = "none";
       }
       e.stopPropagation();
