@@ -185,6 +185,7 @@ PAGE = """<!doctype html>
         <a href="web-standards.html">Web Standards</a>
         <a href="course-site-standards.html">Course Site Standards</a>
         <a href="commandments.html">Commandments</a>
+        <a href="crap.html">CRAP</a>
         <a href="peer-review-guidelines.html">Peer Reviews</a>
         <a href="review-checklist.html">Review Checklist</a>
         <a href="validation.html">Validation</a>
