@@ -47,10 +47,8 @@
         <a href="course-standards.html">Course Standards</a>
         <a href="web-standards.html">Web Standards</a>
         <a href="course-site-standards.html">Course Site Standards</a>
-        <a href="commandments.html">Commandments</a>
-        <a href="crap.html">CRAP</a>
-        <a href="peer-review-guidelines.html">Peer Reviews</a>
-        <a href="review-checklist.html">Review Checklist</a>
+        <a href="crap.html">Design Reference</a>
+        <a href="peer-reviews.html">Peer Reviews</a>
         <a href="validation.html">Validation</a>
         <a href="resources.html">Resources</a>
       </nav>
@@ -75,6 +73,44 @@
         <a href="course-standards.html">Course Standards</a> covers how you
         work, as opposed to what you build.
       </p>
+
+      <h3>The spirit behind the letter</h3>
+      <p>
+        Everything below this is the letter of the law — every rule checkable,
+        and checked. These are the spirit: the developer you become by
+        following them, which no script can measure.
+      </p>
+      <ul>
+        <li>
+          Write code another developer can read without asking you questions.
+        </li>
+        <li>
+          Semantic first — avoid spans, divs, classes, and ids where a real
+          element will do, and defend the ones you keep with a comment.
+        </li>
+        <li>One site, one look. Pages that belong together should feel like it.</li>
+        <li>
+          Validate as you build, not after you are done. Both validators, every
+          page, all green.
+        </li>
+        <li>
+          Design on purpose with the
+          <a href="crap.html">CRAP principles</a>: Contrast, Repetition,
+          Alignment, and Proximity.
+        </li>
+        <li>
+          Name things — files, images, folders — so their names answer the
+          question.
+        </li>
+        <li>
+          Test, test, test: readability, other browsers, other devices, and
+          someone who did not build it. Your grandma counts.
+        </li>
+        <li>
+          When one of these and a rule below seem to disagree, the rule wins —
+          and tell me, because one of them needs fixing.
+        </li>
+      </ul>
 
       <h3>A script checks them, not my taste</h3>
       <p>
@@ -180,11 +216,13 @@
           source when the licence asks you to.
         </li>
         <li>
-          <strong>It has to work on a phone.</strong> Put your media queries
-          at the end of your stylesheet, and open your own page on your own
-          phone before you submit it. The checker reads your markup at one
-          size and cannot see a layout that collapses, a menu that becomes
-          unusable, or text that needs pinching to read.
+          <strong>It has to work on a phone.</strong> The checker now tests
+          the two mechanical prerequisites — a viewport meta tag carrying
+          <code>width=device-width</code>, and at least one media query in your
+          stylesheet — but passing those only means you set up the possibility
+          of a responsive layout. Whether it actually holds up needs your eyes:
+          open your own page on your own phone before you submit it. Put your
+          media queries at the end of the stylesheet.
         </li>
         <li>
           <strong>Keep files where they belong.</strong> Work for a class goes
@@ -196,9 +234,8 @@
       <h3>Course-specific additions</h3>
       <p>
         Every course website also has to satisfy the
-        <a href="course-site-standards.html">Course Site Standards</a>, and
-        the <a href="commandments.html">Commandments</a> are the spirit of the
-        law to all of these rules' letter. Requirements belonging to a single
+        <a href="course-site-standards.html">Course Site Standards</a>.
+        Requirements belonging to a single
         course live on that course's own site — for ITIS3135, on its
         <a href="itis3135/standards.html">Standards</a> page.
       </p>

@@ -264,3 +264,39 @@ header {
   0%, 100% { box-shadow: 0 0 6px 3px rgba(220, 30, 30, 0.35); }
   50% { box-shadow: 0 0 16px 9px rgba(220, 30, 30, 0.75); }
 }
+
+/* ---- Responsive ---------------------------------------------------------
+   Media queries live at the end of the stylesheet, per the Web Standards.
+   The layout is fluid already (width: min(1000px, 100%)); these handle what
+   fluidity alone does not: cramped padding, oversized headings, and nav rows
+   that need to breathe on a narrow screen. */
+
+@media (max-width: 40rem) {
+  body {
+    padding: 14px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  header nav {
+    gap: 8px 12px;
+  }
+
+  .home-logo img,
+  .home-logo-end {
+    width: 30px;
+    height: 30px;
+  }
+
+  pre {
+    font-size: 0.85em;
+  }
+}
+
+@media (min-width: 90rem) {
+  body {
+    padding: 32px 24px;
+  }
+}

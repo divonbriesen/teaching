@@ -166,6 +166,22 @@
 
     let css = embedded;
     for (const s of localSheets) css += await getText(s);
+
+    // responsive: two mechanical prerequisites a script CAN see. Whether the
+    // layout actually holds up on a phone still needs human eyes.
+    const vp = d.querySelector('meta[name="viewport"]');
+    const vpContent = vp ? (vp.getAttribute("content") || "") : "";
+    if (!vp) add("FAIL", "viewport meta tag present", "no <meta name=\"viewport\">");
+    else if (!/width\s*=\s*device-width/i.test(vpContent))
+      add("FAIL", "viewport meta tag present", "missing width=device-width: " + short(vpContent));
+    else add("PASS", "viewport meta tag present", short(vpContent));
+
+    if (css) {
+      const mq = css.match(/@media[^{]*\(/gi);
+      if (mq) add("PASS", "at least one media query", mq.length + " found");
+      else add("FAIL", "at least one media query", "no @media rule in the stylesheet");
+    }
+
     if (css) {
       const stacks = [...css.matchAll(/font-family\s*:([^;}]+)/gi)].map((m) => m[1]);
       const generic = new Set(["serif", "sans-serif", "monospace", "cursive", "system-ui", "inherit", "initial", "unset", "revert"]);
