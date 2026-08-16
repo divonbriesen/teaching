@@ -2,7 +2,7 @@
 """Regenerate schedule.html from the two academic calendars.
 
 Weeks run Monday-Sunday. A week that carries class meetings gets a number; a
-week with none gets a letter code instead and does not consume a number, so
+week with none gets a letter code instead and doesn't consume a number, so
 week numbers stay in step with module numbers.
 
 The character between the two dates flags what interrupts that week, and the
@@ -215,7 +215,7 @@ PAGE = """<!doctype html>
         <p>
           Your LMS still owns the due dates — Canvas at Charlotte, Brightspace
           at Central Piedmont. This page tells you which week a module lands
-          in; the LMS tells you the hour it is due, and the LMS wins whenever
+          in; the LMS tells you the hour it's due, and the LMS wins whenever
           the two disagree.
         </p>
       </blockquote>
