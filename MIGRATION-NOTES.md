@@ -25,13 +25,10 @@ still open. Delete it once every item below is settled.
 
 ## Still open
 
-**1. `itis3135/`'s 39 pages still use their own local validator copy.** They
-load `scripts/standards-check.js` rather than the shared `../tools/` copy, which
-is how web123 behaved and is why nothing broke in the move. Switching them is a
-mechanical find-replace across 39 files, after which
-`itis3135/scripts/standards-check.js` and `itis3135/standards/rules.json` can be
-deleted. Until then the shared `tools/` copy is the canonical one but is loaded
-by nothing.
+**1. Resolved 2026-08-15.** All itis3135 pages now load the shared
+`../tools/standards-check.js`, and the local `scripts/standards-check.js` and
+`standards/rules.json` copies are deleted. One canonical checker, one rules
+file.
 
 ## Deferred, but not for long (revised 2026-08-15)
 

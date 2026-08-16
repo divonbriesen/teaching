@@ -42,14 +42,7 @@
         <a href="schedule.html">Schedule</a>
         <a href="ai-policy.html">AI Policy</a>
         <a href="grading.html">Grading</a>
-      </nav>
-      <nav aria-label="Standards">
-        <a href="course-standards.html">Course Standards</a>
-        <a href="web-standards.html">Web Standards</a>
-        <a href="course-site-standards.html">Course Site Standards</a>
-        <a href="crap.html">Design Reference</a>
-        <a href="peer-reviews.html">Peer Reviews</a>
-        <a href="validation.html">Validation</a>
+        <a href="standards.html">Standards</a>
         <a href="resources.html">Resources</a>
       </nav>
       <nav aria-label="Courses">
@@ -231,14 +224,451 @@
         </li>
       </ul>
 
-      <h3>Course-specific additions</h3>
+      <h2 id="course-site">Course Site Standards</h2>
       <p>
-        Every course website also has to satisfy the
-        <a href="course-site-standards.html">Course Site Standards</a>.
-        Requirements belonging to a single
-        course live on that course's own site — for ITIS3135, on its
-        <a href="itis3135/standards.html">Standards</a> page.
+        Everything in this section applies to your <strong>course site</strong>
+        — the one whose name is your name, your adjective-animal mascot, a
+        divider, and the course ID. It does not apply to the other sites you
+        will build along the way: client projects, personal portfolios, hobby
+        sites, design firms, mascot companies. Those are different kinds of
+        site with their own rules.
       </p>
+      <blockquote class="note">
+        <p>
+          The llama sorts this out automatically. The Vicuñadator works out
+          what kind of site a page belongs to from where it lives, and applies
+          that site's rules — so a hobby page gets hobby rules, a design firm
+          page gets design firm rules, and your course site gets everything
+          below. The standards for those other site types also live inside the
+          assignments that create them, which is where you should look when
+          building one.
+        </p>
+      </blockquote>
+<section>
+      <h3>Before the course site: your root site</h3>
+      <p>
+        Your webspace root carries an <code>index.html</code> that is not
+        course work. It introduces you and points onward. From there, an
+        obvious relative link leads to the course, labelled with the course ID
+        in capitals and no spaces — "Click to go to WEB250" — and it points at
+        the course <em>folder</em>, named for the course ID in lowercase, not
+        at a particular page inside it.
+      </p>
+      <ul>
+        <li>Root page: <code>index.html</code>, no class content on it</li>
+        <li>Link text carries the course ID in caps: WEB250, ITIS3135</li>
+        <li>Link target is the folder: <code>web250/</code>, not a page</li>
+        <li>The link is relative, never absolute</li>
+      </ul>
+
+      <h3>The footer, in order</h3>
+      <p>
+        Every page's footer carries a nav with these seven links, as absolute
+        URLs, because they point at fixed homes regardless of which copy of
+        your site a reader landed on:
+      </p>
+      <ol>
+        <li>Your webspace</li>
+        <li>Your GitHub.com account</li>
+        <li>Your GitHub.io root page</li>
+        <li>Your GitHub.io page for this course</li>
+        <li>freeCodeCamp public profile, showing your timeline</li>
+        <li>Codecademy public profile, showing completed lessons</li>
+        <li>LinkedIn profile</li>
+      </ol>
+      <p>
+        Plus a "Designed by" credit naming your company and linking to it, an
+        HTML validation link, and a CSS validation link.
+      </p>
+
+      <h3>The three pages every course site starts with</h3>
+      <ul>
+        <li>
+          <strong>Home</strong> (<code>index.html</code>) — a welcome, navigation
+          onward, a brief description of the site, and a link to your
+          introduction.
+        </li>
+        <li>
+          <strong>Introduction</strong> — your full name as the h2, a
+          professional image in a figure with a caption, your personal,
+          professional and academic background, your current courses as a
+          sublist, and something memorable about you.
+        </li>
+        <li>
+          <strong>Contract</strong> — the course contract, a link back to your
+          introduction, a digital signature with the date, and the academic
+          integrity pledge.
+        </li>
+      </ul>
+
+      <h3>Your brand, and where it has to show up</h3>
+      <p>
+        Your site carries a brand identity, and every page carries some of it.
+        That means all six of these, chosen deliberately and used consistently:
+      </p>
+      <ul>
+        <li>Organization or company name</li>
+        <li>Logo</li>
+        <li>Colour palette</li>
+        <li>Typography</li>
+        <li>Visual theme</li>
+        <li>Tagline or slogan</li>
+      </ul>
+      <p>
+        Consistency is the whole point. Headers, footers, navigation, colours,
+        and type should make any two pages of your site look like they belong
+        to each other, and anything you customise should suit the theme — a
+        candy-shop site says "Good Morning, Sweeties", not "Good Morning".
+      </p>
+
+        <h3>Requirements Specific To Your Course Site</h3>
+        <p>
+          These rules apply to your ITIS3135 course site on top of the
+          site-wide rules. Where the two overlap, both apply.
+        </p>
+        <ol>
+          <li>
+            The course site meets every rule on the
+            <a href="web-standards.html">Web Standards</a> page.
+          </li>
+          <li>
+            Site name = your name (possessive) + your adjective-animal mascot,
+            followed by a divider of your choosing, followed by the course ID
+            (all caps, no spaces).
+            <br />Example:
+            <ul>
+              <li>Jane Doe's Jazzy Dolphin | ITIS3135</li>
+            </ul>
+            This site name is your h1 and starts the title element on every
+            page. The general rule still applies: title = h1 + divider + h2.
+          </li>
+          <li>
+            Footer includes a designer credit such as "Site Designed by",
+            "Created by", "A Product of", or "Brought to You by", followed by
+            your design firm, linked to your design firm page.
+          </li>
+          <li>
+            Footer includes a "Certified in ..." line with your earned
+            certificates (e.g. freeCodeCamp Responsive Web Design), linked.
+          </li>
+          <li>
+            Intentionally bad assignment pages (e.g., the CRAP page) live in a
+            <strong>stuff/</strong> folder. Pages inside stuff/ are exempt from
+            these standards — that's the point of them — but the rest of the
+            site is not excused for linking to them.
+          </li>
+        </ol>
+      </section>
+
+      <h2>The checklist, in full</h2>
+      <p>
+        The compressed rules above cover what trips people most. This is the
+        complete human-readable enumeration — the prose version of what the
+        checker reads from <a href="standards/rules.json">rules.json</a>. When
+        in doubt, run your page against every item here.
+      </p>
+
+<section>
+        <h3>Standards Checklist</h3>
+        <p>
+          Use this list to validate page structure, naming, and compliance. Some
+          rules demonstrate examples in subbullets. These rules apply to
+          <strong>all</strong> pages you build; your course site has
+          <a href="web-standards.html#course-site">additional requirements</a>.
+        </p>
+        <ol>
+          <li>
+            Site
+            <ul>
+              <li>
+                All images are in an images folder, with clear names that say
+                what they are (sunset_beach.jpg, not img7.jpg or DSC0042.jpg).
+              </li>
+              <li>
+                Every page has at least one image — the favicon does not
+                count, no matter how it's included.
+              </li>
+              <li>
+                Linked stylesheets (other than font services like Google
+                Fonts) live in a styles folder, and the site's stylesheet is
+                called default.css — if there are several, default.css must be
+                first. A single page using only embedded styles needs neither
+                the folder nor the file.
+              </li>
+              <li>All scripts are in a scripts folder.</li>
+              <li>Any unused files sit in a folder called z_archives</li>
+              <li>re-usable code is in a components folder</li>
+              <li>
+                Absolute URLs are for any site that's not part of the site you
+                are linking from.
+              </li>
+
+              <li>
+                Relative URLs are for any page that is part of the same site you
+                are linking from. Standard navbars should all be relative. An
+                absolute URL that points back into your own webspace (links,
+                images, stylesheets, or scripts) is a failure — make it
+                relative. <strong>Exception: footer site links.</strong> Your
+                CLT and GitHub copies are identical files, so the footer's
+                home/site links (CLT Web, GitHub, etc.) must be absolute —
+                they point at a fixed home no matter which copy the reader is
+                on.
+              </li>
+              <li>
+                Relative links should NOT open in new windows/tabs — unless
+                they point into another directory (a separate site or
+                subproject).
+              </li>
+              <li>
+                An href contains only the link itself — no spaces before or
+                after it (stray spaces make hover and underlines look wrong).
+              </li>
+              <li>
+                Any divider — like | or • or ~ — has a space between itself
+                and the things it separates, everywhere on the page.
+              </li>
+            </ul>
+          </li>
+
+          <li>
+            File name is meaningful, has no capital letters or spaces, and is
+            consistent with other pages in site (if applicable). <br />Examples:
+            <ul>
+              <li>introduction.html</li>
+              <li>course_contract.html</li>
+              <li>crap_website_evaluations.html</li>
+            </ul>
+          </li>
+          <li>
+            Title combines the h1 (name of site) with the h2 (name of page)
+            with a divider between. Close/clear page-name variants are fine —
+            Home vs. Welcome, About vs. About Us.
+            <br />Examples:
+            <ul>
+              <li>Billy Jean's Emporium | Contact</li>
+              <li>Wilber Jackson's Wild Jackal | ABC123 | Course Contract</li>
+              <li>Foggy Bottom Enterprises ~ Welcome</li>
+            </ul>
+          </li>
+          <li>
+            There is a legible favicon that matches the site name and/or theme,
+            when viewed on the browser tab. The favicon file lives in the
+            images folder, unless it's embedded (a data URI).
+          </li>
+          <li>
+            Page Validation with the script from Accumulus (cloud)
+            <pre><code>&lt;script src="https://lint.page/kit/4d0fe3.js" crossorigin="anonymous"&gt;&lt;/script&gt;</code> </pre>
+            <ul>
+              <li>Script is last line within head element</li>
+              <li>
+                Every page also carries the
+                <a href="validation.html">Vicunadator</a> script before the end
+                of body — both validators, on every page, while you code.
+              </li>
+              <li>Cloud appears on web page all green</li>
+              <li>Manual check of cloud -> WCAG shows no warning/errors</li>
+            </ul>
+          </li>
+          <li>
+            General Page Layout/Structure
+            <ul>
+              <li>Page has header/main/footer in body.</li>
+              <li>Header and footer match across entire site, to the pixel</li>
+              <li>
+                Header
+                <ul>
+                  <li>
+                    Starts with one h1 containing the site name only (an
+                    image before the h1 is fine)
+                  </li>
+                  <li>Includes navbar with site navigation</li>
+                  <li>
+                    Two or more similar/related links belong in a nav element.
+                  </li>
+                  <li>
+                    Any navigation leading outside of site is a secondary navbar
+                  </li>
+                  <li>
+                    Ok to put navbar between header and main if it's standalone
+                    and not part of header (i.e off to side)
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Main
+                <ul>
+                  <li>
+                    Starts with one h2 containing the page name — an image
+                    before the h2 is fine. (SPA-style pages may have multiple
+                    h2s, one per page name.)
+                  </li>
+                  <li>
+                    If appropriate, includes subsections with h3 as section
+                    titles
+                  </li>
+                  <li>
+                    If further divisions are needed, use article elements with
+                    h4 as article titles
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Footer
+                <ul>
+                  <li>
+                    A site tagline in italics or quotes (but not both) appears
+                    in the header or the footer.
+                  </li>
+                  <li>
+                    Footer goes from widest to narrowest to avoid xmas tree
+                    effect.
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            Styles
+            <ol>
+              <li>
+                Do not use white or black without good reason — explain the
+                reason in a CSS comment.
+              </li>
+              <li>
+                Use at least 2 fonts (check google fonts) and avoid using
+                complex/serif fonts for small text
+              </li>
+              <li>
+                override default link colors and styles — no blue, purple,
+                green, or red links, and visited links stay the same color as
+                unvisited ones
+              </li>
+              <li>
+                Use a color palette that is cohesive and not jarring (check
+                coolors)
+              </li>
+              <li>
+                Do not align paragraphs, unless you intend for them to be one
+                line (it's ok to for small devices), but not for normal screens.
+              </li>
+            </ol>
+          </li>
+          <li>
+            Test, test, test — readability, different browsers and devices,
+            and someone who didn't build it (your grandma counts).
+          </li>
+          <li>
+            Comments &amp; Justifications — each of these, when present, needs
+            a comment explaining why it's necessary. One comment on the first
+            of a same-reason group is sufficient.
+            <ol>
+              <li>divs and spans</li>
+              <li>classes and ids</li>
+              <li>inline styles</li>
+            </ol>
+          </li>
+          <li>
+            Apply <a href="crap.html">CRAP</a> Design Principles
+            <ol>
+              <li>
+                Contrast: Text and important elements have sufficient contrast
+                with background and other elements.
+              </li>
+              <li>
+                Repetition: Design elements (colors, fonts, spacing, etc.) are
+                used consistently across the site to create a cohesive look.
+              </li>
+              <li>
+                Alignment: Elements are aligned in a way that creates a clear
+                visual connection between them, improving readability and
+                organization.
+              </li>
+              <li>
+                Proximity: Related items are grouped together, while unrelated
+                items are spaced apart to create a clear structure and
+                hierarchy.
+              </li>
+            </ol>
+          </li>
+          <li>
+            DO NOT
+            <ol>
+              <li>
+                DO NOT use divs or spans when a more semantic element is
+                available. For example, use header for the page header, nav for
+                navigation, main for the main content area, and footer for the
+                page footer. The litmus test should be - "Is there a more
+                specific element that could be used here instead of a div or
+                span?" If the answer is yes, use that element instead of a div
+                or span. If not, make the div or span meaningful by adding
+                appropriate classes or attributes, but be ready to justify why
+                you are using a div or span instead of a more semantic element.
+              </li>
+              <li>
+                DO NOT use inline styles instead of CSS classes for styling
+                unless there are only two or less instances of said styling.
+                This logic is similar to that of avoiding divs and spans - if
+                there is a more efficient way to apply the styling across
+                multiple elements, use that instead of inline styles.
+              </li>
+              <li>
+                DO NOT add classes you are not using. Avoid things like main
+                class = "main".
+              </li>
+              <li>
+                DO NOT use code that serves little purpose, or that you just
+                pulled from an example or AI without need.
+              </li>
+              <li>
+                DO NOT use more than one h1 and one h2 on any page with the h1
+                as the site name and the h2 as the page name. The exception is a
+                multipage site (aka SPA Single Page Application) where you might
+                use a section to deliniate each page and then use an h2 for the
+                page name within each section.
+              </li>
+              <li>
+                DO NOT overcomplicate your CSS and HTML; you can build a nice
+                page with only about 10 lines of CSS, and no classes or divs or
+                spans or ids whatsoever. Start out with that, and begin to add
+                those other items as NECESSARY to achieve the design you want.
+                If you find yourself adding a lot of code, stop and ask if there
+                is a more efficient way to achieve the same result.
+              </li>
+              <li>
+                DO NOT use black or white, or Times New Roman, or Comics Sans or
+                Papyrus. Doing any of these shows ignorance, or laziness, or
+                both.
+              </li>
+              <li>
+                DO NOT use colors that clash or are too similar to each other.
+                If you are not sure about your color choices, use a tool like
+                Coolors to generate a palette for you, and then adjust as
+                needed.
+              </li>
+              <li>
+                DO NOT center paragraphs. Centering is generally hard to read
+                and should be reserved for very specific use cases, such as a
+                short tagline or a call to action. For normal paragraphs of
+                text, left-aligning is usually the best choice for readability.
+                If you want to center text on smaller screens, you can use media
+                queries to apply center alignment only on those devices, but be
+                cautious about using it too much as it can still affect
+                readability.
+              </li>
+              <li>
+                DO NOT center bullets. Centering bullets can make them harder to
+                read and can disrupt the visual flow of the content. It's
+                generally best to left-align bullet points to maintain
+                readability and a clean layout. If you want to create a more
+                visually interesting design, consider using other styling
+                techniques such as indentation, custom bullet icons, or spacing,
+                rather than centering the bullets themselves.
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </section>
+
     </main>
 
     <footer class="site-footer">
