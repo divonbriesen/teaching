@@ -30,6 +30,19 @@ still open. Delete it once every item below is settled.
 `standards/rules.json` copies are deleted. One canonical checker, one rules
 file.
 
+## To do, term-time
+
+**AI tiers.** The policy now runs ZERO-AI / START-AI / HELP-AI / ALL-AI, and
+deliberately does not promise that every assignment names its tier yet. Two
+jobs remain: put a tier on every assignment in the LMS, and flesh out the
+tier descriptions with examples per course.
+
+**ITSC1110 web assignments.** Still a described category on its pages, not an
+enumerated list.
+
+**TestOut cleanup in Brightspace (CIS110).** Four spots reference the old
+TestOut courseware; the course runs Cengage MindTap/SAM. See the site notes.
+
 ## Deferred, but not for long (revised 2026-08-15)
 
 Both concern the old repo. The original plan waited until December 2026 to

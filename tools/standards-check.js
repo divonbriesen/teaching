@@ -44,6 +44,9 @@
   function isLocal(u) {
     if (!u) return false;
     const low = u.toLowerCase();
+    // a full URL on this page's own origin is still local — the 404 page and
+    // footer site links legitimately use absolute URLs to their own home
+    if (low.startsWith(location.origin.toLowerCase() + "/")) return true;
     // slashes built by concat: some validators misread "//" in a string as a comment
     const ss = "/" + "/";
     const external = ["http:" + ss, "https:" + ss, ss, "data:", "mailto:", "#"];
