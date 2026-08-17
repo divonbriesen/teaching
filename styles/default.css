@@ -275,6 +275,48 @@ header {
   50% { box-shadow: 0 0 16px 9px rgba(220, 30, 30, 0.75); }
 }
 
+/* ---- FAQ entries --------------------------------------------------------
+   A long FAQ reads as one wall of text when only bold separates a question
+   from its answer. Each entry becomes a card so the eye can find where one
+   stops and the next begins, and the Q and A badges mark which is which
+   without relying on weight alone. The heading itself is left to the shared
+   heading rule — a second h3 rule here would trip CSSLint. */
+
+.faq-item {
+  background: #fff;
+  border: 1px solid #d6d0c4;
+  border-left: 5px solid #3c6e47;
+  border-radius: 10px;
+  padding: 16px 18px 6px;
+  margin: 0 0 18px;
+}
+
+/* the Q badge: filled, so the question wins the glance */
+.faq-mark {
+  display: inline-block;
+  min-width: 1.7em;
+  margin-right: 10px;
+  padding: 2px 6px;
+  border: 1px solid #3c6e47;
+  border-radius: 6px;
+  background: #3c6e47;
+  color: #faf7f2;
+  font-family: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+  font-size: 0.62em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+  vertical-align: 0.22em;
+}
+
+/* the A badge: outlined, so it reads as the quieter half of the pair */
+.faq-mark-answer {
+  background: transparent;
+  color: #3c6e47;
+  font-size: 0.8em;
+  vertical-align: 0.06em;
+}
+
 /* ---- Responsive ---------------------------------------------------------
    Media queries live at the end of the stylesheet, per the Web Standards.
    The layout is fluid already (width: min(1000px, 100%)) and headings scale
