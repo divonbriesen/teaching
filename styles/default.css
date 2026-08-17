@@ -78,7 +78,17 @@ main {
   padding: 8px 0 24px;
 }
 
-h1,
+/* h1 stands alone with a fluid size: defining it a second time inside a
+   media query trips CSSLint's "headings defined once" rule, and clamp()
+   scales it between narrow and wide screens without the duplicate. */
+h1 {
+  margin: 0 0 12px;
+  line-height: 1.2;
+  font-family: "Newsreader", Georgia, "Times New Roman", serif;
+  letter-spacing: 0.01em;
+  font-size: clamp(1.6rem, 4vw, 2rem);
+}
+
 h2,
 h3,
 h5 {
@@ -267,17 +277,13 @@ header {
 
 /* ---- Responsive ---------------------------------------------------------
    Media queries live at the end of the stylesheet, per the Web Standards.
-   The layout is fluid already (width: min(1000px, 100%)); these handle what
-   fluidity alone does not: cramped padding, oversized headings, and nav rows
-   that need to breathe on a narrow screen. */
+   The layout is fluid already (width: min(1000px, 100%)) and headings scale
+   with clamp(), so these handle only what neither covers: cramped padding,
+   nav rows that need to breathe, and code blocks that need to shrink. */
 
 @media (max-width: 40rem) {
   body {
     padding: 14px;
-  }
-
-  h1 {
-    font-size: 1.6rem;
   }
 
   header nav {
