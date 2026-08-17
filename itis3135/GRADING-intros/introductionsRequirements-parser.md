@@ -96,7 +96,7 @@ This file is a stricter, machine-friendly version of the same checklist.
 
 ## 11. Required Links
 
-- Rule: These links are required only for web classes (ITIS3135, WEB115, WEB215, WEB250). CIS110 students should not be graded on this links requirement.
+- Rule: These links are required only for the web-development courses (ITIS3135, WEB115, WEB215, WEB250). CIS110 students should not be graded on this links requirement.
 - Rule: Leave exactly one additional blank line after the quote attribution before the links line.
 - Rule: A centered links line is required below the quote block.
 - Check: The links line includes all of the following labels:
