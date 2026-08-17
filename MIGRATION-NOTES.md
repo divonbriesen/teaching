@@ -40,7 +40,7 @@ tier descriptions with examples per course.
 **ITSC1110 web assignments.** Still a described category on its pages, not an
 enumerated list.
 
-**TestOut cleanup in Brightspace (CIS110).** Four spots reference the old
+**TestOut cleanup in the CIS110 LMS.** Four spots reference the old
 TestOut courseware; the course runs Cengage MindTap/SAM. See the site notes.
 
 ## Deferred, but not for long (revised 2026-08-15)
