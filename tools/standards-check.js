@@ -224,8 +224,10 @@
     if (!scripts.some((s) => s.includes("lint.page"))) add("FAIL", "validation script (lint.page) present");
     else {
       // judge from the raw source: lint.page (and other tooling) injects
-      // elements into the live head at runtime
-      const rawHeadSrc = await getText(location.href);
+      // elements into the live head at runtime. Read the body regardless of
+      // HTTP status — a 404 page serves real markup with a 404 code.
+      let rawHeadSrc = "";
+      try { rawHeadSrc = await (await fetch(location.href)).text(); } catch (e) {}
       const headMatch = rawHeadSrc.match(/<head[\s\S]*?<\/head>/i);
       const headTags = headMatch
         ? (headMatch[0].match(/<(script|link|meta|title|style)[\s>]/gi) || [])
@@ -353,7 +355,10 @@
     const ownRoot = (location.host + "/" + (location.pathname.split("/").filter(Boolean)[0] || "")).toLowerCase();
     const allRefs = [...anchors.filter((a) => !a.closest("footer")).map((a) => a.getAttribute("href") || ""),
       ...sheets, ...scripts, ...imgs];
-    const absInternal = allRefs.filter((h) => {
+    // a page served at unpredictable paths (the 404 page) can only use
+    // absolute URLs; it declares data-page="404" on the checker script
+    const notFoundPage = SCRIPT_EL && SCRIPT_EL.dataset.page === "404";
+    const absInternal = notFoundPage ? [] : allRefs.filter((h) => {
       if (!/^https?:\/\//i.test(h)) return false;
       let u; try { u = new URL(h); } catch (e) { return false; }
       const hRoot = (u.host + "/" + (u.pathname.split("/").filter(Boolean)[0] || "")).toLowerCase();
