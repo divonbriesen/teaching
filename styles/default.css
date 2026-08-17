@@ -318,30 +318,19 @@ header {
   margin: 0 0 18px;
 }
 
-/* the Q badge: filled, so the question wins the glance */
+/* Q: and A: labels. A real space follows the colon in the markup, and the
+   margin adds a little more, so the label reads as a label rather than as
+   the first letter of the sentence. */
 .faq-mark {
-  display: inline-block;
-  min-width: 1.7em;
-  margin-right: 10px;
-  padding: 2px 6px;
-  border: 1px solid #3c6e47;
-  border-radius: 6px;
-  background: #3c6e47;
-  color: #faf7f2;
-  font-family: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
-  font-size: 0.62em;
+  margin-right: 0.15em;
+  color: #3c6e47;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-align: center;
-  vertical-align: 0.22em;
 }
 
-/* the A badge: outlined, so it reads as the quieter half of the pair */
+/* the answer's label is the quieter half of the pair */
 .faq-mark-answer {
-  background: transparent;
-  color: #3c6e47;
-  font-size: 0.8em;
-  vertical-align: 0.06em;
+  font-family: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+  color: #6b6257;
 }
 
 /* ---- Responsive ---------------------------------------------------------
