@@ -213,8 +213,8 @@ PAGE = """<!doctype html>
 
       <blockquote class="note">
         <p>
-          Your LMS still owns the due dates — Canvas at Charlotte, Brightspace
-          at Central Piedmont. This page tells you which week a module lands
+          Your LMS still owns the due dates. This page tells you which week
+          a module lands
           in; the LMS tells you the hour it's due, and the LMS wins whenever
           the two disagree.
         </p>

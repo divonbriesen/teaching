@@ -134,6 +134,17 @@ a:focus-visible {
   color: #083f77;
 }
 
+/* Browsers default monospace to 13px against a 16px body, which leaves code
+   looking shrunken next to the prose around it. Naming the stack and the size
+   puts it back in scale — just under 1em, since monospace reads wider than
+   the body face at a matched size. */
+pre,
+code {
+  font-family: "SF Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo,
+    monospace;
+  font-size: 0.95em;
+}
+
 pre {
   overflow-x: auto;
   padding: 12px;
@@ -282,6 +293,22 @@ header {
    without relying on weight alone. The heading itself is left to the shared
    heading rule — a second h3 rule here would trip CSSLint. */
 
+/* jump list: every question as an anchor, so the page opens as an index
+   rather than something you scroll to survey. Two columns where there is
+   room, one where there isn't. */
+.faq-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 28px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.faq-jump li {
+  flex: 1 1 20rem;
+}
+
 .faq-item {
   background: #fff;
   border: 1px solid #d6d0c4;
@@ -339,7 +366,7 @@ header {
   }
 
   pre {
-    font-size: 0.85em;
+    font-size: 0.9em;
   }
 }
 
