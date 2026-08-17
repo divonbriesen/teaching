@@ -340,7 +340,11 @@
     // dividers need a space on both sides, everywhere on the page
     const bodyClone = d.body.cloneNode(true);
     bodyClone.querySelectorAll("script,style,pre,code,#standards-check-badge").forEach((el) => el.remove());
-    const bodyText = bodyClone.textContent || "";
+    // A tilde is only a divider when it separates words. Followed by a digit
+    // or currency it means "about" ("wait ~10 minutes", "(~$12)"), and
+    // followed by punctuation it's the character itself under discussion
+    // ("starting with - or ~,"). Drop those before looking for tight dividers.
+    const bodyText = (bodyClone.textContent || "").replace(/~(?=[\d$£€.,;:)])/g, " ");
     const tight = [...new Set(
       (bodyText.match(/[^\s|•·~][|•·~]|[|•·~][^\s|•·~]/g) || []).filter((t) => !t.includes("/"))
     )].slice(0, 5);
