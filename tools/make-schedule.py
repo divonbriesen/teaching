@@ -174,7 +174,6 @@ PAGE = """<!doctype html>
       <p class="tagline"><em>Schedule — week numbers for 2026&ndash;27</em></p>
       <nav aria-label="Teaching">
         <a href="index.html">Home</a>
-        <a href="about.html">About DI</a>
         <a href="faq.html">FAQ</a>
         <a href="schedule.html">Schedule</a>
         <a href="ai-policy.html">AI Policy</a>
@@ -230,6 +229,10 @@ PAGE = """<!doctype html>
     </main>
 
     <footer class="site-footer">
+      <nav aria-label="About">
+        <a href="about.html">About DI</a>
+        <a href="name.html">My Name</a>
+      </nav>
       <p>
         <em
           >If you keep on doin' what you've been doin' yer gonna keep on

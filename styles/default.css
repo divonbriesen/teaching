@@ -89,17 +89,21 @@ h1 {
   font-size: clamp(1.6rem, 4vw, 2rem);
 }
 
+/* A heading belongs to what follows it, so it sits nearer that than to the
+   paragraph it just left. Equal margins above and below made every heading
+   look like it trailed the section it had finished rather than opening the
+   next one. */
 h2,
 h3,
 h5 {
-  margin: 0 0 12px;
+  margin: 32px 0 10px;
   line-height: 1.2;
   font-family: "Newsreader", Georgia, "Times New Roman", serif;
   letter-spacing: 0.01em;
 }
 
 h4 {
-  margin: 0 0 12px;
+  margin: 32px 0 10px;
   text-align: center;
   font-size: clamp(1.35rem, 2.7vw, 2rem);
   line-height: 1.1;
@@ -118,6 +122,13 @@ figure {
 figure,
 blockquote {
   text-align: center;
+}
+
+/* a heading opening a container has nothing above it to separate from */
+main > :first-child,
+blockquote > :first-child,
+.faq-item > :first-child {
+  margin-top: 0;
 }
 
 img {
@@ -165,7 +176,7 @@ hr {
 
 h6 {
   font-size: 1.1em;
-  margin: 12px 0 4px;
+  margin: 24px 0 6px;
   line-height: 1.2;
   font-family: "Newsreader", Georgia, "Times New Roman", serif;
   letter-spacing: 0.01em;
