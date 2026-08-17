@@ -3,17 +3,81 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>D.I. von Briesen's Dapper Innovative Vicuña Buck | ITIS3135 | Introductions Instructions</title>
-    <link rel="stylesheet" href="../styles/default.css" />
+    <title>
+      D.I. von Briesen's Dapper Innovative Vicuña Buck | Teaching |
+      Introductions
+    </title>
+    <link rel="stylesheet" href="styles/default.css" />
     <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
-    <script src="scripts/include-repeated-code.js" defer></script>
       <script src="https://lint.page/kit/4d0fe3.js" crossorigin="anonymous"></script>
   </head>
   <body id="intro-instructions-page">
-    <header></header>
+    <!-- classes below are styling hooks with no semantic element available:
+         site-header/site-footer match the shared stylesheet's landmark rules,
+         home-logo and home-logo-end size the two facing vicuñas, note boxes a
+         rule or caveat, and mirrored flips the second camel so the pair faces
+         inward -->
+    <header class="site-header">
+      <h1>
+        <a href="index.html" class="home-logo"
+          ><img
+            src="images/vicuna.svg"
+            alt="Camelid Software vicuña logo — home"
+            width="40"
+            height="40"
+        /></a>
+        D.I. von Briesen's Dapper Innovative Vicuña Buck | Teaching
+        <img
+          class="home-logo-end"
+          src="images/vicuna.svg"
+          alt=""
+          width="40"
+          height="40"
+        />
+      </h1>
+      <p class="tagline"><em>Introductions — the entry every course starts with</em></p>
+      <nav aria-label="Teaching">
+        <a href="index.html">Home</a>
+        <a href="about.html">About DI</a>
+        <a href="faq.html">FAQ</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="ai-policy.html">AI Policy</a>
+        <a href="grading.html">Grading</a>
+        <a href="standards.html">Standards</a>
+        <a href="resources.html">Resources</a>
+      </nav>
+      <nav aria-label="Courses">
+        <a href="cis110/">CIS110</a>
+        <a href="web115/">WEB115</a>
+        <a href="web215/">WEB215</a>
+        <a href="web250/">WEB250</a>
+        <a href="itsc1110/">ITSC1110</a>
+        <a href="itis3135/">ITIS3135</a>
+      </nav>
+    </header>
 
     <main>
-      <h2>Introductions Instructions</h2>
+      <h2>Introductions</h2>
+
+      <p>
+        Every course I teach opens with this one, and it works the same way in
+        all of them: you add an entry to a shared Google Doc that the whole
+        class can read. Two things make it worth doing properly. Your
+        classmates use it to find people worth working with, and the format is
+        graded strictly — so it's a cheap, low-stakes lesson in following a
+        specification exactly, which is most of what the rest of the term asks
+        of you.
+      </p>
+
+      <blockquote class="note">
+        <p>
+          Two parts vary by course. The centered links line applies to the web
+          courses — ITIS3135, WEB115, WEB215 and WEB250 — and the
+          <a href="introduction-form.html">introduction form</a> is a separate,
+          later assignment in ITIS3135 and WEB115 only. Everything else on this
+          page applies everywhere.
+        </p>
+      </blockquote>
 
       <section>
         <h3>Shared Google Doc Workflow</h3>
@@ -27,11 +91,15 @@
         </p>
         <p>
           Want a quick pre-check before submitting?
-          <a href="introduction_evaluation.html">Open the Introduction Evaluation Tool</a>.
+          ITIS3135 students can
+          <a href="itis3135/introduction_evaluation.html"
+            >run the Introduction Evaluation Tool</a
+          >
+          first.
         </p>
         <p>
           Unsure what a formatting rule means?
-          <a href="intro-annotated.html">See the annotated example</a> with
+          <a href="introduction-annotated.html">See the annotated example</a> with
           each part labeled.
         </p>
       </section>
@@ -188,8 +256,7 @@
                 <strong>CRS201 - Course Name:</strong> Reason for taking it.
               </li>
               <li>
-                <strong>ITIS3135 - Front-End Web Development:</strong> Reason
-                for taking it.
+                <strong>CRS301 - Course Name:</strong> Reason for taking it.
               </li>
             </ol>
           </li>
@@ -269,7 +336,7 @@
                 <li>CRS101 - Course Name: Reason for taking it.</li>
                 <li>CRS201 - Course Name: Reason for taking it.</li>
                 <li>
-                  ITIS3135 - Front-End Web Development: Reason for taking it.
+                  CRS301 - Course Name: Reason for taking it.
                 </li>
               </ol>
             </li>
@@ -346,7 +413,18 @@
       </section>
     </main>
 
-    <footer></footer>
-      <script src="../tools/standards-check.js" defer data-mode="general"></script>
+    <footer class="site-footer">
+      <p>
+        <em
+          >If you keep on doin' what you've been doin' yer gonna keep on
+          gettin' what you've been gettin!</em
+        >
+      </p>
+      <p>
+        <span class="mirrored">&#128042;</span> This site is a Camelid Software
+        Production, who'd-wanna-copy-this 2026 &#128043;
+      </p>
+    </footer>
+    <script src="tools/standards-check.js" defer data-mode="general"></script>
   </body>
 </html>
