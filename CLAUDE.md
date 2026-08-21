@@ -1,7 +1,7 @@
-# teaching-web
+# teaching
 
 Monorepo for D. von Briesen's course sites, replacing separate per-course repos.
-Live root (once pushed + Pages enabled): https://divonbriesen.github.io/teaching-web/
+Live root (once pushed + Pages enabled): https://divonbriesen.github.io/teaching/
 
 Built by Claude (Cowork) on 2026-08-14 from a restructure of the existing `web123`
 repo (itis3135's old standalone site). Read this before doing anything else here —
@@ -61,8 +61,10 @@ that's still a pending push, separate from this repo's work.
    previously unmatched at web123's root. Expect the llama badge to show new
    failures on pages that were never meant to pass those checks; not harmful,
    but confirm whether specific pages should opt out via `data-mode="general"`.
-4. **Repo name**: everything here assumes the GitHub repo is named
-   `teaching-web`, matching this local folder. Confirm before creating it.
+4. **Repo name**: the repo is `divonbriesen/teaching`, served at
+   https://divonbriesen.github.io/teaching/. It was renamed from
+   `teaching-web` on 2026-08-21; a redirect shim still lives at the old
+   name, because GitHub redirects repository URLs but not Pages URLs.
 
 ## Related context not visible to you here
 

@@ -2,7 +2,7 @@
  *
  * Add to any page, linked from the teaching hub (do not copy it — a copy
  * goes stale as the standards evolve):
- *   <script src="https://divonbriesen.github.io/teaching-web/tools/standards-check.js" defer></script>
+ *   <script src="https://divonbriesen.github.io/teaching/tools/standards-check.js" defer></script>
  *
  * This is the actively maintained copy (moved here from web123 during the
  * multi-course monorepo transition). A frozen copy stays at

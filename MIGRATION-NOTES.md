@@ -1,4 +1,4 @@
-# Migration notes: web123 → teaching-web monorepo
+# Migration notes: web123 → teaching monorepo
 
 Migration completed 2026-08-14. This file records what was decided and what is
 still open. Delete it once every item below is settled.
@@ -21,7 +21,7 @@ still open. Delete it once every item below is settled.
 - **The evaluator Worker is tracked** at `tools/evaluator-worker/` — it had
   never been committed anywhere. Deploying from this new location is untested;
   its original untracked copy has since been deleted.
-- **Live at** https://divonbriesen.github.io/teaching-web/
+- **Live at** https://divonbriesen.github.io/teaching/
 
 ## Still open
 
