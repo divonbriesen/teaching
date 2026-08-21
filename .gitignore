@@ -9,3 +9,4 @@ node_modules/
 RESULTS-*.txt
 RESULTS-*.md
 grading-output/
+tools/__pycache__/
