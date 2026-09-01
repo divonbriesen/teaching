@@ -81,7 +81,10 @@ const ISSUE_MESSAGES = {
   missingBlankLineBeforeLinks: "Missing additional blank line between quote attribution and links line.",
   missingSeparatorHr: "Missing horizontal rule separator after entry.",
   missingBlankLineBeforeSeparatorHr: "Missing at least one blank line before the horizontal rule separator.",
-  multipleSpaces: "Contains multiple consecutive spaces in visible text. Tip: This may include tabs- remove them. Also use View -> Show non-printing characters.",
+  multipleSpaces: "Contains more than one space or tab in a row in visible text. Tip: Use View -> Show non-printing characters.",
+  leadingWhitespace: "A line starts with a leading space or tab. There should never be leading whitespace. Tip: Use View -> Show non-printing characters.",
+  badColonSpacing: "A colon has a space before it, or is missing the single space after it (never a space before a colon, always exactly one space after).",
+  badCommaSpacing: "A comma has a space before it, or is missing the single space after it (never a space before a comma, always exactly one space after).",
 };
 
 const LINK_ISSUE_PATTERNS = [
@@ -825,14 +828,57 @@ function validateSpacingRule(block) {
       .filter((line) => line.length > 0);
 
     if (element === firstParagraph && hasAcknowledgmentSignature(firstParagraph)) {
-      return lines.some((line) => /(^ {2,}\S)|(\S {2,}\S)/.test(line));
+      return lines.some((line) => /[ \t]{2,}/.test(line));
     }
 
-    return lines.some((line) => /(^ {2,}\S)|(\S {2,}\S)/.test(line));
+    return lines.some((line) => /[ \t]{2,}/.test(line));
   });
 
   if (hasMultipleSpaces) {
     issues.push(ISSUE_MESSAGES.multipleSpaces);
+  }
+
+  const hasLeadingWhitespace = nodesToCheck.some((element) => {
+    const text = (element.textContent || "").replace(/\u00a0/g, " ");
+    const lines = text
+      .split(/\r?\n/)
+      .filter((line) => line.length > 0);
+
+    return lines.some((line) => /^[ \t]/.test(line));
+  });
+
+  if (hasLeadingWhitespace) {
+    issues.push(ISSUE_MESSAGES.leadingWhitespace);
+  }
+
+  // A space before ":" or "," is never correct. A missing space right after
+  // is only flagged when the next character isn't a digit, so times ("9:00")
+  // and number groupings ("1,234") aren't misflagged; two-plus spaces after
+  // are already caught by the multiple-spaces check above.
+  const hasBadColonSpacing = nodesToCheck.some((element) => {
+    const text = (element.textContent || "").replace(/\u00a0/g, " ");
+    const lines = text
+      .split(/\r?\n/)
+      .filter((line) => line.length > 0);
+
+    return lines.some((line) => /[ \t]:/.test(line) || /:(?=[^\s\d])/.test(line));
+  });
+
+  if (hasBadColonSpacing) {
+    issues.push(ISSUE_MESSAGES.badColonSpacing);
+  }
+
+  const hasBadCommaSpacing = nodesToCheck.some((element) => {
+    const text = (element.textContent || "").replace(/\u00a0/g, " ");
+    const lines = text
+      .split(/\r?\n/)
+      .filter((line) => line.length > 0);
+
+    return lines.some((line) => /[ \t],/.test(line) || /,(?=[^\s\d])/.test(line));
+  });
+
+  if (hasBadCommaSpacing) {
+    issues.push(ISSUE_MESSAGES.badCommaSpacing);
   }
 
   const blockquote = block.elements.find((element) => element.tagName === "BLOCKQUOTE");
@@ -875,6 +921,50 @@ function validateSpacingRule(block) {
 
   if (!blankParagraphBeforeQuote) {
     issues.push("Missing exactly one blank line before the quote.");
+  }
+
+  return issues;
+}
+
+// Expected: "ABC123 - Course Name" — a 3-4 letter course prefix immediately
+// followed by 3-4 digits (no space between them), fully capitalized, then
+// exactly " - " (space, any dash, space) before the course name.
+const COURSE_ID_LOOSE_RE = /^([A-Za-z]{3,4})([ \t]*)(\d{3,4})/;
+const COURSE_BULLET_DASH_RE = /^ [-‐-―−] \S/u;
+
+function validateCourseBulletFormat(courseLiElement) {
+  const issues = [];
+  const text = normalizeText(courseLiElement.textContent);
+
+  if (!text) {
+    return issues;
+  }
+
+  const idMatch = text.match(COURSE_ID_LOOSE_RE);
+
+  if (!idMatch) {
+    issues.push(
+      `Course item "${text}" does not match the required format: ABC123 - Course Name (e.g. "ITIS3135 - Web Application Design").`,
+    );
+    return issues;
+  }
+
+  const [fullMatch, letters, gap] = idMatch;
+
+  if (gap.length > 0) {
+    issues.push(`Course item "${text}" has a space within the course ID — there should be none (e.g. "ITIS3135" not "ITIS 3135").`);
+  }
+
+  if (letters !== letters.toUpperCase()) {
+    issues.push(`Course item "${text}" course ID is not fully capitalized (should be like "ITIS3135").`);
+  }
+
+  const rest = text.slice(fullMatch.length);
+
+  if (!COURSE_BULLET_DASH_RE.test(rest)) {
+    issues.push(
+      `Course item "${text}" does not match the required format: ABC123 - Course Name (a space, a dash, a space, then the course name).`,
+    );
   }
 
   return issues;
@@ -1094,6 +1184,11 @@ function validateBlock(block, courseProfile) {
 
     if (nestedCourses.length === 0 && siblingNestedCourses.length === 0) {
       issues.push(ISSUE_MESSAGES.missingNestedCourses);
+    } else {
+      const courseItems = nestedCourses.length > 0 ? nestedCourses : siblingNestedCourses;
+      courseItems.forEach((li) => {
+        issues.push(...validateCourseBulletFormat(li));
+      });
     }
   }
 
