@@ -32,8 +32,8 @@ const REQUIRED_LABELS = [
   "Professional Background",
   "Academic Background",
   "Primary Work Computer",
-  "Operating System & Version",
-  "Backup Work Computer & Location Plan",
+  "Primary Work Location",
+  "Alternate Computer & Location",
   "Courses I'm Taking, & Why",
 ];
 
@@ -710,10 +710,6 @@ function normalizeLabelKey(label) {
     .replace(/\s*,\s*/g, ", ")
     .trim();
 
-  if (cleaned === "primary computer") {
-    return "primary work computer";
-  }
-
   if (
     cleaned === "courses i'm taking & why" ||
     cleaned === "courses i’m taking & why" ||
@@ -721,19 +717,6 @@ function normalizeLabelKey(label) {
     cleaned === "courses i’m taking, & why"
   ) {
     return "courses i'm taking, & why";
-  }
-
-  if (cleaned === "operating system and version") {
-    return "operating system & version";
-  }
-
-  if (
-    cleaned === "backup work computer & location plan" ||
-    cleaned === "backup work computer and location plan" ||
-    cleaned === "backup computer & location plan" ||
-    cleaned === "backup computer and location plan"
-  ) {
-    return "backup work computer & location plan";
   }
 
   return cleaned;
