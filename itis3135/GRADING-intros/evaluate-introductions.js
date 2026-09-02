@@ -96,6 +96,7 @@ const LINK_ISSUE_PATTERNS = [
   /^freeCodeCamp link must point to /,
   /^Codecademy link must point to /,
   /^LinkedIn link must point to /,
+  / link text should read exactly /,
   /^Links are present but not as one centered links line with dividers\.$/,
   /^Missing centered links line with dividers\.$/,
   /^Links line should be centered\.$/,
@@ -1436,6 +1437,19 @@ function validateBlock(block, courseProfile) {
   const freecodecamp = findAnchor("freecodecamp");
   const codecademy = findAnchor("codecademy");
   const linkedin = findAnchor("linkedin");
+
+  // normalizeLinkLabel matches loosely (substring, case-insensitive) so a link
+  // is still found and its URL still gets checked even when misspelled or
+  // miscapitalized (e.g. "Github", "Codeacademy", "FreeCodeCamp") — but the
+  // visible text itself must read exactly as required.
+  REQUIRED_LINKS.forEach((requiredLink) => {
+    const anchor = findAnchor(requiredLink.key);
+    if (anchor && anchor.text !== requiredLink.display) {
+      issues.push(
+        `${requiredLink.display} link text should read exactly "${requiredLink.display}" (found "${anchor.text}").`,
+      );
+    }
+  });
 
   if (cltWeb && !/^https:\/\/webpages\.charlotte\.edu\/[a-z]{2}[a-z0-9]*\/?$/i.test(cltWeb.href)) {
     issues.push("CLT Web link must match https://webpages.charlotte.edu/xy... pattern.");
