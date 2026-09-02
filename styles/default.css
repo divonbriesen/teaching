@@ -110,6 +110,17 @@ h4 {
   font-family: "Newsreader", Georgia, "Times New Roman", serif;
 }
 
+/* display-name: the intro's centered, enlarged name/nickname/mascot line —
+   a plain paragraph, not a heading, since students are told not to make it
+   one; this mirrors h4's look without the semantics. */
+.display-name {
+  margin: 12px 0;
+  text-align: center;
+  font-size: clamp(1.35rem, 2.7vw, 2rem);
+  line-height: 1.1;
+  font-family: "Newsreader", Georgia, "Times New Roman", serif;
+}
+
 p,
 ul,
 ol,

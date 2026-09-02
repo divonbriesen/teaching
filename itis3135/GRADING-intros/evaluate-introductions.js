@@ -17,12 +17,24 @@ const COURSE_PROFILES = {
     key: "web",
     label: "WEB",
     requireLinks: true,
+    requireCltWeb: true,
+    checkedItemCount: 15,
+  },
+  // CPCC's web-development courses (WEB115, WEB215, WEB250) share the UNCC
+  // "web" profile's link requirements, except CLT Web — a
+  // webpages.charlotte.edu page — which only UNC Charlotte students can get.
+  webCpcc: {
+    key: "webcpcc",
+    label: "WEB (CPCC)",
+    requireLinks: true,
+    requireCltWeb: false,
     checkedItemCount: 15,
   },
   cis110: {
     key: "cis110",
     label: "CIS110",
     requireLinks: false,
+    requireCltWeb: false,
     checkedItemCount: 14,
   },
 };
@@ -39,8 +51,8 @@ const REQUIRED_LABELS = [
 
 const REQUIRED_LINKS = [
   { key: "clt web", display: "CLT Web" },
-  { key: "github", display: "GitHub" },
   { key: "github.io", display: "GitHub.io" },
+  { key: "github", display: "GitHub" },
   { key: "freecodecamp", display: "freeCodeCamp" },
   { key: "codecademy", display: "Codecademy" },
   { key: "linkedin", display: "LinkedIn" },
@@ -403,12 +415,16 @@ function getDefaultCourseProfile(lastCourseProfile, reportTitle) {
   const normalizedSaved = normalizeText(lastCourseProfile).toLowerCase();
   const normalizedTitle = normalizeText(reportTitle).toLowerCase();
 
-  if (normalizedSaved === "web" || normalizedSaved === "cis110") {
+  if (normalizedSaved === "web" || normalizedSaved === "webcpcc" || normalizedSaved === "cis110") {
     return normalizedSaved;
   }
 
   if (normalizedTitle.includes("cis110")) {
     return "cis110";
+  }
+
+  if (/web1?15|web215|web250/.test(normalizedTitle)) {
+    return "webcpcc";
   }
 
   return "web";
@@ -417,7 +433,7 @@ function getDefaultCourseProfile(lastCourseProfile, reportTitle) {
 function promptForCourseProfile(lastCourseProfile, reportTitle) {
   const defaultProfile = getDefaultCourseProfile(lastCourseProfile, reportTitle);
   const profileInput = window.prompt(
-    "Course profile for this run (WEB or CIS110):",
+    "Course profile for this run (WEB, WEBCPCC, or CIS110):",
     defaultProfile.toUpperCase(),
   );
 
@@ -431,11 +447,15 @@ function promptForCourseProfile(lastCourseProfile, reportTitle) {
     return COURSE_PROFILES.web;
   }
 
+  if (normalized === "webcpcc" || normalized === "web cpcc" || normalized === "cpcc") {
+    return COURSE_PROFILES.webCpcc;
+  }
+
   if (normalized === "cis110" || normalized === "cis 110") {
     return COURSE_PROFILES.cis110;
   }
 
-  window.alert("Invalid course profile. Enter WEB or CIS110.");
+  window.alert("Invalid course profile. Enter WEB, WEBCPCC, or CIS110.");
   return undefined;
 }
 
@@ -568,6 +588,26 @@ function isAcknowledgmentCandidateElement(element) {
   return isAcknowledgmentCandidateText(element.textContent || "");
 }
 
+// The signature (dash/tilde + initials + date) belongs on its own line right
+// after the acknowledgment sentence — not the same line. A bare P starting
+// with a dash-like marker is treated as that signature line; anything else
+// (e.g. the display-name line that follows) is never folded in, so a
+// genuinely missing signature still gets caught.
+function isLikelySignatureLine(textValue) {
+  return /^[-~–—]/.test(normalizeText(textValue));
+}
+
+function getAcknowledgmentCombinedText(element) {
+  const own = element.textContent || "";
+  const next = element.nextElementSibling;
+
+  if (next && next.tagName === "P" && isLikelySignatureLine(next.textContent || "")) {
+    return `${own} ${next.textContent}`;
+  }
+
+  return own;
+}
+
 function findAcknowledgmentElement(block) {
   const stopTags = new Set(["UL", "OL", "BLOCKQUOTE", "HR"]);
   const candidates = [];
@@ -595,7 +635,9 @@ function findAcknowledgmentElement(block) {
     }
   }
 
-  const strictMatch = candidates.find((candidate) => hasAcknowledgmentSignature(candidate));
+  const strictMatch = candidates.find((candidate) =>
+    hasAcknowledgmentText(getAcknowledgmentCombinedText(candidate)),
+  );
 
   if (strictMatch) {
     return strictMatch;
@@ -1017,7 +1059,7 @@ function validateBlock(block, courseProfile) {
   const acknowledgmentParagraph = findAcknowledgmentElement(block);
   const acknowledgmentInHeading = isAcknowledgmentCandidateText(block.name);
   const acknowledgmentSignals = getAcknowledgmentSignals(
-    acknowledgmentParagraph ? acknowledgmentParagraph.textContent || "" : block.name,
+    acknowledgmentParagraph ? getAcknowledgmentCombinedText(acknowledgmentParagraph) : block.name,
   );
 
   if (!acknowledgmentParagraph && !acknowledgmentInHeading) {
@@ -1359,13 +1401,18 @@ function validateBlock(block, courseProfile) {
     })),
   );
 
+  // CLT Web (a webpages.charlotte.edu page) doesn't apply to CPCC students.
+  const applicableLinks = REQUIRED_LINKS.filter(
+    (requiredLink) => requiredLink.key !== "clt web" || courseProfile.requireCltWeb,
+  );
+
   const linkContainerInfo = block.elements
     .map((element) => {
       const elementAnchors = Array.from(element.querySelectorAll("a")).map((anchor) =>
         normalizeLinkLabel(anchor.textContent || ""),
       );
       const labelSet = new Set(elementAnchors.filter(Boolean));
-      const requiredLabelMatches = REQUIRED_LINKS.filter((requiredLink) => labelSet.has(requiredLink.key)).length;
+      const requiredLabelMatches = applicableLinks.filter((requiredLink) => labelSet.has(requiredLink.key)).length;
       const dividerCount = ((element.textContent || "").match(/\|/g) || []).length;
       const centered = elementOrAncestorIsCentered(element, centeredClasses);
 
@@ -1407,7 +1454,7 @@ function validateBlock(block, courseProfile) {
 
   const linkContainer = linkContainerInfo ? linkContainerInfo.element : null;
 
-  REQUIRED_LINKS.forEach((requiredLink) => {
+  applicableLinks.forEach((requiredLink) => {
     if (!anchors.some((anchor) => anchor.label === requiredLink.key)) {
       issues.push(`Missing required link label: ${requiredLink.display}.`);
     }
@@ -1425,7 +1472,7 @@ function validateBlock(block, courseProfile) {
   // is still found and its URL still gets checked even when misspelled or
   // miscapitalized (e.g. "Github", "Codeacademy", "FreeCodeCamp") — but the
   // visible text itself must read exactly as required.
-  REQUIRED_LINKS.forEach((requiredLink) => {
+  applicableLinks.forEach((requiredLink) => {
     const anchor = findAnchor(requiredLink.key);
     if (anchor && anchor.text !== requiredLink.display) {
       issues.push(
@@ -1694,6 +1741,8 @@ async function evaluateIntroductionsFromUrl() {
   const queryCourse = queryConfig.course.toLowerCase();
   if (queryCourse === "web") {
     courseProfile = COURSE_PROFILES.web;
+  } else if (queryCourse === "webcpcc" || queryCourse === "web cpcc" || queryCourse === "cpcc") {
+    courseProfile = COURSE_PROFILES.webCpcc;
   } else if (queryCourse === "cis110" || queryCourse === "cis 110") {
     courseProfile = COURSE_PROFILES.cis110;
   } else {
@@ -1706,7 +1755,7 @@ async function evaluateIntroductionsFromUrl() {
   }
 
   if (!courseProfile) {
-    console.error("No valid course profile entered. Please run again and enter WEB or CIS110.");
+    console.error("No valid course profile entered. Please run again and enter WEB, WEBCPCC, or CIS110.");
     return;
   }
 
