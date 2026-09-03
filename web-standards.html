@@ -291,7 +291,9 @@
           <strong>Introduction</strong> — your full name as the h2, a
           professional image in a figure with a caption, your personal,
           professional and academic background, your current courses as a
-          sublist, and something memorable about you.
+          sublist, and something memorable about you. Full requirements:
+          <a href="web-standards.html#introduction-webpage">Introduction
+          Webpage Standards</a>.
         </li>
         <li>
           <strong>Contract</strong> — the course contract, a link back to your
@@ -358,6 +360,79 @@
           </li>
         </ol>
       </section>
+
+      <h2 id="introduction-webpage">Introduction Webpage Standards</h2>
+      <p>
+        Every course except CIS110 eventually migrates the "Shared
+        Introduction" you write in the course's Google Doc onto its own page
+        on your course site — <code>introduction.html</code>. WEB115, WEB215,
+        WEB250, and ITIS3135 build the full version, links line included;
+        ITSC1110 builds it without the links line, since it isn't a
+        web-development course. This is checked automatically, the same way
+        the rest of your course site is.
+      </p>
+      <blockquote class="note">
+        <p>
+          A finished introduction webpage should look exactly like your entry
+          in the shared Doc — the differences are only in the underlying
+          code: a real <code>&lt;figure&gt;</code>/<code>&lt;figcaption&gt;</code>
+          for the photo and caption, a real <code>&lt;blockquote&gt;</code>
+          for the quote, and CSS handling spacing instead of blank lines. The
+          one real difference: leave out the horizontal-rule separators and
+          the Doc's Table-of-Contents-linked heading — both exist only to
+          organize the shared document, and a page with one entry needs
+          neither.
+        </p>
+      </blockquote>
+      <ol>
+        <li>
+          Your full name is the page's one <code>h2</code>, in
+          <em>Last Name, First Name Middle Initial.</em> format, left-aligned
+          like normal text — not centered, and not a link.
+        </li>
+        <li>
+          A public-acknowledgment sentence right after the heading, same
+          content as the Doc: state that this is a public page, then sign it
+          with your initials and the date after a dash or tilde
+          (<code>- JAD 5/18/26</code>).
+        </li>
+        <li>
+          A centered display-name line:
+          <code>First M. "Nickname" Last ~ Adjective Animal</code>.
+        </li>
+        <li>
+          Your photo in a real <code>&lt;figure&gt;</code>, centered, with a
+          centered, italicized <code>&lt;figcaption&gt;</code> beneath it.
+        </li>
+        <li>
+          A personal statement of at least three complete sentences,
+          left-aligned like normal text.
+        </li>
+        <li>
+          A bulleted list with these seven bold labels, each followed by its
+          content: <strong>Personal Background</strong>,
+          <strong>Professional Background</strong>,
+          <strong>Academic Background</strong>,
+          <strong>Primary Work Computer</strong> (type, OS, and version),
+          <strong>Primary Work Location</strong>,
+          <strong>Alternate Computer &amp; Location</strong>, and
+          <strong>Courses I'm Taking, &amp; Why</strong> — itself a nested
+          list, each item formatted
+          <code>CODE101 - Course Name: reason for taking it.</code>
+        </li>
+        <li>
+          A favorite quote in a real <code>&lt;blockquote&gt;</code>,
+          centered, with attribution starting with a dash or tilde. Don't
+          type the word "Quote" as a label before it.
+        </li>
+        <li>
+          Web-development courses only (WEB115, WEB215, WEB250, ITIS3135): a
+          centered links line with dividers, carrying CLT Web, GitHub.io,
+          GitHub, freeCodeCamp, Codecademy, and LinkedIn — CPCC students in
+          the WEB courses skip CLT Web and include the other five. ITSC1110
+          skips this line entirely.
+        </li>
+      </ol>
 
       <h2>The Checklist, in Full</h2>
       <p>
