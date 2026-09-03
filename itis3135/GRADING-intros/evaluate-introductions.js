@@ -18,7 +18,7 @@ const COURSE_PROFILES = {
     label: "WEB",
     requireLinks: true,
     requireCltWeb: true,
-    checkedItemCount: 15,
+    checkedItemCount: 14,
   },
   // CPCC's web-development courses (WEB115, WEB215, WEB250) share the UNCC
   // "web" profile's link requirements, except CLT Web — a
@@ -28,14 +28,17 @@ const COURSE_PROFILES = {
     label: "WEB (CPCC)",
     requireLinks: true,
     requireCltWeb: false,
-    checkedItemCount: 15,
+    checkedItemCount: 14,
   },
-  cis110: {
-    key: "cis110",
-    label: "CIS110",
+  // ITSC1110's Introduction Webpage skips the links section entirely — CIS110
+  // never gets an Introduction Webpage assignment at all (Doc-only, forever),
+  // so this profile has no CIS110 use, just this shape reused for ITSC1110.
+  itsc1110: {
+    key: "itsc1110",
+    label: "ITSC1110",
     requireLinks: false,
     requireCltWeb: false,
-    checkedItemCount: 14,
+    checkedItemCount: 13,
   },
 };
 
@@ -62,9 +65,7 @@ const ISSUE_MESSAGES = {
   badNameHeading: "Heading 2 name is not in the expected format: Last Name, First Name Middle Initial.",
   headingShouldBeLeftAligned: "Heading 2 name line should be left-aligned.",
   onlyFirstHeadingAllowed: "Nothing should be a heading except for the first one (Last, First).",
-  entryNotAlphabetized: "Entry is not alphabetized by last name.",
-  missingHrBeforeEntry: "Entry should start below a horizontal rule.",
-  missingBlankLineBelowHr: "Entry should start with a blank line below a horizontal rule.",
+  leftoverDocArtifact: "Remove this — it's a Google Doc separator (horizontal rule or blank spacer line) that a single-entry webpage doesn't need. Use CSS spacing instead.",
   missingAcknowledgment: "Missing public acknowledgment sentence with initials and date.",
   acknowledgmentMissingInitials: "Public acknowledgment is present, but initials are missing.",
   acknowledgmentMissingDate: "Public acknowledgment is present, but date is missing.",
@@ -90,11 +91,6 @@ const ISSUE_MESSAGES = {
   missingLinksLine: "Missing centered links line with dividers.",
   linksLineCentered: "Links line should be centered.",
   linksNeedDividers: "Links line should include dividers between each required link.",
-  missingBlankLineBeforeLinks: "Missing additional blank line between quote attribution and links line.",
-  missingSeparatorHr: "Missing horizontal rule separator after entry.",
-  missingBlankLineBeforeSeparatorHr: "Missing at least one blank line before the horizontal rule separator.",
-  multipleSpaces: "Contains more than one space or tab in a row in visible text. Tip: Use View -> Show non-printing characters.",
-  leadingWhitespace: "A line starts with a leading space or tab. There should never be leading whitespace. Tip: Use View -> Show non-printing characters.",
   badColonSpacing: "A colon has a space before it, or is missing the single space after it (never a space before a colon, always exactly one space after).",
   badCommaSpacing: "A comma has a space before it, or is missing the single space after it (never a space before a comma, always exactly one space after).",
 };
@@ -131,38 +127,133 @@ const boldClassCache = new WeakMap();
 const centeredClassCache = new WeakMap();
 const imageCenteredClassCache = new WeakMap();
 
+// A hand-authored page (this site's own examples) styles centering/bold text
+// through an external stylesheet and plain tag-name selectors (e.g. "figure,
+// blockquote { text-align: center; }"), unlike a Google Docs export, which
+// always inlines a <style> block keyed by generated class names. Selector
+// parsing below handles both: simple class selectors (".foo") and simple
+// tag-name selectors ("figure"), comma-separated lists of either.
+function parseSimpleSelectors(selectorListText) {
+  const classes = [];
+  const tags = [];
+
+  selectorListText.split(",").forEach((rawPart) => {
+    const part = rawPart.trim();
+
+    if (/^\.[a-zA-Z0-9_-]+$/.test(part)) {
+      classes.push(part.slice(1));
+    } else if (/^[a-zA-Z][a-zA-Z0-9]*$/.test(part)) {
+      tags.push(part.toLowerCase());
+    }
+    // Anything else (ids, combinators, pseudo-classes, attribute selectors)
+    // is a compound/complex selector this simple regex-based scan skips.
+  });
+
+  return { classes, tags };
+}
+
+function computeStyledSelectors(styleText, declarationMatches) {
+  const classes = new Set();
+  const tags = new Set();
+  // Strip comments first: a /* ... */ block has no braces of its own, so
+  // left in place it fuses onto whatever selector follows it and breaks
+  // the simple-selector match below.
+  const withoutComments = styleText.replace(/\/\*[\s\S]*?\*\//g, "");
+  const rulePattern = /([^{}]+)\{([^{}]*)\}/g;
+  let match = rulePattern.exec(withoutComments);
+
+  while (match) {
+    const declarations = match[2];
+
+    if (declarationMatches(declarations)) {
+      const found = parseSimpleSelectors(match[1]);
+      found.classes.forEach((className) => classes.add(className));
+      found.tags.forEach((tagName) => tags.add(tagName));
+    }
+
+    match = rulePattern.exec(withoutComments);
+  }
+
+  return { classes, tags };
+}
+
+function boldDeclarationMatches(declarations) {
+  const weightMatch = declarations.match(/font-weight\s*:\s*([^;}]*)/i);
+
+  if (!weightMatch) {
+    return false;
+  }
+
+  const value = weightMatch[1].trim().toLowerCase();
+  const numeric = Number.parseInt(value, 10);
+  return value === "bold" || (!Number.isNaN(numeric) && numeric >= 600);
+}
+
+function centeredDeclarationMatches(declarations) {
+  const alignMatch = declarations.match(/text-align\s*:\s*([^;}]*)/i);
+  return Boolean(alignMatch && alignMatch[1].trim().toLowerCase() === "center");
+}
+
+function imageCenteredDeclarationMatches(declarations) {
+  const hasDisplayBlock = /display\s*:\s*block/i.test(declarations);
+  const hasMarginShorthandAuto = /margin\s*:\s*[^;}]*(?:^|\s)auto(?:\s|$)/i.test(declarations);
+  const hasMarginSidesAuto =
+    /margin-left\s*:\s*auto/i.test(declarations) &&
+    /margin-right\s*:\s*auto/i.test(declarations);
+
+  return (hasMarginShorthandAuto || hasMarginSidesAuto) && hasDisplayBlock;
+}
+
+function getEmbeddedStyleText(doc) {
+  return Array.from(doc.querySelectorAll("style"))
+    .map((style) => style.textContent || "")
+    .join("\n");
+}
+
+// Follows <link rel="stylesheet"> the same way a browser would, resolved
+// against the document's own base URL (see the <base> injected in
+// evaluateIntroductionsFromUrl) rather than this script's own location.
+async function getExternalStyleText(doc) {
+  const hrefs = Array.from(doc.querySelectorAll('link[rel~="stylesheet"]'))
+    .map((link) => link.getAttribute("href"))
+    .filter(Boolean);
+
+  const texts = await Promise.all(
+    hrefs.map(async (href) => {
+      try {
+        const resolved = new URL(href, doc.baseURI).toString();
+        const response = await fetch(resolved, { cache: "no-store" });
+        return response.ok ? await response.text() : "";
+      } catch (_error) {
+        return "";
+      }
+    }),
+  );
+
+  return texts.join("\n");
+}
+
+// Fetches external stylesheets once per document and populates all three
+// caches together, so the (synchronous) validation pass below never needs
+// to await anything. Call this before validateBlock runs.
+async function warmStyleCachesForDocument(doc) {
+  const styleText = [getEmbeddedStyleText(doc), await getExternalStyleText(doc)].join("\n");
+
+  boldClassCache.set(doc, computeStyledSelectors(styleText, boldDeclarationMatches));
+  centeredClassCache.set(doc, computeStyledSelectors(styleText, centeredDeclarationMatches));
+  imageCenteredClassCache.set(doc, computeStyledSelectors(styleText, imageCenteredDeclarationMatches));
+}
+
+// Fallback for callers that skip warmStyleCachesForDocument (e.g. testing a
+// document directly): embedded <style> only, same as before external-
+// stylesheet support existed. Deliberately does not populate the cache, so
+// a later warmup call still wins.
 function getBoldClassesForDocument(doc) {
   if (boldClassCache.has(doc)) {
     return boldClassCache.get(doc);
   }
 
-  const styleText = Array.from(doc.querySelectorAll("style"))
-    .map((style) => style.textContent || "")
-    .join("\n");
-  const classes = new Set();
-  const rulePattern = /\.([a-zA-Z0-9_-]+)\s*\{([^}]*)\}/g;
-  let match = rulePattern.exec(styleText);
-
-  while (match) {
-    const className = match[1];
-    const declarations = match[2];
-    const weightMatch = declarations.match(/font-weight\s*:\s*([^;}]*)/i);
-
-    if (weightMatch) {
-      const value = weightMatch[1].trim().toLowerCase();
-      const numeric = Number.parseInt(value, 10);
-      const isBold = value === "bold" || (!Number.isNaN(numeric) && numeric >= 600);
-
-      if (isBold) {
-        classes.add(className);
-      }
-    }
-
-    match = rulePattern.exec(styleText);
-  }
-
-  boldClassCache.set(doc, classes);
-  return classes;
+  return computeStyledSelectors(getEmbeddedStyleText(doc), boldDeclarationMatches);
 }
 
 function getCenteredClassesForDocument(doc) {
@@ -170,27 +261,7 @@ function getCenteredClassesForDocument(doc) {
     return centeredClassCache.get(doc);
   }
 
-  const styleText = Array.from(doc.querySelectorAll("style"))
-    .map((style) => style.textContent || "")
-    .join("\n");
-  const classes = new Set();
-  const rulePattern = /\.([a-zA-Z0-9_-]+)\s*\{([^}]*)\}/g;
-  let match = rulePattern.exec(styleText);
-
-  while (match) {
-    const className = match[1];
-    const declarations = match[2];
-    const alignMatch = declarations.match(/text-align\s*:\s*([^;}]*)/i);
-
-    if (alignMatch && alignMatch[1].trim().toLowerCase() === "center") {
-      classes.add(className);
-    }
-
-    match = rulePattern.exec(styleText);
-  }
-
-  centeredClassCache.set(doc, classes);
-  return classes;
+  return computeStyledSelectors(getEmbeddedStyleText(doc), centeredDeclarationMatches);
 }
 
 function getImageCenteredClassesForDocument(doc) {
@@ -198,31 +269,7 @@ function getImageCenteredClassesForDocument(doc) {
     return imageCenteredClassCache.get(doc);
   }
 
-  const styleText = Array.from(doc.querySelectorAll("style"))
-    .map((style) => style.textContent || "")
-    .join("\n");
-  const classes = new Set();
-  const rulePattern = /\.([a-zA-Z0-9_-]+)\s*\{([^}]*)\}/g;
-  let match = rulePattern.exec(styleText);
-
-  while (match) {
-    const className = match[1];
-    const declarations = match[2];
-    const hasDisplayBlock = /display\s*:\s*block/i.test(declarations);
-    const hasMarginShorthandAuto = /margin\s*:\s*[^;}]*(?:^|\s)auto(?:\s|$)/i.test(declarations);
-    const hasMarginSidesAuto =
-      /margin-left\s*:\s*auto/i.test(declarations) &&
-      /margin-right\s*:\s*auto/i.test(declarations);
-
-    if ((hasMarginShorthandAuto || hasMarginSidesAuto) && hasDisplayBlock) {
-      classes.add(className);
-    }
-
-    match = rulePattern.exec(styleText);
-  }
-
-  imageCenteredClassCache.set(doc, classes);
-  return classes;
+  return computeStyledSelectors(getEmbeddedStyleText(doc), imageCenteredDeclarationMatches);
 }
 
 function elementIsBold(element, boldClasses) {
@@ -242,7 +289,11 @@ function elementIsBold(element, boldClasses) {
     return true;
   }
 
-  return Array.from(element.classList || []).some((className) => boldClasses.has(className));
+  if (boldClasses.tags.has(element.tagName.toLowerCase())) {
+    return true;
+  }
+
+  return Array.from(element.classList || []).some((className) => boldClasses.classes.has(className));
 }
 
 function elementIsCentered(element, centeredClasses) {
@@ -256,7 +307,11 @@ function elementIsCentered(element, centeredClasses) {
     return true;
   }
 
-  return Array.from(element.classList || []).some((className) => centeredClasses.has(className));
+  if (centeredClasses.tags.has(element.tagName.toLowerCase())) {
+    return true;
+  }
+
+  return Array.from(element.classList || []).some((className) => centeredClasses.classes.has(className));
 }
 
 function elementOrAncestorIsCentered(element, centeredClasses, maxDepth = 3) {
@@ -304,7 +359,11 @@ function imageIsCentered(imageElement, centeredClasses, imageCenteredClasses) {
     return true;
   }
 
-  return Array.from(imageElement.classList || []).some((className) => imageCenteredClasses.has(className));
+  if (imageCenteredClasses.tags.has(imageElement.tagName.toLowerCase())) {
+    return true;
+  }
+
+  return Array.from(imageElement.classList || []).some((className) => imageCenteredClasses.classes.has(className));
 }
 
 function resolveGoogleRedirectUrl(href) {
@@ -415,12 +474,12 @@ function getDefaultCourseProfile(lastCourseProfile, reportTitle) {
   const normalizedSaved = normalizeText(lastCourseProfile).toLowerCase();
   const normalizedTitle = normalizeText(reportTitle).toLowerCase();
 
-  if (normalizedSaved === "web" || normalizedSaved === "webcpcc" || normalizedSaved === "cis110") {
+  if (normalizedSaved === "web" || normalizedSaved === "webcpcc" || normalizedSaved === "itsc1110") {
     return normalizedSaved;
   }
 
-  if (normalizedTitle.includes("cis110")) {
-    return "cis110";
+  if (normalizedTitle.includes("itsc1110")) {
+    return "itsc1110";
   }
 
   if (/web1?15|web215|web250/.test(normalizedTitle)) {
@@ -433,7 +492,7 @@ function getDefaultCourseProfile(lastCourseProfile, reportTitle) {
 function promptForCourseProfile(lastCourseProfile, reportTitle) {
   const defaultProfile = getDefaultCourseProfile(lastCourseProfile, reportTitle);
   const profileInput = window.prompt(
-    "Course profile for this run (WEB, WEBCPCC, or CIS110):",
+    "Course profile for this run (WEB, WEBCPCC, or ITSC1110):",
     defaultProfile.toUpperCase(),
   );
 
@@ -451,11 +510,11 @@ function promptForCourseProfile(lastCourseProfile, reportTitle) {
     return COURSE_PROFILES.webCpcc;
   }
 
-  if (normalized === "cis110" || normalized === "cis 110") {
-    return COURSE_PROFILES.cis110;
+  if (normalized === "itsc1110" || normalized === "itsc 1110") {
+    return COURSE_PROFILES.itsc1110;
   }
 
-  window.alert("Invalid course profile. Enter WEB, WEBCPCC, or CIS110.");
+  window.alert("Invalid course profile. Enter WEB, WEBCPCC, or ITSC1110.");
   return undefined;
 }
 
@@ -489,8 +548,9 @@ function countSentences(text) {
 }
 
 function isNameHeadingFormat(text) {
-  // Support multi-word names (e.g., double surnames) and Unicode letters.
-  const namePart = "[\\p{L}][\\p{L}'’\\-]*";
+  // Support multi-word names (e.g., double surnames), Unicode letters, and
+  // an initials-style name (e.g. "D.I.") in place of a spelled-out one.
+  const namePart = "[\\p{L}][\\p{L}'’.\\-]*";
   const pattern = new RegExp(
     `^${namePart}(?:\\s+${namePart})*,\\s+${namePart}(?:\\s+${namePart})*(?:\\s+[A-Z]\\.)?$`,
     "u",
@@ -550,14 +610,21 @@ function getAcknowledgmentSignals(textValue) {
     };
   }
 
-  const mentionsPublicVisibility = /\bpublic(?:ly)?\b|\bweb\b/i.test(text);
+  // "public"/"web" are the obvious wording, but "anyone [with the link] can
+  // see" is the same claim phrased differently — also a valid acknowledgment.
+  const mentionsPublicVisibility = /\bpublic(?:ly)?\b|\bweb\b|\banyone\b/i.test(text);
   const hasUnderstandClause = /\bi\s+understand\b/i.test(text);
   const hasVisibilityIntent = /(won['’]t|will not|don['’]?t)\s+put\s+anything\s+here/i.test(text);
   const datePattern = /(?:\d{1,2}[\/.\-]\d{1,2}[\/.\-]\d{2,4}|\d{1,2}\s+[A-Za-z]{3,9}\s+\d{2,4}|[A-Za-z]{3,9}\s+\d{1,2},?\s+\d{2,4}|MM[\/-]DD[\/-]YYYY)/;
-  const initialsPattern = /(?:(?:\b[A-Z]\.){2,6}\b|\b[A-Z](?:\s+[A-Z]){1,5}\b|\b[A-Z]{2,6}\b|\b[A-Z]{1,6}[\/-][A-Z]{1,6}\b|\b[A-Z]\.\s*[A-Z](?:\.)?\b)/;
+  // Bare-letter-run initials ("DIB") must stay all-caps and unanchored,
+  // otherwise any ordinary capitalized word (sentence starts, proper nouns)
+  // would count as "initials" and the missing-initials check would never
+  // fire. But initials right after a signature marker ("- DIvB") are
+  // unambiguous regardless of case or periods, so that one form is looser.
+  const initialsPattern = /(?:(?:\b[A-Z]\.){2,6}\b|\b[A-Z](?:\s+[A-Z]){1,5}\b|\b[A-Z]{2,6}\b|\b[A-Z]{1,6}[\/-][A-Z]{1,6}\b|\b[A-Z]\.\s*[A-Z](?:\.)?\b|[-~–—]\s*[A-Za-z](?:\.?[A-Za-z]){1,5}\.?\b)/;
   const hasDate = datePattern.test(text);
   const hasInitials = initialsPattern.test(text);
-  const hasSignatureMarker = /[-~–—]\s*(?:(?:[A-Z]\.){2,6}|[A-Z]{2,6}|[A-Z](?:\s+[A-Z]){1,5})/u.test(text);
+  const hasSignatureMarker = /[-~–—]\s*(?:(?:[A-Za-z]\.){2,6}|[A-Za-z]{2,6}|[A-Za-z](?:\s+[A-Za-z]){1,5})/u.test(text);
   const looksLikeAcknowledgment =
     (mentionsPublicVisibility && (hasUnderstandClause || hasVisibilityIntent) && (hasDate || hasInitials)) ||
     (hasUnderstandClause && mentionsPublicVisibility);
@@ -570,14 +637,6 @@ function getAcknowledgmentSignals(textValue) {
     hasSignatureMarker,
     looksLikeAcknowledgment,
   };
-}
-
-function hasAcknowledgmentSignature(element) {
-  if (!element) {
-    return false;
-  }
-
-  return hasAcknowledgmentText(element.textContent || "");
 }
 
 function isAcknowledgmentCandidateElement(element) {
@@ -708,40 +767,6 @@ function collectIntroBlocks(doc) {
   });
 }
 
-function getLastNameSortKey(nameValue) {
-  const name = normalizeText(nameValue);
-
-  if (!name) {
-    return "";
-  }
-
-  const source = name.includes(",")
-    ? name.split(",")[0]
-    : (name.split(/\s+/).slice(-1)[0] || name);
-
-  return source
-    .toLowerCase()
-    .replace(/[^\p{L}]/gu, "");
-}
-
-function applyAlphabeticalOrderIssues(results) {
-  let previousKey = "";
-
-  results.forEach((result) => {
-    const currentKey = getLastNameSortKey(result.name);
-
-    if (!currentKey) {
-      return;
-    }
-
-    if (previousKey && currentKey < previousKey) {
-      result.issues.unshift(ISSUE_MESSAGES.entryNotAlphabetized);
-    }
-
-    previousKey = currentKey;
-  });
-}
-
 function normalizeLabelKey(label) {
   const cleaned = normalizeText(label)
     .toLowerCase()
@@ -845,49 +870,23 @@ function validateSpacingRule(block) {
   const issues = [];
 
   const nodesToCheck = [block.heading, ...block.elements];
-  const firstParagraph = block.elements.find((element) => element.tagName === "P");
 
-  const hasMultipleSpaces = nodesToCheck.some((element) => {
-    const text = (element.textContent || "").replace(/\u00a0/g, " ");
-    const lines = text
-      .split(/\r?\n/)
-      .filter((line) => line.length > 0);
-
-    if (element === firstParagraph && hasAcknowledgmentSignature(firstParagraph)) {
-      return lines.some((line) => /[ \t]{2,}/.test(line));
-    }
-
-    return lines.some((line) => /[ \t]{2,}/.test(line));
-  });
-
-  if (hasMultipleSpaces) {
-    issues.push(ISSUE_MESSAGES.multipleSpaces);
-  }
-
-  const hasLeadingWhitespace = nodesToCheck.some((element) => {
-    const text = (element.textContent || "").replace(/\u00a0/g, " ");
-    const lines = text
-      .split(/\r?\n/)
-      .filter((line) => line.length > 0);
-
-    return lines.some((line) => /^[ \t]/.test(line));
-  });
-
-  if (hasLeadingWhitespace) {
-    issues.push(ISSUE_MESSAGES.leadingWhitespace);
-  }
+  // Multiple-spaces/leading-whitespace in the raw HTML source don't exist on
+  // a rendered webpage \u2014 a browser collapses any run of whitespace
+  // (including the newlines and indentation of hand-formatted source) down
+  // to one space regardless of what's typed. Those two checks only made
+  // sense against a Google Doc's WYSIWYG export, where what's typed is
+  // exactly what's visible. What's still real on a rendered page: an actual
+  // space character sitting next to a colon or comma, so those checks stay,
+  // using the fully-collapsed text (not a raw newline split, which would
+  // wrongly mistake source-wrapping for adjacent whitespace).
 
   // A space before ":" or "," is never correct. A missing space right after
   // is only flagged when the next character isn't a digit, so times ("9:00")
-  // and number groupings ("1,234") aren't misflagged; two-plus spaces after
-  // are already caught by the multiple-spaces check above.
+  // and number groupings ("1,234") aren't misflagged.
   const hasBadColonSpacing = nodesToCheck.some((element) => {
-    const text = (element.textContent || "").replace(/\u00a0/g, " ");
-    const lines = text
-      .split(/\r?\n/)
-      .filter((line) => line.length > 0);
-
-    return lines.some((line) => /[ \t]:/.test(line) || /:(?=[^\s\d])/.test(line));
+    const text = normalizeText((element.textContent || "").replace(/\u00a0/g, " "));
+    return /[ \t]:/.test(text) || /:(?=[^\s\d])/.test(text);
   });
 
   if (hasBadColonSpacing) {
@@ -895,58 +894,12 @@ function validateSpacingRule(block) {
   }
 
   const hasBadCommaSpacing = nodesToCheck.some((element) => {
-    const text = (element.textContent || "").replace(/\u00a0/g, " ");
-    const lines = text
-      .split(/\r?\n/)
-      .filter((line) => line.length > 0);
-
-    return lines.some((line) => /[ \t],/.test(line) || /,(?=[^\s\d])/.test(line));
+    const text = normalizeText((element.textContent || "").replace(/\u00a0/g, " "));
+    return /[ \t],/.test(text) || /,(?=[^\s\d])/.test(text);
   });
 
   if (hasBadCommaSpacing) {
     issues.push(ISSUE_MESSAGES.badCommaSpacing);
-  }
-
-  const blockquote = block.elements.find((element) => element.tagName === "BLOCKQUOTE");
-  const quoteParagraphIndex = block.elements.findIndex((element) => {
-    if (element.tagName !== "P") {
-      return false;
-    }
-
-    return /["“”]/.test(normalizeText(element.textContent));
-  });
-
-  if (!blockquote && quoteParagraphIndex < 0) {
-    return issues;
-  }
-
-  const blankParagraphBeforeQuote = (() => {
-    if (blockquote) {
-      const blockquoteIndex = block.elements.indexOf(blockquote);
-      const previousElement = block.elements[blockquoteIndex - 1];
-
-      return Boolean(
-        previousElement &&
-          previousElement.tagName === "P" &&
-          normalizeText(previousElement.textContent).length === 0,
-      );
-    }
-
-    if (quoteParagraphIndex <= 0) {
-      return false;
-    }
-
-    const previousElement = block.elements[quoteParagraphIndex - 1];
-
-    return Boolean(
-      previousElement &&
-        previousElement.tagName === "P" &&
-        normalizeText(previousElement.textContent).length === 0,
-    );
-  })();
-
-  if (!blankParagraphBeforeQuote) {
-    issues.push("Missing exactly one blank line before the quote.");
   }
 
   return issues;
@@ -1026,34 +979,18 @@ function validateBlock(block, courseProfile) {
     issues.push(ISSUE_MESSAGES.onlyFirstHeadingAllowed);
   }
 
-  const entryPrefixElements = [];
-  let previousElement = block.heading.previousElementSibling;
+  // <hr> and blank spacer paragraphs separate entries in the shared Google
+  // Doc and create vertical spacing there — neither belongs on a webpage
+  // with exactly one entry, where CSS margins already handle spacing.
+  const hasLeftoverDocArtifact = block.elements.some(
+    (element) =>
+      element.tagName === "HR" ||
+      Boolean(element.querySelector("hr")) ||
+      (element.tagName === "P" && normalizeText(element.textContent).length === 0),
+  );
 
-  while (previousElement && previousElement !== block.previousHeading) {
-    entryPrefixElements.unshift(previousElement);
-    previousElement = previousElement.previousElementSibling;
-  }
-
-  let hrBeforeHeadingIndex = -1;
-  for (let index = entryPrefixElements.length - 1; index >= 0; index -= 1) {
-    const element = entryPrefixElements[index];
-    if (element.tagName === "HR" || Boolean(element.querySelector("hr"))) {
-      hrBeforeHeadingIndex = index;
-      break;
-    }
-  }
-
-  if (hrBeforeHeadingIndex < 0) {
-    issues.push(ISSUE_MESSAGES.missingHrBeforeEntry);
-  } else {
-    const betweenHrAndHeading = entryPrefixElements.slice(hrBeforeHeadingIndex + 1);
-    const hasBlankLineBelowHr = betweenHrAndHeading.some(
-      (element) => element.tagName === "P" && normalizeText(element.textContent).length === 0,
-    );
-
-    if (!hasBlankLineBelowHr) {
-      issues.push(ISSUE_MESSAGES.missingBlankLineBelowHr);
-    }
+  if (hasLeftoverDocArtifact) {
+    issues.push(ISSUE_MESSAGES.leftoverDocArtifact);
   }
 
   const acknowledgmentParagraph = findAcknowledgmentElement(block);
@@ -1114,46 +1051,55 @@ function validateBlock(block, courseProfile) {
   let captionElement = null;
 
   if (image) {
-    const imageIndex = block.elements.findIndex(
-      (element) => element.tagName === "IMG" || element.querySelector("img"),
-    );
+    // The webpage's own convention: the caption lives in a <figcaption>
+    // inside the same <figure> as the image, not a plain paragraph after it.
+    const figcaption = image.tagName === "FIGURE" ? image.querySelector("figcaption") : null;
 
-    if (imageIndex >= 0) {
-      for (let index = imageIndex + 1; index < block.elements.length; index += 1) {
-        const candidate = block.elements[index];
+    if (figcaption && normalizeText(figcaption.textContent).length > 0) {
+      hasItalicCaption = true;
+      captionElement = figcaption;
+    } else {
+      const imageIndex = block.elements.findIndex(
+        (element) => element.tagName === "IMG" || element.querySelector("img"),
+      );
 
-        if (["H2", "H3", "UL", "OL", "BLOCKQUOTE"].includes(candidate.tagName)) {
+      if (imageIndex >= 0) {
+        for (let index = imageIndex + 1; index < block.elements.length; index += 1) {
+          const candidate = block.elements[index];
+
+          if (["H2", "H3", "UL", "OL", "BLOCKQUOTE"].includes(candidate.tagName)) {
+            break;
+          }
+
+          if (candidate.tagName !== "P") {
+            continue;
+          }
+
+          const captionText = normalizeText(candidate.textContent);
+
+          if (!captionText) {
+            continue;
+          }
+
+          const hasItalicMarkup = Boolean(candidate.querySelector("em, i"));
+          const isLikelyCaptionLength = captionText.split(" ").length <= 20;
+
+          if (hasItalicMarkup || isLikelyCaptionLength) {
+            hasItalicCaption = true;
+            captionElement = candidate;
+          }
+
           break;
         }
-
-        if (candidate.tagName !== "P") {
-          continue;
-        }
-
-        const captionText = normalizeText(candidate.textContent);
-
-        if (!captionText) {
-          continue;
-        }
-
-        const hasItalicMarkup = Boolean(candidate.querySelector("em, i"));
-        const isLikelyCaptionLength = captionText.split(" ").length <= 20;
-
-        // Google Docs published pages frequently encode italics via generated CSS classes,
-        // not semantic <em>/<i> tags. Treat a short paragraph immediately under the image as caption.
-        if (hasItalicMarkup || isLikelyCaptionLength) {
-          hasItalicCaption = true;
-          captionElement = candidate;
-        }
-
-        break;
       }
     }
   }
 
   if (!hasItalicCaption) {
     issues.push(ISSUE_MESSAGES.missingCaption);
-  } else if (captionElement && !elementIsCentered(captionElement, centeredClasses)) {
+  } else if (captionElement && !elementOrAncestorIsCentered(captionElement, centeredClasses)) {
+    // A <figcaption> centers via its parent <figure>'s CSS (text-align
+    // inherits to children), so check the ancestor chain, not just itself.
     issues.push(ISSUE_MESSAGES.captionShouldBeCentered);
   }
 
@@ -1191,9 +1137,14 @@ function validateBlock(block, courseProfile) {
   const coursesItem = labels.get(normalizeLabelKey("courses i'm taking, & why"));
 
   if (coursesItem) {
-    const nestedCourses = Array.from(coursesItem.item.querySelectorAll(":scope > ul > li"));
+    // The site's own instructions call this a "nested numbered list" (<ol>),
+    // but Google Docs' numbered-list export, and some students' bulleted
+    // lists, both need to count — match either list type, not just <ul>.
+    const nestedCourses = Array.from(
+      coursesItem.item.querySelectorAll(":scope > ul > li, :scope > ol > li"),
+    );
 
-    // Google Docs published HTML often exports nested list levels as sibling UL blocks.
+    // Google Docs published HTML often exports nested list levels as sibling UL/OL blocks.
     let siblingNestedCourses = [];
     const coursesContainer = block.elements.find(
       (element) => element === coursesItem.item || element.contains(coursesItem.item),
@@ -1203,7 +1154,7 @@ function validateBlock(block, courseProfile) {
       const containerIndex = block.elements.indexOf(coursesContainer);
       const nextElement = block.elements[containerIndex + 1];
 
-      if (nextElement && nextElement.tagName === "UL") {
+      if (nextElement && (nextElement.tagName === "UL" || nextElement.tagName === "OL")) {
         siblingNestedCourses = Array.from(nextElement.querySelectorAll(":scope > li"));
       }
     }
@@ -1237,11 +1188,40 @@ function validateBlock(block, courseProfile) {
     hasQuote = Boolean(quoteText && quoteText.length >= 8);
     quoteStartElement = quoteElement || null;
     quoteStartLine = quoteText || "";
-    hasAttribution = Boolean(quoteFooter && normalizeText(quoteFooter.textContent).length > 0);
-    if (quoteFooter && hasAttribution) {
+
+    if (quoteFooter && normalizeText(quoteFooter.textContent).length > 0) {
+      hasAttribution = true;
       attributionStartsWithMarker = /^[\-~\u2010-\u2015\u2212]/u.test(normalizeText(quoteFooter.textContent));
+      quoteAttributionElement = quoteFooter;
+    } else {
+      // This site's own convention: quote and attribution share one <p>,
+      // split by a <br> ("quote text<br />- Attribution") \u2014 no <footer>
+      // needed.
+      const quoteParagraph = quoteElement ? quoteElement.querySelector("p") : null;
+
+      if (quoteParagraph && quoteParagraph.querySelector("br")) {
+        const segments = quoteParagraph.innerHTML.split(/<br\s*\/?>/i);
+        const attributionHtml = segments.length > 1 ? segments[segments.length - 1] : "";
+        const attributionText = normalizeText(attributionHtml.replace(/<[^>]+>/g, ""));
+
+        if (attributionText.length > 0) {
+          hasAttribution = true;
+          attributionStartsWithMarker = /^[\-~\u2010-\u2015\u2212]/u.test(attributionText);
+          quoteAttributionElement = quoteParagraph;
+        }
+      }
     }
-    quoteAttributionElement = quoteFooter || null;
+
+    if (quoteElement && !elementIsCentered(quoteElement, centeredClasses)) {
+      issues.push(ISSUE_MESSAGES.quoteShouldBeCentered);
+    }
+
+    // The attribution element (a <footer> or the quote's own <p>) is a
+    // descendant of <blockquote>, so it centers via CSS inheritance from
+    // its ancestor rather than its own tag/class — check the ancestor chain.
+    if (quoteAttributionElement && !elementOrAncestorIsCentered(quoteAttributionElement, centeredClasses)) {
+      issues.push(ISSUE_MESSAGES.quoteAttributionShouldBeCentered);
+    }
   } else {
     // Google Docs published HTML often uses plain paragraphs instead of semantic blockquote/footer.
     const textLineElements = block.elements
@@ -1534,38 +1514,6 @@ function validateBlock(block, courseProfile) {
     }
   }
 
-  if (quoteAttributionElement && linkContainer) {
-    const attributionIndex = block.elements.indexOf(quoteAttributionElement);
-    const linkContainerIndex = block.elements.indexOf(linkContainer);
-
-    if (attributionIndex >= 0 && linkContainerIndex > attributionIndex) {
-      const between = block.elements.slice(attributionIndex + 1, linkContainerIndex);
-      const blankParagraphs = between.filter(
-        (element) => element.tagName === "P" && normalizeText(element.textContent).length === 0,
-      ).length;
-
-      if (blankParagraphs < 1) {
-        issues.push(ISSUE_MESSAGES.missingBlankLineBeforeLinks);
-      }
-    }
-  }
-
-  const hrIndex = block.elements.findIndex(
-    (element) => element.tagName === "HR" || Boolean(element.querySelector("hr")),
-  );
-
-  if (hrIndex < 0) {
-    issues.push(ISSUE_MESSAGES.missingSeparatorHr);
-  } else {
-    const hasBlankLineBeforeHr = block.elements
-      .slice(0, hrIndex)
-      .some((element) => element.tagName === "P" && normalizeText(element.textContent).length === 0);
-
-    if (!hasBlankLineBeforeHr) {
-      issues.push(ISSUE_MESSAGES.missingBlankLineBeforeSeparatorHr);
-    }
-  }
-
   if (!courseProfile.requireLinks) {
     for (let index = issues.length - 1; index >= 0; index -= 1) {
       const issue = issues[index];
@@ -1575,30 +1523,6 @@ function validateBlock(block, courseProfile) {
         issues.splice(index, 1);
       }
     }
-  }
-
-  const multipleSpacesIssue = ISSUE_MESSAGES.multipleSpaces;
-  const missingAdditionalBlankLineIssue = ISSUE_MESSAGES.missingBlankLineBeforeLinks;
-  const missingHrIssue = ISSUE_MESSAGES.missingSeparatorHr;
-  const missingBlankBeforeHrIssue = ISSUE_MESSAGES.missingBlankLineBeforeSeparatorHr;
-  const multipleSpacesIndex = issues.indexOf(multipleSpacesIssue);
-  const missingAdditionalBlankLineIndex = issues.indexOf(missingAdditionalBlankLineIssue);
-
-  if (multipleSpacesIndex >= 0) {
-    issues.splice(multipleSpacesIndex, 1);
-
-    let insertIndex = issues.indexOf(missingAdditionalBlankLineIssue);
-    if (insertIndex < 0) {
-      insertIndex = issues.indexOf(missingHrIssue);
-    }
-    if (insertIndex < 0) {
-      insertIndex = issues.indexOf(missingBlankBeforeHrIssue);
-    }
-    if (insertIndex < 0) {
-      insertIndex = issues.length;
-    }
-
-    issues.splice(insertIndex, 0, multipleSpacesIssue);
   }
 
   return issues;
@@ -1743,8 +1667,8 @@ async function evaluateIntroductionsFromUrl() {
     courseProfile = COURSE_PROFILES.web;
   } else if (queryCourse === "webcpcc" || queryCourse === "web cpcc" || queryCourse === "cpcc") {
     courseProfile = COURSE_PROFILES.webCpcc;
-  } else if (queryCourse === "cis110" || queryCourse === "cis 110") {
-    courseProfile = COURSE_PROFILES.cis110;
+  } else if (queryCourse === "itsc1110" || queryCourse === "itsc 1110") {
+    courseProfile = COURSE_PROFILES.itsc1110;
   } else {
     courseProfile = hasPrompt ? promptForCourseProfile(lastCourseProfile, reportTitle) : null;
   }
@@ -1755,7 +1679,7 @@ async function evaluateIntroductionsFromUrl() {
   }
 
   if (!courseProfile) {
-    console.error("No valid course profile entered. Please run again and enter WEB, WEBCPCC, or CIS110.");
+    console.error("No valid course profile entered. Please run again and enter WEB, WEBCPCC, or ITSC1110.");
     return;
   }
 
@@ -1798,14 +1722,23 @@ async function evaluateIntroductionsFromUrl() {
     const html = await response.text();
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
+
+    // parseFromString gives the new document this script's own base URL, not
+    // the fetched page's — inject a <base> so relative hrefs (e.g. a linked
+    // stylesheet) resolve against where the HTML actually came from.
+    if (!doc.querySelector("base")) {
+      const baseElement = doc.createElement("base");
+      baseElement.setAttribute("href", url);
+      (doc.head || doc.documentElement).prepend(baseElement);
+    }
+
+    await warmStyleCachesForDocument(doc);
     const introBlocks = collectIntroBlocks(doc);
 
     const results = introBlocks.map((block) => ({
       name: block.name,
       issues: validateBlock(block, courseProfile),
     }));
-
-    applyAlphabeticalOrderIssues(results);
 
     const report = formatReport(results, courseProfile);
     saveLastRunState(url, reportTitle, courseProfile.key);
