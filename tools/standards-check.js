@@ -173,11 +173,16 @@
     const localSheets = sheets.filter(isLocal);
     const embedded = [...d.querySelectorAll("style")].map((s) => s.textContent).join("\n");
     const CSS_RULE = "stylesheets in styles/, first named default.css";
+    // styles/ must be the immediate folder holding a single file directly —
+    // not just "styles/" present anywhere in the path (was matching
+    // "web115/styles/default.css", reaching into another site's directory)
+    // and not a further sub/sub folder inside styles/ itself.
+    const inStylesFolder = (s) => /^\.?\/?styles\/[^/]+$/i.test(s);
     if (!localSheets.length) {
       add("PASS", CSS_RULE, embedded.trim() ? "embedded styles only — folder/default.css not required" : "no stylesheets on this page");
-    } else if (localSheets.some((s) => !s.includes("styles/")))
-      add("FAIL", CSS_RULE, "outside styles/: " + localSheets.filter((s) => !s.includes("styles/")).join(", "));
-    else if (!localSheets[0].endsWith("default.css"))
+    } else if (localSheets.some((s) => !inStylesFolder(s)))
+      add("FAIL", CSS_RULE, "outside styles/: " + localSheets.filter((s) => !inStylesFolder(s)).join(", "));
+    else if (localSheets[0].split("/").pop().toLowerCase() !== "default.css")
       add("FAIL", CSS_RULE, "first stylesheet is " + localSheets[0]);
     else add("PASS", CSS_RULE);
 
