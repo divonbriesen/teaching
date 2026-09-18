@@ -205,6 +205,21 @@
     }
 
     if (css) {
+      // Presence check, not a strict numeric threshold: a max-width without
+      // centering just leaves content stuck to one side, so require both
+      // together rather than crediting a lone max-width that isn't wired up.
+      const bodyCss = [...css.matchAll(/\bbody\b[^{]*\{([^}]*)\}/gi)].map((m) => m[1]).join(" ");
+      const hasMaxWidth = /max-width\s*:/i.test(bodyCss);
+      const hasAutoMargin = /margin(-inline)?\s*:\s*[^;]*\bauto\b/i.test(bodyCss) ||
+        (/margin-left\s*:\s*auto/i.test(bodyCss) && /margin-right\s*:\s*auto/i.test(bodyCss));
+      add(hasMaxWidth && hasAutoMargin ? "PASS" : "FAIL",
+        "body has a max-width and is centered (margin: auto)",
+        hasMaxWidth && hasAutoMargin ? ""
+          : !hasMaxWidth ? "no max-width on body"
+          : "max-width set but not centered — add margin: 0 auto (or margin-inline: auto)");
+    }
+
+    if (css) {
       const stacks = [...css.matchAll(/font-family\s*:([^;}]+)/gi)].map((m) => m[1]);
       const generic = new Set(["serif", "sans-serif", "monospace", "cursive", "system-ui", "inherit", "initial", "unset", "revert"]);
       const primaries = new Set(
