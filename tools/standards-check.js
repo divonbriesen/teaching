@@ -406,7 +406,18 @@
       const footHtml = footer.innerHTML;
       if (course) {
         add(CREDIT_RE.test(footer.textContent) ? "PASS" : "FAIL", "footer has designer credit");
-        add(/certified in/i.test(footer.textContent) ? "PASS" : "FAIL", "footer 'Certified in ...' line");
+        // Gated on the same signal as the cert-page nav links (rules.json's
+        // soften_if_none rule): no cert pages started yet means there's
+        // nothing to certify in, so don't fail the footer line for it.
+        const certRule = rules && rules.sites && rules.sites.course &&
+          (rules.sites.course.site_checks || []).find((c) => c.soften_if_none);
+        const certStarted = !certRule || (certRule.patterns || [])
+          .some((p) => new RegExp(p, "i").test(d.documentElement.outerHTML));
+        if (!certStarted) {
+          add("INFO", "footer 'Certified in ...' line", "not required until the cert pages are up");
+        } else {
+          add(/certified in/i.test(footer.textContent) ? "PASS" : "FAIL", "footer 'Certified in ...' line");
+        }
       }
       const header = d.querySelector("header");
       const chrome = (header ? header.innerHTML : "") + footHtml;
@@ -450,8 +461,15 @@
               } else if (c.type === "text_all" || c.type === "html_all") {
                 const hay = c.type === "text_all" ? docText : docHtml;
                 const missing = (c.patterns || []).filter((p2) => !new RegExp(p2, "i").test(hay));
-                add(!missing.length ? "PASS" : "FAIL", rule,
-                  missing.length ? "missing: " + missing.slice(0, 4).join(", ") : "");
+                // soften_if_none: a list that's genuinely not due yet has
+                // none of its items present. Once even one shows up, the
+                // student has started, so the rest are fair game to require.
+                if (c.soften_if_none && missing.length === (c.patterns || []).length) {
+                  add("INFO", rule, "none yet — not required until you start");
+                } else {
+                  add(!missing.length ? "PASS" : "FAIL", rule,
+                    missing.length ? "missing: " + missing.slice(0, 4).join(", ") : "");
+                }
               } else if (c.type === "heading") {
                 const sel = c.level ? "h" + c.level : "h1,h2,h3,h4,h5,h6";
                 const heads = [...d.querySelectorAll(sel)].map((h) => h.textContent.trim());

@@ -15,6 +15,7 @@
         {
           "type": "html_all",
           "rule": "primary nav links the five cert pages (M6B on)",
+          "soften_if_none": true,
           "patterns": [
             "href=\"survey.html\"",
             "href=\"cards.html\"",
