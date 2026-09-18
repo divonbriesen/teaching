@@ -540,7 +540,12 @@
           const firmRe = new RegExp((rules.sites.designfirm && rules.sites.designfirm.match_pattern) || "\\.[a-z]{2,4}/", "i");
           const isCourseRef = (u) => courseDirs.some((dir) => u.toLowerCase().includes(dir)) && !firmRe.test(u);
           const headsAll = [...d.querySelectorAll("h1")].map((h) => h.textContent).concat([title]);
-          const coursey = headsAll.filter((t) => /[A-Z]{2,4}\d{3,4}/.test(t));
+          // The "Name's Mascot" possessive + two capitalized words (e.g.
+          // "Huggins's Theroretical Hummingbird") is the course h1's
+          // convention, not the personal page's — flag it here too, not
+          // just a bare course code.
+          const mascotName = /['’]s\s+[A-Z][a-z]*\s+[A-Z][a-z]*/;
+          const coursey = headsAll.filter((t) => /[A-Z]{2,4}\d{3,4}/.test(t) || mascotName.test(t));
           add(!coursey.length ? "PASS" : "FAIL", "title/h1 read as YOUR page, not the course's",
             coursey.slice(0, 2).join("; ").trim());
           const courseLinks = anchors.map((a) => a.getAttribute("href") || "").filter(isCourseRef);
