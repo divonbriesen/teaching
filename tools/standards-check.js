@@ -53,6 +53,53 @@
     return !external.some(function (p) { return low.startsWith(p); });
   }
 
+  // Which declared site (rules.json's sites map) does a path belong to?
+  // Pulled out of the current-page mode detection so the same logic can
+  // classify an arbitrary link's target, not just location.pathname — that's
+  // what lets us tell "crosses into a different site" from "same site,
+  // different directory" for the relative-links and new-tab rules below.
+  function classifySite(pathname, host, rules) {
+    if (!rules || !rules.sites) return null;
+    const lowPath = pathname.toLowerCase();
+    let site = null;
+    let bestPos = -1;
+    // deepest match wins so hobby/ inside itis3135/ resolves to hobby
+    for (const [name, s] of Object.entries(rules.sites)) {
+      for (const dir of s.match_dirs || []) {
+        const pos = lowPath.lastIndexOf("/" + dir + "/");
+        if (pos > bestPos) { bestPos = pos; site = name; }
+      }
+      if (s.match_pattern) {
+        const m = lowPath.match(new RegExp(s.match_pattern, "g"));
+        if (m) {
+          const pos = lowPath.lastIndexOf(m[m.length - 1]);
+          if (pos > bestPos) { bestPos = pos; site = name; }
+        }
+      }
+    }
+    if (!site && rules.sites.personal) {
+      const depth = lowPath.split("/").filter((s) => s && !/\.html?$/.test(s)).length;
+      if ((host.includes("webpages.charlotte.edu") && depth === 1) ||
+          (host.endsWith("github.io") && depth === 0)) site = "personal";
+    }
+    // mascot: folder is named after each student's mascot, so no fixed dir
+    // can match — an unrecognized folder (any location) resolves to mascot
+    if ((!site || site === "course") && rules.sites.mascot) {
+      const dirs = lowPath.split("/").filter((s) => s && !/\.html?$/.test(s));
+      const last = dirs[dirs.length - 1];
+      const minDepth = host.includes("webpages.charlotte.edu") ? 2 : 1;
+      if (last && dirs.length >= minDepth) {
+        const known = new Set();
+        for (const s of Object.values(rules.sites)) for (const dir of s.match_dirs || []) known.add(dir);
+        const excluded = new Set(rules.sites.mascot.exclude_dirs || []);
+        const firmPat = rules.sites.designfirm && rules.sites.designfirm.match_pattern;
+        const firmHit = firmPat && new RegExp(firmPat, "i").test("/" + last + "/");
+        if (!known.has(last) && !excluded.has(last) && !firmHit) site = "mascot";
+      }
+    }
+    return site;
+  }
+
   async function runChecks() {
     const d = document;
     const h1 = d.querySelector("h1");
@@ -64,46 +111,8 @@
     try { rules = await (await fetch(RULES_URL)).json(); } catch (e) { rules = null; }
     const SCRIPT_EL = d.querySelector('script[src*="standards-check"]');
     const scriptMode = SCRIPT_EL && SCRIPT_EL.dataset.mode;
-    const lowPath = location.pathname.toLowerCase();
-    // deepest match wins so hobby/ inside itis3135/ resolves to hobby
     const dataSite = SCRIPT_EL && SCRIPT_EL.dataset.site;
-    let site = dataSite || null;
-    if (!site && rules && rules.sites) {
-      let bestPos = -1;
-      for (const [name, s] of Object.entries(rules.sites)) {
-        for (const dir of s.match_dirs || []) {
-          const pos = lowPath.lastIndexOf("/" + dir + "/");
-          if (pos > bestPos) { bestPos = pos; site = name; }
-        }
-        if (s.match_pattern) {
-          const m = lowPath.match(new RegExp(s.match_pattern, "g"));
-          if (m) {
-            const pos = lowPath.lastIndexOf(m[m.length - 1]);
-            if (pos > bestPos) { bestPos = pos; site = name; }
-          }
-        }
-      }
-    }
-    if (!site && rules && rules.sites && rules.sites.personal) {
-      const depth = lowPath.split("/").filter((s) => s && !/\.html?$/.test(s)).length;
-      if ((location.host.includes("webpages.charlotte.edu") && depth === 1) ||
-          (location.host.endsWith("github.io") && depth === 0)) site = "personal";
-    }
-    // mascot: folder is named after each student's mascot, so no fixed dir
-    // can match — an unrecognized folder (any location) resolves to mascot
-    if ((!site || site === "course") && rules && rules.sites && rules.sites.mascot) {
-      const dirs = lowPath.split("/").filter((s) => s && !/\.html?$/.test(s));
-      const last = dirs[dirs.length - 1];
-      const minDepth = location.host.includes("webpages.charlotte.edu") ? 2 : 1;
-      if (last && dirs.length >= minDepth) {
-        const known = new Set();
-        for (const s of Object.values(rules.sites)) for (const dir of s.match_dirs || []) known.add(dir);
-        const excluded = new Set(rules.sites.mascot.exclude_dirs || []);
-        const firmPat = rules.sites.designfirm && rules.sites.designfirm.match_pattern;
-        const firmHit = firmPat && new RegExp(firmPat, "i").test("/" + last + "/");
-        if (!known.has(last) && !excluded.has(last) && !firmHit) site = "mascot";
-      }
-    }
+    let site = dataSite || classifySite(location.pathname, location.host, rules);
     if (scriptMode === "course") site = "course";
     else if (scriptMode === "general") site = null;
     const course = site === "course";
@@ -351,11 +360,14 @@
     add(!tight.length ? "PASS" : "FAIL",
       "dividers have a space on both sides", tight.map((t) => JSON.stringify(t)).join(", "));
 
-    // Internal references must be relative: an absolute URL back into the
-    // student's own webspace (links or assets) should be a relative path.
-    // Footer links are exempt: the CLT and GH copies are identical files,
-    // so the footer's site/home links must be absolute to point at a fixed
-    // home no matter which copy you're reading.
+    // Internal references must be relative WITHIN the same site: an absolute
+    // URL back into the student's own webspace (links or assets) should be a
+    // relative path when it stays on this site, but crossing into a
+    // different declared site (course/hobby/mascot/personal/designfirm — a
+    // standalone site by design) is a legitimate absolute reference, the
+    // same way the footer's site/home link is (still always exempt: the CLT
+    // and GH copies are identical files, so that link must be absolute to
+    // point at a fixed home no matter which copy you're reading).
     const ownRoot = (location.host + "/" + (location.pathname.split("/").filter(Boolean)[0] || "")).toLowerCase();
     const allRefs = [...anchors.filter((a) => !a.closest("footer")).map((a) => a.getAttribute("href") || ""),
       ...sheets, ...scripts, ...imgs];
@@ -366,20 +378,26 @@
       if (!/^https?:\/\//i.test(h)) return false;
       let u; try { u = new URL(h); } catch (e) { return false; }
       const hRoot = (u.host + "/" + (u.pathname.split("/").filter(Boolean)[0] || "")).toLowerCase();
-      return u.host.toLowerCase() === location.host.toLowerCase() &&
+      const ownSpace = u.host.toLowerCase() === location.host.toLowerCase() &&
         (location.host.toLowerCase().endsWith("github.io") || hRoot === ownRoot);
+      if (!ownSpace) return false;
+      return classifySite(u.pathname, u.host, rules) === site;
     });
     add(!absInternal.length ? "PASS" : "FAIL",
-      "internal links/assets are relative, not absolute URLs",
+      "internal links/assets are relative within the same site (absolute ok crossing to another site)",
       absInternal.slice(0, 4).map(short).join(", "));
 
-    // Relative links may open new tabs only when they point into another directory.
+    // Local links may open new tabs only when they cross into a different
+    // site than this page — same-site navigation must stay in-tab.
     const badBlank = anchors.filter((a) => {
       const h = a.getAttribute("href") || "";
-      const path = h.split("#")[0].split("?")[0].replace(/\/+$/, "");
-      return a.target === "_blank" && isLocal(h) && !path.includes("/");
+      if (a.target !== "_blank" || !isLocal(h)) return false;
+      const path = h.split("#")[0].split("?")[0];
+      let targetPath;
+      try { targetPath = new URL(path, location.href).pathname; } catch (e) { return false; }
+      return classifySite(targetPath, location.host, rules) === site;
     });
-    add(!badBlank.length ? "PASS" : "FAIL", "relative links must not open new tabs (other directories ok)",
+    add(!badBlank.length ? "PASS" : "FAIL", "same-site links must not open new tabs (crossing to another site is ok)",
       badBlank.map((a) => a.getAttribute("href")).slice(0, 5).join(", "));
 
     const crap = internal.filter((h) => course && (h.startsWith("stuff/") || h.includes("/stuff/")));
@@ -620,7 +638,14 @@
     badge.id = "standards-check-badge";
     badge.style.cssText =
       "position:fixed;bottom:36px;right:36px;z-index:9999;cursor:pointer;" +
-      "font-size:34px;line-height:1;user-select:none;border-radius:50%;padding:4px;" +
+      // Fixed square + flex centering: a page's own font-family (every course
+      // page sets its own fonts) otherwise reaches the emoji glyph and can
+      // render it wider than tall, so shrink-to-fit sizing turned the badge
+      // oval on some pages and round on others depending on the page's CSS.
+      "width:48px;height:48px;box-sizing:border-box;display:flex;" +
+      "align-items:center;justify-content:center;" +
+      "font-size:34px;line-height:1;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;" +
+      "user-select:none;border-radius:50%;padding:4px;" +
       (crappy && !fails
         ? "transform:rotate(180deg);background:rgba(225,245,225,.9);" +
           "box-shadow:0 0 12px 6px rgba(40,170,60,.55);"
