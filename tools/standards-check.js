@@ -683,6 +683,49 @@
           add("HEAD", "PAGE RULES: " + page.toUpperCase());
           applyChecks(pageRules.checks);
         }
+        if (page === "introduction.html") {
+          // The doc-to-webpage rebuild carries over the six profile links
+          // (introductions.html Part 4) — but nothing checked their text,
+          // href, order, or that they actually live in the footer like the
+          // rest of the site's identity links. A page could have every
+          // link wrong, in the wrong place, with wrong labels, and still
+          // glow green. CLT Web is UNCC-only (introductions.html: CPCC
+          // students skip it), so drop it for the CPCC course dirs.
+          const CPCC_COURSE_DIRS = ["web115", "web215", "web250", "cis110"];
+          const lowPath = location.pathname.toLowerCase();
+          const isCPCC = CPCC_COURSE_DIRS.some((dir) => lowPath.includes("/" + dir + "/"));
+          const REQUIRED_LINKS = (isCPCC ? [] : [{ label: "CLT Web", domain: "webpages.charlotte.edu" }]).concat([
+            { label: "GitHub.io", domain: "github.io" },
+            { label: "GitHub", domain: "github.com" },
+            { label: "freeCodeCamp", domain: "freecodecamp.org" },
+            { label: "Codecademy", domain: "codecademy.com" },
+            { label: "LinkedIn", domain: "linkedin.com" },
+          ]);
+          const footerEl2 = d.querySelector("footer");
+          const footerAnchors = footerEl2 ? [...footerEl2.querySelectorAll("a")] : [];
+          const findByLabel = (label) => footerAnchors.find((a) => a.textContent.trim() === label);
+
+          const missing = REQUIRED_LINKS.filter((r) => !findByLabel(r.label)).map((r) => r.label);
+          add(!missing.length ? "PASS" : "FAIL",
+            "profile links (" + REQUIRED_LINKS.map((r) => r.label).join(", ") + ") are in the footer",
+            missing.length ? "missing from footer (exact text): " + missing.join(", ") : "");
+
+          const found = REQUIRED_LINKS.map((r) => ({ ...r, el: findByLabel(r.label) })).filter((r) => r.el);
+          const wrongHref = found.filter((r) => {
+            let host = "";
+            try { host = new URL(r.el.getAttribute("href") || "", location.href).hostname.toLowerCase(); } catch (e) {}
+            return !host.endsWith(r.domain);
+          });
+          add(found.length && !wrongHref.length ? "PASS" : "FAIL",
+            "profile links point to the right site",
+            wrongHref.length ? wrongHref.map((r) => r.label + " -> " + (r.el.getAttribute("href") || "")).join(", ") : "");
+
+          const inOrder = found.every((r, i) => i === 0 ||
+            (found[i - 1].el.compareDocumentPosition(r.el) & Node.DOCUMENT_POSITION_FOLLOWING));
+          add(found.length === REQUIRED_LINKS.length && inOrder ? "PASS" : "FAIL",
+            "profile links are in the required order (" + REQUIRED_LINKS.map((r) => r.label).join(", ") + ")",
+            found.length === REQUIRED_LINKS.length ? (inOrder ? "" : "out of order") : "can't check order — some links missing");
+        }
       }
     }
     return results;
