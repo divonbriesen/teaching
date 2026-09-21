@@ -866,7 +866,7 @@
         {
           "type": "html",
           "rule": "a serif font too",
-          "pattern": "font-family[^;\"]*serif",
+          "pattern": "font-family[^;]{0,60}?(?:\\b(?:times new roman|georgia|garamond|cambria|palatino|book antiqua|bookman|constantia|didot|baskerville|rockwell|pt serif|playfair display|merriweather|lora|noto serif|source serif|bitter|crimson text|eb garamond|libre baskerville|cardo|vollkorn|century schoolbook|goudy old style|calisto mt|cochin|perpetua|sabon|minion pro)\\b|(?<!sans-)(?<!sans )\\bserif\\b)",
           "present": true
         },
         {
@@ -902,7 +902,7 @@
         {
           "type": "html",
           "rule": "comically large font size",
-          "pattern": "font-size:\\s*([4-9]\\d|\\d{3,})px",
+          "pattern": "font-size:\\s*(?:([4-9]\\d|\\d{3,})px|(?:[3-9]|\\d{2,})(?:\\.\\d+)?r?em|(?:[3-9]\\d|\\d{3,})pt|(?:[5-9]|\\d{2,})(?:\\.\\d+)?v[wh]|(?:[3-9]\\d{2}|\\d{4,})%)",
           "present": true
         },
         {
