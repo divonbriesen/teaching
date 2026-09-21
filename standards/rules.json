@@ -730,7 +730,7 @@
       "title_divider": "unique"
     },
     "designfirm": {
-      "match_pattern": "\\.[a-z]{2,4}/",
+      "match_pattern": "\\.[a-z]{2,24}/",
       "site_checks": [
         {
           "type": "heading",

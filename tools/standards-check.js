@@ -552,7 +552,7 @@
         }
         if (site === "personal") {
           const courseDirs = (rules.sites.course && rules.sites.course.match_dirs) || ["itis3135"];
-          const firmRe = new RegExp((rules.sites.designfirm && rules.sites.designfirm.match_pattern) || "\\.[a-z]{2,4}/", "i");
+          const firmRe = new RegExp((rules.sites.designfirm && rules.sites.designfirm.match_pattern) || "\\.[a-z]{2,24}/", "i");
           const isCourseRef = (u) => courseDirs.some((dir) => u.toLowerCase().includes(dir)) && !firmRe.test(u);
           const headsAll = [...d.querySelectorAll("h1")].map((h) => h.textContent).concat([title]);
           // The "Name's Mascot" possessive + two capitalized words (e.g.
