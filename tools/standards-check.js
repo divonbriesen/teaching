@@ -49,7 +49,12 @@
     if (low.startsWith(location.origin.toLowerCase() + "/")) return true;
     // slashes built by concat: some validators misread "//" in a string as a comment
     const ss = "/" + "/";
-    const external = ["http:" + ss, "https:" + ss, ss, "data:", "mailto:", "#"];
+    // non-web schemes a "Contact Me" section legitimately links to — not
+    // fetchable, and not really "internal site navigation" either, the same
+    // way mailto: already wasn't. file:// stays excluded from this list on
+    // purpose: unlike a phone number, a file:// link on a public site is a
+    // real mistake and should keep getting flagged as broken.
+    const external = ["http:" + ss, "https:" + ss, ss, "data:", "mailto:", "tel:", "sms:", "facetime:", "facetime-audio:", "geo:", "#"];
     return !external.some(function (p) { return low.startsWith(p); });
   }
 
