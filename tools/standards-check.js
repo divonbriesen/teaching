@@ -287,11 +287,47 @@
     if (course && h1Text) {
       const good = /['’]s\s+\S+/.test(h1Text) && /[A-Z]{2,}\d{3,}[A-Z0-9]*\s*$/.test(h1Text);
       add(good ? "PASS" : "FAIL", "site name = Name's Mascot <divider> COURSEID", good ? "" : h1Text);
+
+      // The format check above only confirms SOME word follows "'s" — it
+      // doesn't confirm that word is actually your mascot, not just any
+      // word ("Thomas McElroy's Aardvark" would pass it). Words in the
+      // mascot phrase should share initials with the words in your name,
+      // positionally — "Terrific Muskrat" matching "Thomas McElroy".
+      const splitWords = (s) => s.split(/[\s.]+/).map((w) => w.trim()).filter(Boolean);
+      const nameMascot = h1Text.match(/^(.+?)['’]s\s+(.+?)\s*[|~•·—-]/);
+      if (nameMascot) {
+        const nameWords = splitWords(nameMascot[1]);
+        const mascotWords = splitWords(nameMascot[2]);
+        const initialsMatch = nameWords.length === mascotWords.length &&
+          nameWords.every((w, i) => w[0] && mascotWords[i][0] && w[0].toLowerCase() === mascotWords[i][0].toLowerCase());
+        add(initialsMatch ? "PASS" : "FAIL", "mascot's words share initials with your name's words",
+          initialsMatch ? "" : nameMascot[1].trim() + " vs " + nameMascot[2].trim());
+      } else {
+        add("FAIL", "mascot's words share initials with your name's words",
+          "could not find Name's Mascot pattern in: " + h1Text);
+      }
     }
     if (title && h1Text) {
-      const site = h1Text.toLowerCase();
-      add(title.toLowerCase().startsWith(site.slice(0, Math.max(8, site.length / 2))) ? "PASS" : "FAIL",
+      const h1Lower = h1Text.toLowerCase();
+      add(title.toLowerCase().startsWith(h1Lower.slice(0, Math.max(8, h1Lower.length / 2))) ? "PASS" : "FAIL",
         "title combines h1 (site name) + divider + h2 (page name)");
+
+      // The prefix check above only verifies the FRONT of the title (h1
+      // side) — it never verified the page-name half actually reflects the
+      // h2, so "...ITIS3135 | lalalalala" on a page whose h2 says "Home"
+      // passed silently. Hobby pages have their own SPA-aware version of
+      // this (any section's h2), so skip it here to avoid double-checking.
+      if (site !== "hobby") {
+        const h2El = d.querySelector("h2");
+        if (h2El) {
+          const parts = title.split(dividerRe);
+          const lastPart = parts[parts.length - 1].trim();
+          const h2Text = h2El.textContent.trim();
+          const pageNameMatches = lastPart.toLowerCase() === h2Text.toLowerCase();
+          add(pageNameMatches ? "PASS" : "FAIL", "title ends with the page's h2 text",
+            pageNameMatches ? "" : "title ends with \"" + lastPart + "\", h2 is \"" + h2Text + "\"");
+        }
+      }
     }
 
     const anchors = [...d.querySelectorAll("a[href]")];
