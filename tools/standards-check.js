@@ -336,7 +336,17 @@
     }
 
     const anchors = [...d.querySelectorAll("a[href]")];
-    const internal = anchors.map((a) => a.getAttribute("href")).filter(isLocal);
+    // A footer whose only job is the "Designed by X" credit line shouldn't
+    // count that link toward "2+ related links" — that's attribution, not
+    // site navigation, and requiring a <nav> to hold one incidental credit
+    // link (alongside, say, the one required course-site mention) is a
+    // false positive on an otherwise perfectly normal one-page site.
+    const footerEl = d.querySelector("footer");
+    const footerHasCredit = !!footerEl && CREDIT_RE.test(footerEl.textContent);
+    const internal = anchors
+      .filter((a) => !(footerHasCredit && a.closest("footer")))
+      .map((a) => a.getAttribute("href"))
+      .filter(isLocal);
     if (internal.length >= 2) {
       const nav = d.querySelector("nav");
       if (!nav) add("FAIL", "2+ related links are in a <nav>", internal.length + " internal links, no nav");
