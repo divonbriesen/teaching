@@ -331,7 +331,8 @@
     add(scripts.some((s) => s.includes("standards-check")) ? "PASS" : "FAIL",
       "Vicunadator (lama) script element is on the page");
 
-    if (!scripts.some((s) => s.includes("lint.page"))) add("FAIL", "Accumulus (cloud) validation script element is on the page");
+    const ACCUM_RULE = "Accumulus (cloud) validation script element is on the page, last in <head>";
+    if (!scripts.some((s) => s.includes("lint.page"))) add("FAIL", ACCUM_RULE, "missing");
     else {
       // judge from the raw source: lint.page (and other tooling) injects
       // elements into the live head at runtime. Read the body regardless of
@@ -345,7 +346,7 @@
       const lastIsScript = headTags.length &&
         /script/i.test(headTags[headTags.length - 1]) &&
         /lint\.page[\s\S]{0,120}<\/head>/i.test(headMatch ? headMatch[0].slice(-300) : "");
-      add(lastIsScript ? "PASS" : "FAIL", "Accumulus (cloud) validation script element is last in <head>");
+      add(lastIsScript ? "PASS" : "FAIL", ACCUM_RULE, lastIsScript ? "" : "present but not last in <head>");
     }
 
     // ===== BODY =====
