@@ -181,7 +181,7 @@
             {
               "type": "html",
               "rule": "links to the course hub",
-              "pattern": "divonbriesen\\.github\\.io/web123",
+              "pattern": "divonbriesen\\.github\\.io/teaching",
               "present": true
             },
             {
