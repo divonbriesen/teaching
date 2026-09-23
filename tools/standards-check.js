@@ -527,6 +527,28 @@
     add(!tight.length ? "PASS" : "FAIL",
       "dividers have a space on both sides", tight.map((t) => JSON.stringify(t)).join(", "));
 
+    // An embellishment bookending a heading/title (e.g. "-Adaija's
+    // Webpage-") needs a space between it and the word it wraps — same
+    // idea as "dividers have a space on both sides" above, but scoped to
+    // headings/title and including dash characters that check deliberately
+    // excludes (a bare mid-sentence hyphen is usually just a compound
+    // word, but a dash bookending an entire heading is unambiguously
+    // decorative, not part of a word).
+    const EMBELLISH_CHARS = /[|~•·—-]/;
+    const bookendTight = (text) => {
+      const t = text.trim();
+      if (t.length < 2) return false;
+      const leadingTight = EMBELLISH_CHARS.test(t[0]) && !/\s/.test(t[1]);
+      const trailingTight = EMBELLISH_CHARS.test(t[t.length - 1]) && !/\s/.test(t[t.length - 2]);
+      return leadingTight || trailingTight;
+    };
+    const headingAndTitleTexts = [...d.querySelectorAll("h1, h2, h3")].map((h) => h.textContent)
+      .concat(title ? [title] : []);
+    const badBookends = headingAndTitleTexts.filter((t) => t.trim() && bookendTight(t));
+    add(!badBookends.length ? "PASS" : "FAIL",
+      "embellishment in heading/title has a space on both sides",
+      badBookends.slice(0, 3).map((t) => JSON.stringify(t.trim())).join(", "));
+
     // Internal references must be relative WITHIN the same site: an absolute
     // URL back into the student's own webspace (links or assets) should be a
     // relative path when it stays on this site, but crossing into a
