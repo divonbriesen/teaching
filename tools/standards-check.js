@@ -180,7 +180,7 @@
     const title = d.title.trim();
     const dividerRe = site === "hobby" ? /[^\w\s'".,]/ : /[|~•·—-]/;
     if (!title) add("FAIL", "title element present");
-    else if (!dividerRe.test(title)) add("FAIL", "title combines h1 (site name) + divider + h2 (page name)", "no divider: " + title);
+    else if (!dividerRe.test(title)) add("FAIL", "title has a divider" + (site === "hobby" ? " (unique symbol ok here)" : ""), "no divider: " + title);
     else add("PASS", "title has a divider" + (site === "hobby" ? " (unique symbol ok here)" : ""), title);
 
     const sheets = [...d.querySelectorAll('link[rel~="stylesheet"]')].map((l) => l.getAttribute("href") || "");
@@ -361,9 +361,20 @@
       }
     }
     if (title && h1Text) {
+      // The title's front portion must be h1 IN FULL (not just some leading
+      // fragment of it) followed by a divider — a half-length prefix match
+      // let a title pass as long as it started the same way h1 did, even
+      // when the h1 itself had extra stuff (like a duplicated page name)
+      // tacked on after that the loose check never looked at.
       const h1Lower = h1Text.toLowerCase();
-      add(title.toLowerCase().startsWith(h1Lower.slice(0, Math.max(8, h1Lower.length / 2))) ? "PASS" : "FAIL",
-        "title combines h1 (site name) + divider + h2 (page name)");
+      const titleLower = title.toLowerCase();
+      const startsWithH1 = titleLower.startsWith(h1Lower);
+      const afterH1 = startsWithH1 ? title.slice(h1Text.length) : "";
+      const dividerRightAfter = new RegExp("^\\s*(?:" + dividerRe.source + ")").test(afterH1);
+      const structureOk = startsWithH1 && dividerRightAfter;
+      add(structureOk ? "PASS" : "FAIL",
+        "title combines h1 (site name) + divider + h2 (page name)",
+        structureOk ? "" : "h1 is \"" + h1Text + "\", title is \"" + title + "\"");
 
       // The prefix check above only verifies the FRONT of the title (h1
       // side) — it never verified the page-name half actually reflects the
