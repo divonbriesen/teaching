@@ -608,7 +608,11 @@
           // rules, so checking it here would flag every valid personal
           // page. An earlier possessive-name regex here also flagged
           // ordinary titles like "Sydney's Personal Page".)
-          const h1DividerRe = /[|~•·—-]/;
+          // Requires whitespace on BOTH sides of the divider char, same as
+          // the general "dividers have a space on both sides" rule — a bare
+          // char match caught decorative bookend dashes ("-Adaija's
+          // Webpage-") and hyphenated names ("Mary-Jane") as false coursey.
+          const h1DividerRe = /\s[|~•·—-]\s/;
           const coursey = [...new Set(
             headsAll.filter((t) => /[A-Z]{2,4}\s*\d{3,4}/.test(t))
               .concat(h1Texts.filter((t) => h1DividerRe.test(t)))
