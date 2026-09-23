@@ -595,16 +595,24 @@
           const courseDirs = (rules.sites.course && rules.sites.course.match_dirs) || ["itis3135"];
           const firmRe = new RegExp((rules.sites.designfirm && rules.sites.designfirm.match_pattern) || "\\.[a-z]{2,24}/", "i");
           const isCourseRef = (u) => courseDirs.some((dir) => u.toLowerCase().includes(dir)) && !firmRe.test(u);
-          const headsAll = [...d.querySelectorAll("h1")].map((h) => h.textContent).concat([title]);
-          // The "Name's Mascot" possessive + two capitalized words (e.g.
-          // "Huggins's Theroretical Hummingbird") is the course h1's
-          // convention, not the personal page's — flag it here too, not
-          // just a bare course code.
-          const mascotName = /['’]s\s+[A-Z][a-z]*\s+[A-Z][a-z]*/;
+          const h1Texts = [...d.querySelectorAll("h1")].map((h) => h.textContent);
+          const headsAll = h1Texts.concat([title]);
           // \s* between letters and digits: "ITIS 3135" (spaced) is just as
           // much a course code as "ITIS3135" — the tight no-space version
           // let a real course-code h1 through uncaught.
-          const coursey = headsAll.filter((t) => /[A-Z]{2,4}\s*\d{3,4}/.test(t) || mascotName.test(t));
+          // A divider inside the h1 itself is the other tell: the
+          // mascot/course h1 format is "Name's Mascot <divider> COURSEID",
+          // while a personal page's h1 should just be the student's name,
+          // no divider. (Checked against h1Texts only, not headsAll/title —
+          // the title is REQUIRED to have its own divider by the general
+          // rules, so checking it here would flag every valid personal
+          // page. An earlier possessive-name regex here also flagged
+          // ordinary titles like "Sydney's Personal Page".)
+          const h1DividerRe = /[|~•·—-]/;
+          const coursey = [...new Set(
+            headsAll.filter((t) => /[A-Z]{2,4}\s*\d{3,4}/.test(t))
+              .concat(h1Texts.filter((t) => h1DividerRe.test(t)))
+          )];
           add(!coursey.length ? "PASS" : "FAIL", "title/h1 read as YOUR page, not the course's",
             coursey.slice(0, 2).join("; ").trim());
           const courseLinks = anchors.map((a) => a.getAttribute("href") || "").filter(isCourseRef);
