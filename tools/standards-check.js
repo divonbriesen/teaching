@@ -235,9 +235,13 @@
       add(!banned.length ? "PASS" : "FAIL", "no banned fonts (as the primary choice)", banned.join(", "));
       add(/(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(css) ? "PASS" : "FAIL", "link colors overridden (no blue/purple/green/red; visited matches normal)", /(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(css) ? "" : "no `a` selector in CSS");
       const bw = [...css.matchAll(/:\s*(#000000|#000|#ffffff|#fff|black|white)\s*[;}]/gi)].map((m) => m[1]);
-      const cssComments = /\/\*[\s\S]*?\S[\s\S]*?\*\//.test(css);
+      const cssCommentTexts = [...css.matchAll(/\/\*([\s\S]*?\S[\s\S]*?)\*\//g)].map((m) => m[1].trim());
       if (!bw.length) add("PASS", "no black/white without a reason (CSS comment)");
-      else if (cssComments) add("PASS", "no black/white without a reason (CSS comment)", [...new Set(bw)].join(", ") + " — commented");
+      else if (cssCommentTexts.length) {
+        const cssCommentSummary = "comment" + (cssCommentTexts.length > 1 ? "s" : "") + ": "
+          + cssCommentTexts.map((c) => JSON.stringify(c)).join("; ");
+        add("PASS", "no black/white without a reason (CSS comment)", [...new Set(bw)].join(", ") + " — " + cssCommentSummary);
+      }
       else add("FAIL", "no black/white without a reason (CSS comment)", [...new Set(bw)].join(", ") + " — no CSS comments found");
     } else add("FAIL", "page has CSS (linked or embedded)", "no CSS found at all");
 
@@ -328,7 +332,13 @@
           const parts = title.split(dividerRe);
           const lastPart = parts[parts.length - 1].trim();
           const h2Text = h2El.textContent.trim();
-          const pageNameMatches = lastPart.toLowerCase() === h2Text.toLowerCase();
+          // "Welcome"/"Welcome!" is an accepted stand-in for "Home" on the
+          // landing page — students may use either as the page name.
+          const normalizePageName = (s) => {
+            const t = s.replace(/[!.]+$/, "").trim().toLowerCase();
+            return t === "welcome" ? "home" : t;
+          };
+          const pageNameMatches = normalizePageName(lastPart) === normalizePageName(h2Text);
           add(pageNameMatches ? "PASS" : "FAIL", "title ends with the page's h2 text",
             pageNameMatches ? "" : "title ends with \"" + lastPart + "\", h2 is \"" + h2Text + "\"");
         }
@@ -396,9 +406,16 @@
     }
 
     // comments justify divs/spans, classes/ids, inline styles
-    let comments = 0;
+    const commentTexts = [];
     const tw = d.createTreeWalker(d.documentElement, NodeFilter.SHOW_COMMENT);
-    while (tw.nextNode()) if (tw.currentNode.data.trim()) comments++;
+    while (tw.nextNode()) {
+      const t = tw.currentNode.data.trim();
+      if (t) commentTexts.push(t);
+    }
+    const comments = commentTexts.length;
+    const commentSummary = comments
+      ? "comment" + (comments > 1 ? "s" : "") + ": " + commentTexts.map((c) => JSON.stringify(c)).join("; ")
+      : "no comments found";
     // count from the raw source: browsers/extensions (Edge features,
     // translators, dark-mode tools) inject styles, classes, and elements
     // into the live DOM that the student never wrote
@@ -412,12 +429,12 @@
     const classId = (rawCounted.match(/\s(class|id)\s*=\s*["']/gi) || []).length;
     const inline = (rawCounted.match(/\sstyle\s*=\s*["']/gi) || []).length;
     add(!divSpan || comments ? "PASS" : "FAIL", "divs/spans explained in comments",
-      divSpan ? divSpan + " used" + (comments ? "" : ", no comments found") : "none used");
+      divSpan ? divSpan + " used, " + commentSummary : "none used");
     add(!classId || comments ? "PASS" : "FAIL", "classes/ids explained in comments",
-      classId ? classId + " used" + (comments ? "" : ", no comments found") : "none used");
+      classId ? classId + " used, " + commentSummary : "none used");
     if (!inline) add("PASS", "inline styles (2 or fewer, explained in comments)", "0");
     else if (inline <= 2) add(comments ? "PASS" : "FAIL", "inline styles (2 or fewer, explained in comments)",
-      inline + (comments ? "" : ", no comments found"));
+      inline + ", " + commentSummary);
     else add("FAIL", "inline styles (2 or fewer, explained in comments)", inline + " found");
 
     // hrefs must contain only the link — no adjacent spaces
