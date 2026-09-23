@@ -489,7 +489,7 @@
       divSpan ? divSpan + " used, " + commentSummary : "none used");
     add(!classId || comments ? "PASS" : "FAIL", "classes/ids explained in comments",
       classId ? classId + " used, " + commentSummary : "none used");
-    if (!inline) add("PASS", "inline styles (2 or fewer, explained in comments)", "0");
+    if (!inline) add("PASS", "inline styles (2 or fewer, explained in comments)", "none used");
     else if (inline <= 2) add(comments ? "PASS" : "FAIL", "inline styles (2 or fewer, explained in comments)",
       inline + ", " + commentSummary);
     else add("FAIL", "inline styles (2 or fewer, explained in comments)", inline + " found");
