@@ -27,6 +27,28 @@
 
   const short = (s) => (s && s.startsWith("data:") ? s.slice(0, 20) + "…" : (s || "").slice(0, 80));
 
+  // Removes @media {...} (or any other @-rule block) bodies, brace-depth
+  // aware, leaving only CSS that applies unconditionally. A rule that only
+  // exists inside a media query (e.g. max-width: 600px) doesn't count as a
+  // real override — outside that condition nothing sets it at all.
+  const stripConditionalBlocks = (css) => {
+    let result = css;
+    const atRuleStart = /@[\w-]+[^{;]*\{/;
+    let match;
+    while ((match = atRuleStart.exec(result))) {
+      const start = match.index;
+      let depth = 1;
+      let i = start + match[0].length;
+      while (i < result.length && depth > 0) {
+        if (result[i] === "{") depth++;
+        else if (result[i] === "}") depth--;
+        i++;
+      }
+      result = result.slice(0, start) + result.slice(i);
+    }
+    return result;
+  };
+
   async function ok(url) {
     try {
       const r = await fetch(url, { method: "HEAD" });
@@ -242,7 +264,13 @@
       add(primaries.size >= 2 ? "PASS" : "FAIL", "at least 2 fonts", [...primaries].sort().join(", ") || "none");
       const banned = [...primaries].filter((f) => BANNED_FONTS.some((b) => f.includes(b)));
       add(!banned.length ? "PASS" : "FAIL", "no banned fonts (as the primary choice)", banned.join(", "));
-      add(/(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(css) ? "PASS" : "FAIL", "link colors overridden (no blue/purple/green/red; visited matches normal)", /(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(css) ? "" : "no `a` selector in CSS");
+      // Must apply unconditionally — a rule that only exists inside an
+      // @media block (e.g. a mobile-only override) leaves the browser's
+      // default blue/purple showing at every other viewport width.
+      const unconditionalCss = stripConditionalBlocks(css);
+      const hasLinkOverride = /(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(unconditionalCss);
+      add(hasLinkOverride ? "PASS" : "FAIL", "link colors overridden (no blue/purple/green/red; visited matches normal)",
+        hasLinkOverride ? "" : "no unconditional `a` selector in CSS (only inside @media, or missing entirely)");
       const bw = [...css.matchAll(/:\s*(#000000|#000|#ffffff|#fff|black|white)\s*[;}]/gi)].map((m) => m[1]);
       const cssCommentTexts = [...css.matchAll(/\/\*([\s\S]*?\S[\s\S]*?)\*\//g)].map((m) => m[1].trim());
       if (!bw.length) add("PASS", "no black/white without a reason (CSS comment)");
