@@ -634,7 +634,7 @@
           else if (!courseLinks.length) add("FAIL", "exactly one link to the course site", "none found");
           else add("FAIL", "exactly one link to the course site", courseLinks.length + " found: " + courseLinks.slice(0, 3).join(", "));
           const shared = [...sheets, ...scripts, ...imgs].filter((s) => isLocal(s) && isCourseRef(s));
-          add(!shared.length ? "PASS" : "FAIL", "no styles/images/scripts shared with the course site",
+          add(!shared.length ? "PASS" : "FAIL", "site has its own styles/images/scripts and does not use those from other sites",
             shared.slice(0, 4).map(short).join(", "));
           // Own styling: embedded, OR a linked stylesheet that's actually
           // yours — default.css (or styles/default.css) sitting right next
