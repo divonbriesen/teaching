@@ -119,7 +119,16 @@
     const dataSite = SCRIPT_EL && SCRIPT_EL.dataset.site;
     let site = dataSite || classifySite(location.pathname, location.host, rules);
     if (scriptMode === "course") site = "course";
-    else if (scriptMode === "general") site = null;
+    else if (scriptMode === "general") {
+      site = null;
+      // data-mode="general" skips ALL site-type rules (course, personal,
+      // hobby, mascot...), not just course ones — easy to carry over by
+      // accident from a template and end up with a report that looks
+      // clean (0 fails) while silently never checking a whole required
+      // section. Flag it loudly so that's obvious from the report itself.
+      add("WARN", "site-specific rules skipped (data-mode=\"general\" is set on this page's script tag)",
+        "remove data-mode=\"general\" if this page should be auto-classified and checked against its site-type rules");
+    }
     const course = site === "course";
 
     if (location.pathname.toLowerCase().includes("/components/")) {
