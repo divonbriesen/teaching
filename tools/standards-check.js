@@ -601,7 +601,10 @@
           // convention, not the personal page's — flag it here too, not
           // just a bare course code.
           const mascotName = /['’]s\s+[A-Z][a-z]*\s+[A-Z][a-z]*/;
-          const coursey = headsAll.filter((t) => /[A-Z]{2,4}\d{3,4}/.test(t) || mascotName.test(t));
+          // \s* between letters and digits: "ITIS 3135" (spaced) is just as
+          // much a course code as "ITIS3135" — the tight no-space version
+          // let a real course-code h1 through uncaught.
+          const coursey = headsAll.filter((t) => /[A-Z]{2,4}\s*\d{3,4}/.test(t) || mascotName.test(t));
           add(!coursey.length ? "PASS" : "FAIL", "title/h1 read as YOUR page, not the course's",
             coursey.slice(0, 2).join("; ").trim());
           const courseLinks = anchors.map((a) => a.getAttribute("href") || "").filter(isCourseRef);
@@ -611,8 +614,17 @@
           const shared = [...sheets, ...scripts, ...imgs].filter((s) => isLocal(s) && isCourseRef(s));
           add(!shared.length ? "PASS" : "FAIL", "no styles/images/scripts shared with the course site",
             shared.slice(0, 4).map(short).join(", "));
-          if (embedded.trim() && !localSheets.length) add("PASS", "embedded stylesheet does the styling");
-          else add("FAIL", "embedded stylesheet does the styling",
+          // Own styling: embedded, OR a linked stylesheet that's actually
+          // yours — default.css (or styles/default.css) sitting right next
+          // to the personal page, not borrowed/shared from the course site
+          // (or anywhere else). A linked stylesheet used to fail this check
+          // outright no matter where it pointed, which didn't match what a
+          // correctly-set-up personal page is allowed to look like.
+          const OWN_DEFAULT_CSS = /^\.?\/?(styles\/)?default\.css$/i;
+          const ownLocalSheet = localSheets.length === 1 && OWN_DEFAULT_CSS.test(localSheets[0]);
+          if (embedded.trim() && !localSheets.length) add("PASS", "own styling (embedded, or default.css right here)", "embedded");
+          else if (ownLocalSheet) add("PASS", "own styling (embedded, or default.css right here)", localSheets[0]);
+          else add("FAIL", "own styling (embedded, or default.css right here)",
             localSheets.length ? "linked: " + localSheets.slice(0, 2).join(", ") : "no embedded styles");
           add("INFO", "CLT and GitHub Pages copies match", "compare the pair by eye");
         }
