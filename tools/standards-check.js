@@ -253,9 +253,9 @@
     else add("FAIL", CODE_RULE, localScripts.filter((s) => !inCodeFolder(s)).join(", "));
 
     add(scripts.some((s) => s.includes("standards-check")) ? "PASS" : "FAIL",
-      "Vicunadator script on the page");
+      "Vicunadator (lama) script on the page");
 
-    if (!scripts.some((s) => s.includes("lint.page"))) add("FAIL", "validation script (lint.page) present");
+    if (!scripts.some((s) => s.includes("lint.page"))) add("FAIL", "Accumulus (cloud) validation script present");
     else {
       // judge from the raw source: lint.page (and other tooling) injects
       // elements into the live head at runtime. Read the body regardless of
@@ -269,7 +269,7 @@
       const lastIsScript = headTags.length &&
         /script/i.test(headTags[headTags.length - 1]) &&
         /lint\.page[\s\S]{0,120}<\/head>/i.test(headMatch ? headMatch[0].slice(-300) : "");
-      add(lastIsScript ? "PASS" : "FAIL", "validation script is last line of head");
+      add(lastIsScript ? "PASS" : "FAIL", "Accumulus (cloud) validation script is last line of head");
     }
 
     // ===== BODY =====
