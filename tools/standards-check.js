@@ -368,7 +368,16 @@
       else add("FAIL", MAIN_RULE, "h2 present but <" + f + "> comes first");
     }
     else if (!h2s.length) add("FAIL", MAIN_RULE, "main has no h2");
-    else add("INFO", MAIN_RULE, "found " + h2s.length + " h2s — fine for an SPA if each h2 is a page name");
+    else {
+      // A real SPA needs each h2 "page" boxed in its own <section>/<article>
+      // — that's what actually makes multiple h2s legitimate page names
+      // instead of just several headings dumped flat into one static page.
+      const wraps = [...h2s].map((h2) => h2.closest("section, article"));
+      const isSpa = wraps.every(Boolean) && new Set(wraps).size === wraps.length;
+      add(isSpa ? "PASS" : "FAIL", MAIN_RULE,
+        isSpa ? "found " + h2s.length + " h2s, each in its own section/article"
+              : "found " + h2s.length + " h2s but not each in its own <section>/<article> — this is not an SPA");
+    }
 
     // The favicon never counts as the page image, however it's included.
     const favHref = icon ? icon.getAttribute("href") || "" : "";
