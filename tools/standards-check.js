@@ -395,7 +395,9 @@
       const isSpa = wraps.every(Boolean) && new Set(wraps).size === wraps.length;
       add(isSpa ? "PASS" : "FAIL", MAIN_RULE,
         isSpa ? "found " + h2s.length + " h2s, each in its own section/article"
-              : "found " + h2s.length + " h2s but not each in its own <section>/<article> — this is not an SPA");
+              : "found " + h2s.length + " h2s outside a <section>/<article> — a page has ONE h2 name, so if this " +
+                "isn't a real multi-page SPA, the extra headings should probably be h3s; if it IS an SPA, wrap " +
+                "each h2's content in its own <section> or <article>");
     }
 
     // The favicon never counts as the page image, however it's included.
