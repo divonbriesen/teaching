@@ -254,6 +254,41 @@
       else add("FAIL", "no black/white without a reason (CSS comment)", [...new Set(bw)].join(", ") + " — no CSS comments found");
     } else add("FAIL", "page has CSS (linked or embedded)", "no CSS found at all");
 
+    // h1-h3 should read as Title Case — either in the text itself, or via
+    // CSS text-transform: capitalize on the headings (a class/id they use,
+    // or a bare h1/h2/h3 selector). Minor words (a, of, the...) are exempt
+    // except as the first/last word, matching normal title-case style.
+    const TITLE_CASE_MINOR = new Set(["a", "an", "the", "and", "but", "or", "nor", "for", "so", "yet",
+      "at", "by", "in", "of", "on", "to", "up", "as", "vs", "via", "from", "into", "with"]);
+    const looksTitleCase = (text) => {
+      const words = text.trim().split(/\s+/).filter(Boolean);
+      return words.every((w, i) => {
+        const core = w.replace(/^[^A-Za-z]+/, "");
+        if (!core) return true;
+        if (i !== 0 && i !== words.length - 1 && TITLE_CASE_MINOR.has(core.toLowerCase())) return true;
+        return core[0] === core[0].toUpperCase();
+      });
+    };
+    const headingEls = [...d.querySelectorAll("h1, h2, h3")];
+    let headingsStyled = false;
+    if (css) {
+      const headingClasses = new Set(headingEls.flatMap((h) => [...h.classList]).map((c) => c.toLowerCase()));
+      const headingIds = new Set(headingEls.map((h) => h.id).filter(Boolean).map((i) => i.toLowerCase()));
+      headingsStyled = [...css.matchAll(/([^{}]+)\{([^}]*)\}/g)].some(([, selector, decl]) => {
+        if (!/text-transform\s*:\s*capitalize/i.test(decl)) return false;
+        const sel = selector.toLowerCase();
+        return /\bh[123]\b/.test(sel)
+          || [...headingClasses].some((c) => sel.includes("." + c))
+          || [...headingIds].some((i) => sel.includes("#" + i));
+      });
+    }
+    if (headingsStyled) add("PASS", "headings (h1-h3) use Title Case", "styled via CSS text-transform: capitalize");
+    else {
+      const badHeadings = headingEls.filter((h) => h.textContent.trim() && !looksTitleCase(h.textContent));
+      add(!badHeadings.length ? "PASS" : "FAIL", "headings (h1-h3) use Title Case",
+        badHeadings.length ? badHeadings.slice(0, 3).map((h) => JSON.stringify(h.textContent.trim())).join(", ") : "");
+    }
+
     const scripts = [...d.querySelectorAll("script[src]")].map((s) => s.getAttribute("src") || "");
     const localScripts = scripts.filter(isLocal);
     // tools/ counts alongside scripts/: the shared validator lives in the
