@@ -328,18 +328,31 @@
     else if (localScripts.every(inCodeFolder)) add("PASS", CODE_RULE);
     else add("FAIL", CODE_RULE, localScripts.filter((s) => !inCodeFolder(s)).join(", "));
 
-    add(scripts.some((s) => s.includes("standards-check")) ? "PASS" : "FAIL",
-      "Vicunadator (lama) script element is on the page");
+    // Shared raw-source fetch — both placement checks below need the page's
+    // ORIGINAL markup, not the live DOM: other scripts (Accumulus's own
+    // viewer widget, browser extensions) can append elements to head/body
+    // at runtime that have nothing to do with what the student wrote.
+    let rawPageSrc = "";
+    try { rawPageSrc = await (await fetch(location.href)).text(); } catch (e) {}
+    const headMatch = rawPageSrc.match(/<head[\s\S]*?<\/head>/i);
 
-    const ACCUM_RULE = "Accumulus (cloud) validation script element is on the page, last in <head>";
+    const VIC_RULE = "Vicunadator (lama) script on page, in head or at end of body";
+    if (!scripts.some((s) => s.includes("standards-check"))) add("FAIL", VIC_RULE, "missing");
+    else {
+      const inHead = headMatch && /standards-check/i.test(headMatch[0]);
+      const bodyEndIdx = rawPageSrc.toLowerCase().lastIndexOf("</body>");
+      const nearBodyEnd = bodyEndIdx > -1 &&
+        /standards-check/i.test(rawPageSrc.slice(Math.max(0, bodyEndIdx - 300), bodyEndIdx));
+      add(inHead || nearBodyEnd ? "PASS" : "FAIL", VIC_RULE,
+        inHead || nearBodyEnd ? "" : "present, but not in <head> or the last item in <body>");
+    }
+
+    const ACCUM_RULE = "Accumulus (cloud) script on page, last in head";
     if (!scripts.some((s) => s.includes("lint.page"))) add("FAIL", ACCUM_RULE, "missing");
     else {
       // judge from the raw source: lint.page (and other tooling) injects
       // elements into the live head at runtime. Read the body regardless of
       // HTTP status — a 404 page serves real markup with a 404 code.
-      let rawHeadSrc = "";
-      try { rawHeadSrc = await (await fetch(location.href)).text(); } catch (e) {}
-      const headMatch = rawHeadSrc.match(/<head[\s\S]*?<\/head>/i);
       const headTags = headMatch
         ? (headMatch[0].match(/<(script|link|meta|title|style)[\s>]/gi) || [])
         : [];
