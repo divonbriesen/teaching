@@ -837,7 +837,7 @@
     panel.innerHTML = closeX + res
       .map((r) => r.level === "HEAD"
         ? "<br>&gt;&gt;&gt;&gt;&gt;&gt; <strong>" + esc(r.rule) + "</strong> &lt;&lt;&lt;&lt;&lt;&lt;"
-        : icons[r.level] + " " + esc(r.rule) + (r.detail ? ": " + esc(r.detail) : ""))
+        : icons[r.level] + " " + esc(r.rule) + (r.detail ? " &rarr; found: &quot;" + esc(r.detail) + "&quot;" : ""))
       .join("<br>") +
       "<br><br><strong>" + res.filter((r) => r.level === "PASS").length + " pass, " + fails + " fail</strong>" +
       "<br><br><em>This validator is BETA and may have minor issues - but it should be green BEFORE you submit your " +
