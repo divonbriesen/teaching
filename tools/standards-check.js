@@ -836,10 +836,13 @@
       'cursor:pointer;font:bold 14px/1 sans-serif;color:#666;padding:0 2px;">&#10005;</span>';
     panel.innerHTML = closeX + res
       .map((r) => r.level === "HEAD"
-        ? "<br>&gt;&gt;&gt;&gt;&gt;&gt; <strong>" + esc(r.rule) + "</strong>"
+        ? "<br>&gt;&gt;&gt;&gt;&gt;&gt; <strong>" + esc(r.rule) + "</strong> &lt;&lt;&lt;&lt;&lt;&lt;"
         : icons[r.level] + " " + esc(r.rule) + (r.detail ? ": " + esc(r.detail) : ""))
       .join("<br>") +
-      "<br><br><strong>" + res.filter((r) => r.level === "PASS").length + " pass, " + fails + " fail</strong>";
+      "<br><br><strong>" + res.filter((r) => r.level === "PASS").length + " pass, " + fails + " fail</strong>" +
+      "<br><br><em>This validator is BETA and may have minor issues - but it should be green BEFORE you submit your " +
+      "work. If there's something not working or that doesn't make sense, bring it to our attention ASAP, ideally " +
+      "on the class discussion forum.</em>";
     badge.addEventListener("click", (e) => {
       e.stopPropagation();
       if (fails) {
