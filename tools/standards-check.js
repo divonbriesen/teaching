@@ -417,6 +417,19 @@
     add(!padded.length ? "PASS" : "FAIL",
       "hrefs contain only the link (no adjacent spaces)", padded.slice(0, 5).join(", "));
 
+    // A divider glued onto the end/start of a link's own text makes it
+    // clickable — "Visit my Site! |" turns the "|" into part of the link
+    // instead of separator text between two links. The divider (and its
+    // surrounding space) belongs outside the <a>, as a sibling text node.
+    const DIVIDER_CHAR = /[|~•·—-]/;
+    const linkDividers = anchors.filter((a) => {
+      const t = (a.textContent || "").trim();
+      return t && (DIVIDER_CHAR.test(t[0]) || DIVIDER_CHAR.test(t[t.length - 1]));
+    });
+    add(!linkDividers.length ? "PASS" : "FAIL",
+      "divider is outside the link, not part of its clickable text",
+      linkDividers.slice(0, 3).map((a) => JSON.stringify((a.textContent || "").trim())).join(", "));
+
     // dividers need a space on both sides, everywhere on the page
     const bodyClone = d.body.cloneNode(true);
     bodyClone.querySelectorAll("script,style,pre,code,#standards-check-badge").forEach((el) => el.remove());
