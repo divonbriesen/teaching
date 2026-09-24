@@ -388,7 +388,10 @@
       // word ("Thomas McElroy's Aardvark" would pass it). Words in the
       // mascot phrase should share initials with the words in your name,
       // positionally — "Terrific Muskrat" matching "Thomas McElroy".
-      const splitWords = (s) => s.split(/[\s.]+/).map((w) => w.trim()).filter(Boolean);
+      // Split on hyphens too — a hyphenated surname ("McCrary-Roffis") is
+      // two separate name parts for initials-matching purposes, same as a
+      // hyphenated mascot phrase would be.
+      const splitWords = (s) => s.split(/[\s.-]+/).map((w) => w.trim()).filter(Boolean);
       // Any decorative symbol counts as the divider here (not just the
       // narrow |~•·—- set) — a student's h1 can legitimately use a star,
       // diamond, or other character as their divider of choice, and this
