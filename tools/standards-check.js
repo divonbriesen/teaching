@@ -200,10 +200,13 @@
     }
 
     const title = d.title.trim();
-    const dividerRe = site === "hobby" ? /[^\w\s'".,]/ : /[|~•·—-]/;
+    // Any decorative symbol counts as the divider (not just a narrow
+    // |~•·—- set) — a student's title can legitimately use a star, diamond,
+    // or other character, same as the mascot-name divider below.
+    const dividerRe = /[^\w\s'".,]/;
     if (!title) add("FAIL", "title element present");
-    else if (!dividerRe.test(title)) add("FAIL", "title has a divider" + (site === "hobby" ? " (unique symbol ok here)" : ""), "no divider: " + title);
-    else add("PASS", "title has a divider" + (site === "hobby" ? " (unique symbol ok here)" : ""), title);
+    else if (!dividerRe.test(title)) add("FAIL", "title has a divider", "no divider: " + title);
+    else add("PASS", "title has a divider", title);
 
     const sheets = [...d.querySelectorAll('link[rel~="stylesheet"]')].map((l) => l.getAttribute("href") || "");
     const localSheets = sheets.filter(isLocal);
@@ -407,12 +410,19 @@
         const initialsMatchFor = (nameWords, mascotWords) =>
           nameWords.length === mascotWords.length &&
           nameWords.every((w, i) => w[0] && mascotWords[i][0] && w[0].toLowerCase() === mascotWords[i][0].toLowerCase());
-        const combos = [
-          [splitWords(nameMascot[1], true), splitWords(nameMascot[2], true)],
-          [splitWords(nameMascot[1], true), splitWords(nameMascot[2], false)],
-          [splitWords(nameMascot[1], false), splitWords(nameMascot[2], true)],
-          [splitWords(nameMascot[1], false), splitWords(nameMascot[2], false)],
-        ];
+        // A middle initial ("Kaleb J. Weaver") splits into its own word but
+        // usually isn't reflected in the mascot phrase — try dropping any
+        // single-letter interior word as an alternate reading.
+        const dropMiddleInitials = (words) =>
+          words.length > 2 ? words.filter((w, i) => !(i > 0 && i < words.length - 1 && w.length === 1)) : words;
+        const combos = [];
+        for (const nameHyphen of [true, false]) {
+          for (const mascotHyphen of [true, false]) {
+            const nw = splitWords(nameMascot[1], nameHyphen);
+            const mw = splitWords(nameMascot[2], mascotHyphen);
+            combos.push([nw, mw], [dropMiddleInitials(nw), mw]);
+          }
+        }
         const initialsMatch = combos.some(([nw, mw]) => initialsMatchFor(nw, mw));
         add(initialsMatch ? "PASS" : "FAIL", "mascot's words share initials with your name's words",
           initialsMatch ? "" : nameMascot[1].trim() + " vs " + nameMascot[2].trim());
