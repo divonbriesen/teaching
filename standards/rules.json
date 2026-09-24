@@ -670,10 +670,14 @@
       "match_dirs": [
         "itis3135",
         "web115",
+        "web-115",
         "web215",
+        "web-215",
         "web250",
+        "web-250",
         "itsc1110",
-        "cis110"
+        "cis110",
+        "cis-110"
       ]
     },
     "hobby": {
