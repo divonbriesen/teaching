@@ -902,7 +902,14 @@
         }
         const pageRules = siteRules.pages && siteRules.pages[page];
         if (pageRules) {
-          add("HEAD", "PAGE RULES: " + page.toUpperCase());
+          // Name which course these page rules are for — the same
+          // "index.html" rules currently apply uniformly across every
+          // course directory (itis3135, web115, ...), so without this the
+          // header gives no clue which course's page you're looking at.
+          const courseDirsForHeader = (rules.sites.course && rules.sites.course.match_dirs) || [];
+          const pathSegsForHeader = location.pathname.toLowerCase().split("/").filter(Boolean);
+          const matchedCourseDir = pathSegsForHeader.find((seg) => courseDirsForHeader.includes(seg));
+          add("HEAD", "PAGE RULES: " + page.toLowerCase() + (matchedCourseDir ? " on " + matchedCourseDir : ""));
           applyChecks(pageRules.checks);
         }
         if (page === "introduction.html") {
