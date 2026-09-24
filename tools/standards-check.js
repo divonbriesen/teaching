@@ -21,7 +21,7 @@
     ? SCRIPT_SRC.replace(/[^/]+\/standards-check\.js.*$/, "standards/rules.json")
     : "standards/rules.json";
   const BANNED_FONTS = ["times new roman", "comic sans", "papyrus"];
-  const CREDIT_RE = /designed by|created by|a product of|brought to you by|production/i;
+  const CREDIT_RE = /designed by|created by|built by|a product of|brought to you by|production/i;
   const results = [];
   const add = (level, rule, detail) => results.push({ level, rule, detail: detail || "" });
 
