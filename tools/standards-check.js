@@ -388,10 +388,14 @@
       // word ("Thomas McElroy's Aardvark" would pass it). Words in the
       // mascot phrase should share initials with the words in your name,
       // positionally — "Terrific Muskrat" matching "Thomas McElroy".
-      // Split on hyphens too — a hyphenated surname ("McCrary-Roffis") is
-      // two separate name parts for initials-matching purposes, same as a
-      // hyphenated mascot phrase would be.
-      const splitWords = (s) => s.split(/[\s.-]+/).map((w) => w.trim()).filter(Boolean);
+      // A hyphen in a name is ambiguous: "McCrary-Roffis" is a compound
+      // surname (two initials-worthy parts), but "Al-Jafari" is a single
+      // Arabic-prefix surname (one part) — no single splitting rule gets
+      // both right. Try both interpretations (hyphen as a word break, and
+      // hyphen kept inside the word) for both sides and accept a match
+      // from any combination, rather than committing to one convention.
+      const splitWords = (s, hyphenBreaks) =>
+        s.split(hyphenBreaks ? /[\s.-]+/ : /[\s.]+/).map((w) => w.trim()).filter(Boolean);
       // Any decorative symbol counts as the divider here (not just the
       // narrow |~•·—- set) — a student's h1 can legitimately use a star,
       // diamond, or other character as their divider of choice, and this
@@ -400,10 +404,16 @@
       // job elsewhere).
       const nameMascot = h1Text.match(/^(.+?)['’]s\s+(.+?)\s*[^\w\s'".,]/);
       if (nameMascot) {
-        const nameWords = splitWords(nameMascot[1]);
-        const mascotWords = splitWords(nameMascot[2]);
-        const initialsMatch = nameWords.length === mascotWords.length &&
+        const initialsMatchFor = (nameWords, mascotWords) =>
+          nameWords.length === mascotWords.length &&
           nameWords.every((w, i) => w[0] && mascotWords[i][0] && w[0].toLowerCase() === mascotWords[i][0].toLowerCase());
+        const combos = [
+          [splitWords(nameMascot[1], true), splitWords(nameMascot[2], true)],
+          [splitWords(nameMascot[1], true), splitWords(nameMascot[2], false)],
+          [splitWords(nameMascot[1], false), splitWords(nameMascot[2], true)],
+          [splitWords(nameMascot[1], false), splitWords(nameMascot[2], false)],
+        ];
+        const initialsMatch = combos.some(([nw, mw]) => initialsMatchFor(nw, mw));
         add(initialsMatch ? "PASS" : "FAIL", "mascot's words share initials with your name's words",
           initialsMatch ? "" : nameMascot[1].trim() + " vs " + nameMascot[2].trim());
       } else {
