@@ -879,6 +879,21 @@
           else add("PASS", "page source holds only the include, not header/footer tags");
         }
         if (site === "course") {
+          // The canonical course directory name has no separators
+          // ("web115", not "web-115" or "web 115") — the checker itself
+          // recognizes hyphenated variants too (so a hyphenated dir still
+          // gets graded against the right rules instead of silently
+          // misclassifying), but the dash/space itself is still wrong and
+          // worth flagging so students converge on one real folder name.
+          const courseDirs = (rules.sites.course && rules.sites.course.match_dirs) || [];
+          const pathSegs = location.pathname.toLowerCase().split("/").filter(Boolean);
+          const matchedDir = pathSegs.find((seg) => courseDirs.includes(seg));
+          const DIR_RULE = "course directory name has no dashes or spaces";
+          if (matchedDir && /[-\s]/.test(matchedDir)) {
+            add("FAIL", DIR_RULE, "\"" + matchedDir + "\" should be \"" + matchedDir.replace(/[-\s]/g, "") + "\"");
+          } else if (matchedDir) {
+            add("PASS", DIR_RULE);
+          }
           const navs = [...d.querySelectorAll("nav")];
           const hasHobby = (n) => n && [...n.querySelectorAll("a")].some((a) => (a.getAttribute("href") || "").toLowerCase().includes("hobby"));
           if (hasHobby(navs[0])) add("FAIL", "Hobby link lives in the secondary nav (second <nav>)", "found in the primary nav");
@@ -898,7 +913,7 @@
           // link wrong, in the wrong place, with wrong labels, and still
           // glow green. CLT Web is UNCC-only (introductions.html: CPCC
           // students skip it), so drop it for the CPCC course dirs.
-          const CPCC_COURSE_DIRS = ["web115", "web215", "web250", "cis110"];
+          const CPCC_COURSE_DIRS = ["web115", "web-115", "web215", "web-215", "web250", "web-250", "cis110", "cis-110"];
           const lowPath = location.pathname.toLowerCase();
           const isCPCC = CPCC_COURSE_DIRS.some((dir) => lowPath.includes("/" + dir + "/"));
           const REQUIRED_LINKS = (isCPCC ? [] : [{ label: "CLT Web", domain: "webpages.charlotte.edu" }]).concat([
