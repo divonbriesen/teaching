@@ -389,7 +389,13 @@
       // mascot phrase should share initials with the words in your name,
       // positionally — "Terrific Muskrat" matching "Thomas McElroy".
       const splitWords = (s) => s.split(/[\s.]+/).map((w) => w.trim()).filter(Boolean);
-      const nameMascot = h1Text.match(/^(.+?)['’]s\s+(.+?)\s*[|~•·—-]/);
+      // Any decorative symbol counts as the divider here (not just the
+      // narrow |~•·—- set) — a student's h1 can legitimately use a star,
+      // diamond, or other character as their divider of choice, and this
+      // regex's job is just to split "name" from "mascot phrase", not to
+      // police which symbol was used (that's the general divider checks'
+      // job elsewhere).
+      const nameMascot = h1Text.match(/^(.+?)['’]s\s+(.+?)\s*[^\w\s'".,]/);
       if (nameMascot) {
         const nameWords = splitWords(nameMascot[1]);
         const mascotWords = splitWords(nameMascot[2]);
