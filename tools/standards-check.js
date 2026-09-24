@@ -764,7 +764,14 @@
         if (site === "personal") {
           const courseDirs = (rules.sites.course && rules.sites.course.match_dirs) || ["itis3135"];
           const firmRe = new RegExp((rules.sites.designfirm && rules.sites.designfirm.match_pattern) || "\\.[a-z]{2,24}/", "i");
-          const isCourseRef = (u) => courseDirs.some((dir) => u.toLowerCase().includes(dir)) && !firmRe.test(u);
+          // Test the firm-TLD exclusion against the URL's PATH only, not its
+          // hostname — an absolute course link on GitHub Pages
+          // ("https://student.github.io/web115") has ".io/" right in the
+          // domain, which the exclusion pattern matches just as readily as
+          // a real nested design-firm path ("itis3135/mystudio.co/"),
+          // wrongly disqualifying every absolute-URL course reference.
+          const stripHost = (u) => u.replace(/^https?:\/\/[^/]+/i, "");
+          const isCourseRef = (u) => courseDirs.some((dir) => u.toLowerCase().includes(dir)) && !firmRe.test(stripHost(u));
           const h1Texts = [...d.querySelectorAll("h1")].map((h) => h.textContent);
           const headsAll = h1Texts.concat([title]);
           // \s* between letters and digits: "ITIS 3135" (spaced) is just as
