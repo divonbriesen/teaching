@@ -717,6 +717,13 @@
                 add(okc ? "PASS" : "FAIL", rule, okc ? "" : "found " + n);
               } else if (c.type === "text" || c.type === "html") {
                 const hay = c.type === "text" ? docText : docHtml;
+                // soften_unless: a milestone that chains off an earlier one
+                // (e.g. M11 off M8A) isn't due until that earlier link shows
+                // up on the page — same idea as soften_if_none, one level up.
+                if (c.soften_unless && !new RegExp(c.soften_unless, "i").test(docHtml)) {
+                  add("INFO", rule, "not required until the previous milestone is up");
+                  continue;
+                }
                 const found = new RegExp(c.pattern, "i").test(hay);
                 const okc = found === want;
                 let detail = okc ? "" : (want ? "missing" : "found — remove it");

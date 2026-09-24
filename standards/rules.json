@@ -28,19 +28,22 @@
           "type": "html",
           "rule": "nav links the CRAP evaluations page (M8A on)",
           "pattern": "href=\"website_evaluations\\.html\"",
-          "present": true
+          "present": true,
+          "soften_unless": "href=\"survey\\.html\"|href=\"cards\\.html\"|href=\"inventory\\.html\"|href=\"documentation\\.html\"|href=\"product\\.html\""
         },
         {
           "type": "html",
           "rule": "primary nav links the Pictures/Images page (M11 on)",
           "pattern": "href=\"(pictures|images)\\.html\"",
-          "present": true
+          "present": true,
+          "soften_unless": "href=\"website_evaluations\\.html\""
         },
         {
           "type": "html",
           "rule": "primary nav links the Introduction Form page (M12 on)",
           "pattern": "href=\"(introduction_form|intro_form)\\.html\"",
-          "present": true
+          "present": true,
+          "soften_unless": "href=\"(pictures|images)\\.html\""
         }
       ],
       "pages": {
