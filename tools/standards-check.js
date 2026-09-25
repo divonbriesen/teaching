@@ -571,12 +571,15 @@
     const classId = (rawCounted.match(/\s(class|id)\s*=\s*["']/gi) || []).length;
     const inline = (rawCounted.match(/\sstyle\s*=\s*["']/gi) || []).length;
     // The comment has to actually talk about the thing, not just exist.
-    const explained = (re, what) => commentTexts.some((c) => re.test(c))
-      ? [true, commentSummary]
-      : [false, comments ? "no comment mentions " + what + " — " + commentSummary : commentSummary];
-    const [divOk, divWhy] = explained(/\b(divs?|spans?)\b/i, "div or span");
-    const [classOk, classWhy] = explained(/\b(class(es)?|ids?)\b/i, "class or id");
-    const [inlineOk, inlineWhy] = explained(/\b(inline|styles?|styling)\b/i, "inline style");
+    const NOTE_STRUCT = "Any use of divs/spans/classes requires a justifying comment, as you should only use these if you need them.";
+    const NOTE_INLINE = "Any inline style requires a justifying comment, as you should only use one if you need it.";
+    const explained = (re, what, note) => {
+      const hit = commentTexts.find((c) => re.test(c));
+      return hit ? [true, "e.g. " + JSON.stringify(hit)] : [false, "no comment mentions " + what + ". " + note];
+    };
+    const [divOk, divWhy] = explained(/\b(divs?|spans?)\b/i, "div or span", NOTE_STRUCT);
+    const [classOk, classWhy] = explained(/\b(class(es)?|ids?)\b/i, "class or id", NOTE_STRUCT);
+    const [inlineOk, inlineWhy] = explained(/\b(inline|styles?|styling)\b/i, "inline style", NOTE_INLINE);
     add(!divSpan || divOk ? "PASS" : "FAIL", "divs/spans explained in comments",
       divSpan ? divSpan + " used, " + divWhy : "none used");
     add(!classId || classOk ? "PASS" : "FAIL", "classes/ids explained in comments",
