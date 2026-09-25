@@ -274,15 +274,22 @@
       const hasLinkOverride = /(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(unconditionalCss);
       add(hasLinkOverride ? "PASS" : "FAIL", "link colors overridden (no blue/purple/green/red; visited matches normal)",
         hasLinkOverride ? "" : "no unconditional `a` selector in CSS (only inside @media, or missing entirely)");
-      const bw = [...css.matchAll(/:\s*(#000000|#000|#ffffff|#fff|black|white)\s*[;}]/gi)].map((m) => m[1]);
-      const cssCommentTexts = [...css.matchAll(/\/\*([\s\S]*?\S[\s\S]*?)\*\//g)].map((m) => m[1].trim());
-      if (!bw.length) add("PASS", "no black/white without a reason (CSS comment)");
-      else if (cssCommentTexts.length) {
-        const cssCommentSummary = "comment" + (cssCommentTexts.length > 1 ? "s" : "") + ": "
-          + cssCommentTexts.map((c) => JSON.stringify(c)).join("; ");
-        add("PASS", "no black/white without a reason (CSS comment)", [...new Set(bw)].join(", ") + " — " + cssCommentSummary);
-      }
-      else add("FAIL", "no black/white without a reason (CSS comment)", [...new Set(bw)].join(", ") + " — no CSS comments found");
+      // Each black/white value needs a comment on its own line or the line
+      // just above. Comments are blanked out (newlines kept) before matching
+      // so commented-out code doesn't count as a real use.
+      const BW_RULE = "no black/white without a reason (CSS comment)";
+      const cssLines = css.split("\n");
+      const cssNoComments = css.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "));
+      const bwUses = [...cssNoComments.matchAll(/:\s*(#000000|#000|#ffffff|#fff|black|white)\s*[;}]/gi)].map((m) => ({
+        value: m[1],
+        line: cssNoComments.slice(0, m.index).split("\n").length - 1,
+      }));
+      const hasComment = (i) => i >= 0 && /\/\*[\s\S]*?\*\/|\*\/\s*$/.test(cssLines[i] || "");
+      const unexplained = bwUses.filter((u) => !hasComment(u.line) && !hasComment(u.line - 1));
+      if (!bwUses.length) add("PASS", BW_RULE);
+      else if (!unexplained.length) add("PASS", BW_RULE, [...new Set(bwUses.map((u) => u.value))].join(", "));
+      else add("FAIL", BW_RULE, unexplained.slice(0, 5).map((u) => "`" + cssLines[u.line].trim().slice(0, 50) + "`").join(", ")
+        + " — add a comment on that line or the line above explaining why");
     } else add("FAIL", "page has CSS (linked or embedded)", "no CSS found at all");
 
     // h1-h3 should read as Title Case — either in the text itself, or via
