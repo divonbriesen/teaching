@@ -199,9 +199,9 @@
               "patterns": [
                 "VS Code",
                 "Emmet",
-                "Filezilla|SFTP",
                 "GitHub",
-                "Accumulus"
+                "Accumulus",
+                "Vicunadator"
               ]
             },
             {
@@ -210,11 +210,18 @@
               "patterns": [
                 "personal",
                 "course site",
-                "design",
+                "design"
+              ]
+            },
+            {
+              "type": "text_all",
+              "rule": "lists the later planned sites (crappy, whimsical, client project)",
+              "patterns": [
                 "crapp?y",
                 "whimsical|product company",
                 "client project"
-              ]
+              ],
+              "skip_for_dirs": ["web115", "web-115", "web215", "web-215", "web250", "web-250", "cis110", "cis-110"]
             },
             {
               "type": "element",
