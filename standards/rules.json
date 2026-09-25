@@ -61,8 +61,7 @@
               "type": "html",
               "rule": "nav links to About",
               "pattern": "href=\"about.html\"",
-              "present": true,
-              "skip_for_dirs": ["web115", "web-115", "web215", "web-215", "web250", "web-250", "cis110", "cis-110"]
+              "present": true
             },
             {
               "type": "element",
@@ -191,7 +190,8 @@
               "type": "html",
               "rule": "links to the course hub",
               "pattern": "divonbriesen\\.github\\.io/teaching",
-              "present": true
+              "present": true,
+              "skip_for_dirs": ["web115", "web-115", "web215", "web-215", "web250", "web-250", "cis110", "cis-110"]
             },
             {
               "type": "text_all",
