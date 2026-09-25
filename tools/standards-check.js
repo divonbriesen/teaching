@@ -1,6 +1,6 @@
 /* Standards self-check badge.
  *
- * Add to any page, linked from the teaching hub (do not copy it — a copy
+ * Add to any page, linked from the instructor's teaching site (do not copy it — a copy
  * goes stale as the standards evolve):
  *   <script src="https://divonbriesen.github.io/teaching/tools/standards-check.js" defer></script>
  *
@@ -133,7 +133,7 @@
     const h1Text = h1 ? h1.textContent.trim() : "";
     // Self-aware mode detection: rules.json declares which directories are
     // course sites (match_dirs); a pattern guess would misfire on things
-    // like web123 (the hub). data-mode still overrides.
+    // like web123 (the teaching site). data-mode still overrides.
     let rules = null;
     try { rules = await (await fetch(RULES_URL)).json(); } catch (e) { rules = null; }
     const SCRIPT_EL = d.querySelector('script[src*="standards-check"]');
@@ -337,7 +337,7 @@
     const scripts = [...d.querySelectorAll("script[src]")].map((s) => s.getAttribute("src") || "");
     const localScripts = scripts.filter(isLocal);
     // tools/ counts alongside scripts/: the shared validator lives in the
-    // teaching hub's tools/ folder, and the rule's point is that scripts sit
+    // instructor's teaching site's tools/ folder, and the rule's point is that scripts sit
     // in a folder rather than loose at the site root
     const inCodeFolder = (s) => s.includes("scripts/") || s.includes("tools/");
     const CODE_RULE = "scripts in scripts/ (or tools/)";

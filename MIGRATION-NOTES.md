@@ -59,16 +59,16 @@ there is no urgency — but it is the last copy of those records anywhere.
 pages built in past terms, which hardcode that URL in their HTML. Deleting it
 takes the badge off those pages — a cosmetic loss on old work, and one nobody
 minds after a couple more weeks. Web Standards no longer mentions the old URL,
-so anything built from now on links the teaching-hub copy. Safe to delete from
+so anything built from now on links the teaching-site copy. Safe to delete from
 early September 2026.
 
 ## Resolved
 
 **Instructor pages failing the course ruleset — fixed 2026-08-14.** Moving this
-content under `/itis3135/` made `match_dirs` classify the hub's own pages as
-student course sites, producing 8 failures on the hub against rules it was never
+content under `/itis3135/` made `match_dirs` classify the teaching site's own pages as
+student course sites, producing 8 failures on the teaching site against rules it was never
 meant to meet. All 39 pages now carry `data-mode="general"`, restoring the
-behavior they had at the web123 root (where the hub matched no site at all —
+behavior they had at the web123 root (where the teaching site matched no site at all —
 which is why `web123` is in the mascot `exclude_dirs`).
 
 Note for anyone reading the validator: `data-mode="general"` was documented in

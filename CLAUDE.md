@@ -19,7 +19,7 @@ git history is one combined stream across all courses.
 
 ## Structure
 
-- `index.html` — hub page, links to all 6 courses.
+- `index.html` — home page, links to all 6 courses.
 - `itis3135/` — pristine copy of web123's current content (ITIS 3135). Its own
   `scripts/standards-check.js` + `standards/rules.json` are untouched copies,
   identical behavior to web123 today (see open decision 2 below).
