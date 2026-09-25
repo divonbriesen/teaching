@@ -288,8 +288,16 @@
           if (sm) linkColors[sm[1] + "|" + (sm[2] ? sm[2].slice(1) : "base")] = normColor(cm[1]);
         }
       }
+      const BANNED_LINK_COLORS = new Set(["blue", "purple", "green", "red", "lime",
+        "#0000ee", "#551a8b", "#0000ff", "#ff0000", "#ee0000", "#008000", "#800080", "#00ff00"]);
       const visitedProblems = [];
       if (hasLinkOverride) {
+        for (const key of Object.keys(linkColors)) {
+          if (!BANNED_LINK_COLORS.has(linkColors[key])) continue;
+          const [prefix, state] = key.split("|");
+          visitedProblems.push((state === "base" ? prefix : prefix + ":" + state) + " is " + linkColors[key]
+            + " — pick your own color, not a default blue/purple/green/red");
+        }
         for (const key of Object.keys(linkColors)) {
           const [prefix, state] = key.split("|");
           if (state !== "visited") continue;
