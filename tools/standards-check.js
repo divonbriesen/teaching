@@ -740,6 +740,10 @@
           for (const c of checks || []) {
             const rule = c.rule || "rule";
             const want = c.present !== false;
+            // skip_for_dirs: this check doesn't apply to courses whose
+            // directory is listed (e.g. a page CPCC hasn't assigned yet)
+            const skipSegs = location.pathname.toLowerCase().split("/").filter(Boolean);
+            if ((c.skip_for_dirs || []).some((dir) => skipSegs.includes(dir))) continue;
             try {
               if (c.type === "element") {
                 const sel = c.within ? c.within + " " + c.tag : c.tag;
