@@ -561,11 +561,9 @@
     // count from the raw source: browsers/extensions (Edge features,
     // translators, dark-mode tools) inject styles, classes, and elements
     // into the live DOM that the student never wrote
-    let rawCounted = await getText(location.href);
-    for (const part of ["header", "footer"]) {
-      const frag = await getText("components/" + part + ".html");
-      if (frag) rawCounted += frag;
-    }
+    // header/footer component files are left out: the page can't carry a
+    // comment for markup that lives in a shared component.
+    const rawCounted = await getText(location.href);
     const divSpan = (rawCounted.match(/<(div|span)[\s>]/gi) || []).length
       - (rawCounted.match(/<div[^>]*data-include/gi) || []).length;
     const classId = (rawCounted.match(/\s(class|id)\s*=\s*["']/gi) || []).length;
