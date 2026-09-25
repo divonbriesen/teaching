@@ -188,7 +188,7 @@
             },
             {
               "type": "html",
-              "rule": "links to the course hub",
+              "rule": "links to the instructor's teaching site",
               "pattern": "divonbriesen\\.github\\.io/teaching",
               "present": true,
               "skip_for_dirs": ["web115", "web-115", "web215", "web-215", "web250", "web-250", "cis110", "cis-110"]
