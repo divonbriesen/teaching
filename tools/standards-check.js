@@ -272,8 +272,37 @@
       // default blue/purple showing at every other viewport width.
       const unconditionalCss = stripConditionalBlocks(css);
       const hasLinkOverride = /(^|[^-\w])a\s*[,{:]|a:link|a:visited/.test(unconditionalCss);
-      add(hasLinkOverride ? "PASS" : "FAIL", "link colors overridden (no blue/purple/green/red; visited matches normal)",
-        hasLinkOverride ? "" : "no unconditional `a` selector in CSS (only inside @media, or missing entirely)");
+      // For each link selector (a, nav a, ...) that sets a :visited color,
+      // compare it to the normal (base or :link) color.
+      const normColor = (c) => {
+        c = c.trim().toLowerCase().replace("!important", "").replace(/\s+/g, "");
+        const m = c.match(/^#([0-9a-f])([0-9a-f])([0-9a-f])$/);
+        return m ? "#" + m.slice(1).map((ch) => ch + ch).join("") : c;
+      };
+      const linkColors = {};
+      for (const [, selGroup, body] of unconditionalCss.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+        const cm = body.match(/(?<![-\w])color\s*:\s*([^;}]+)/i);
+        if (!cm) continue;
+        for (const sel of selGroup.split(",")) {
+          const sm = sel.trim().toLowerCase().match(/^(.*?\ba)(:link|:visited)?$/);
+          if (sm) linkColors[sm[1] + "|" + (sm[2] ? sm[2].slice(1) : "base")] = normColor(cm[1]);
+        }
+      }
+      const visitedProblems = [];
+      if (hasLinkOverride) {
+        for (const key of Object.keys(linkColors)) {
+          const [prefix, state] = key.split("|");
+          if (state !== "visited") continue;
+          const normal = linkColors[prefix + "|link"] || linkColors[prefix + "|base"];
+          if (normal !== linkColors[key]) {
+            visitedProblems.push(prefix + ":visited is " + linkColors[key] + ", normal is " + (normal || "the browser default"));
+          }
+        }
+      }
+      add(hasLinkOverride && !visitedProblems.length ? "PASS" : "FAIL",
+        "link colors overridden (no blue/purple/green/red; visited matches normal)",
+        !hasLinkOverride ? "no unconditional `a` selector in CSS (only inside @media, or missing entirely)"
+          : visitedProblems.slice(0, 3).join("; "));
       // Each black/white value needs a comment on its own line or the line
       // just above. Comments are blanked out (newlines kept) before matching
       // so commented-out code doesn't count as a real use.
