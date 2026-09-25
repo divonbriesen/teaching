@@ -200,9 +200,15 @@
                 "VS Code",
                 "Emmet",
                 "GitHub",
-                "Accumulus",
-                "Vicunadator"
+                "Accumulus"
               ]
+            },
+            {
+              "type": "text",
+              "rule": "names the Vicunadator",
+              "pattern": "Vicunadator",
+              "present": true,
+              "skip_for_dirs": ["itis3135"]
             },
             {
               "type": "text_all",
