@@ -284,12 +284,19 @@
         value: m[1],
         line: cssNoComments.slice(0, m.index).split("\n").length - 1,
       }));
-      const hasComment = (i) => i >= 0 && /\/\*[\s\S]*?\*\/|\*\/\s*$/.test(cssLines[i] || "");
-      const unexplained = bwUses.filter((u) => !hasComment(u.line) && !hasComment(u.line - 1));
+      const commentText = (i) => {
+        const l = cssLines[i] || "";
+        return [...l.matchAll(/\/\*(.*?)\*\//g)].map((m) => m[1]).concat(l.match(/^(.*?)\*\//) ? [RegExp.$1] : []).join(" ");
+      };
+      const namesColor = (u) => {
+        const re = /^(white|#fff|#ffffff)$/i.test(u.value) ? /white|#f{3,6}/i : /black|#0{3,6}/i;
+        return re.test(commentText(u.line) + " " + commentText(u.line - 1));
+      };
+      const unexplained = bwUses.filter((u) => !namesColor(u));
       if (!bwUses.length) add("PASS", BW_RULE);
       else if (!unexplained.length) add("PASS", BW_RULE, [...new Set(bwUses.map((u) => u.value))].join(", "));
       else add("FAIL", BW_RULE, unexplained.slice(0, 5).map((u) => "`" + cssLines[u.line].trim().slice(0, 50) + "`").join(", ")
-        + " — add a comment on that line or the line above explaining why");
+        + " — add a comment on that line or the line above that says why (mention white/black)");
     } else add("FAIL", "page has CSS (linked or embedded)", "no CSS found at all");
 
     // h1-h3 should read as Title Case — either in the text itself, or via
@@ -563,13 +570,20 @@
       - (rawCounted.match(/<div[^>]*data-include/gi) || []).length;
     const classId = (rawCounted.match(/\s(class|id)\s*=\s*["']/gi) || []).length;
     const inline = (rawCounted.match(/\sstyle\s*=\s*["']/gi) || []).length;
-    add(!divSpan || comments ? "PASS" : "FAIL", "divs/spans explained in comments",
-      divSpan ? divSpan + " used, " + commentSummary : "none used");
-    add(!classId || comments ? "PASS" : "FAIL", "classes/ids explained in comments",
-      classId ? classId + " used, " + commentSummary : "none used");
+    // The comment has to actually talk about the thing, not just exist.
+    const explained = (re, what) => commentTexts.some((c) => re.test(c))
+      ? [true, commentSummary]
+      : [false, comments ? "no comment mentions " + what + " — " + commentSummary : commentSummary];
+    const [divOk, divWhy] = explained(/\b(divs?|spans?)\b/i, "div or span");
+    const [classOk, classWhy] = explained(/\b(class(es)?|ids?)\b/i, "class or id");
+    const [inlineOk, inlineWhy] = explained(/\b(inline|styles?|styling)\b/i, "inline style");
+    add(!divSpan || divOk ? "PASS" : "FAIL", "divs/spans explained in comments",
+      divSpan ? divSpan + " used, " + divWhy : "none used");
+    add(!classId || classOk ? "PASS" : "FAIL", "classes/ids explained in comments",
+      classId ? classId + " used, " + classWhy : "none used");
     if (!inline) add("PASS", "inline styles (2 or fewer, explained in comments)", "none used");
-    else if (inline <= 2) add(comments ? "PASS" : "FAIL", "inline styles (2 or fewer, explained in comments)",
-      inline + ", " + commentSummary);
+    else if (inline <= 2) add(inlineOk ? "PASS" : "FAIL", "inline styles (2 or fewer, explained in comments)",
+      inline + ", " + inlineWhy);
     else add("FAIL", "inline styles (2 or fewer, explained in comments)", inline + " found");
 
     // hrefs must contain only the link — no adjacent spaces
