@@ -162,13 +162,25 @@
             },
             {
               "type": "text_all",
-              "rule": "contract language present",
+              "rule": "contract language present (agrees to the contract, names von Briesen, has a year)",
               "patterns": [
-                "agree to abide by the terms of the course contract",
+                "agree",
                 "von Briesen",
-                "Signed",
                 "20\\d\\d"
               ]
+            },
+            {
+              "type": "element",
+              "rule": "at least four paragraphs",
+              "tag": "p",
+              "within": "main",
+              "min": 4
+            },
+            {
+              "type": "html",
+              "rule": "last paragraph is Signed followed by your name/date in italics",
+              "pattern": "<p[^>]*>\\s*Signed\\b(?:(?!</p>)[\\s\\S])*?<(em|i)[\\s>](?:(?!</p>)[\\s\\S])*</p>(?![\\s\\S]*<p[\\s>][\\s\\S]*</main>)",
+              "present": true
             },
             {
               "type": "text",
