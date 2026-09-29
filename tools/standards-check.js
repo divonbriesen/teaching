@@ -506,7 +506,12 @@
       if (site !== "hobby") {
         const h2El = d.querySelector("h2");
         if (h2El) {
-          const parts = title.split(dividerRe);
+          // A divider must be padded by whitespace on both sides to count as
+          // a structural split point — otherwise trailing punctuation used
+          // as decoration (e.g. "Welcome!") gets mistaken for a divider and
+          // chops the page name down to nothing.
+          const splitDividerRe = new RegExp("\\s+(?:" + dividerRe.source + ")+\\s+");
+          const parts = title.split(splitDividerRe);
           const lastPart = parts[parts.length - 1].trim();
           const h2Text = h2El.textContent.trim();
           // "Welcome"/"Welcome!" is an accepted stand-in for "Home" on the
