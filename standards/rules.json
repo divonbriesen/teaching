@@ -810,7 +810,7 @@
         {
           "type": "css",
           "rule": "non-standard bullet style",
-          "pattern": "list-style",
+          "pattern": "list-style|::marker|li\\s*::?before",
           "present": true
         },
         {
