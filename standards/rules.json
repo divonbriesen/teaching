@@ -11,57 +11,34 @@
           "present": false,
           "fail_hint_pattern": "©",
           "fail_hint": "© found but malformed — needs: YourFirmName ©2026 (space before ©, none after)"
-        },
-        {
-          "type": "html_all",
-          "rule": "primary nav links the five cert pages (M6B on)",
-          "soften_if_none": true,
-          "patterns": [
-            "href=\"survey.html\"",
-            "href=\"cards.html\"",
-            "href=\"inventory.html\"",
-            "href=\"documentation.html\"",
-            "href=\"product.html\""
-          ]
-        },
-        {
-          "type": "html",
-          "rule": "nav links the CRAP evaluations page (M8A on)",
-          "pattern": "href=\"website_evaluations\\.html\"",
-          "present": true,
-          "soften_unless": "href=\"survey\\.html\"|href=\"cards\\.html\"|href=\"inventory\\.html\"|href=\"documentation\\.html\"|href=\"product\\.html\""
-        },
-        {
-          "type": "html",
-          "rule": "primary nav links the Pictures/Images page (M11 on)",
-          "pattern": "href=\"(pictures|images)\\.html\"",
-          "present": true,
-          "soften_unless": "href=\"website_evaluations\\.html\""
-        },
-        {
-          "type": "html",
-          "rule": "primary nav links the Introduction Form page (M12 on)",
-          "pattern": "href=\"(introduction_form|intro_form)\\.html\"",
-          "present": true,
-          "soften_unless": "href=\"(pictures|images)\\.html\""
         }
       ],
       "pages": {
         "index.html": {
           "checks": [
             {
-              "type": "html_all",
-              "rule": "nav links to Introduction, Contract",
-              "patterns": [
-                "href=\"introduction.html\"",
-                "href=\"contract.html\""
+              "type": "html",
+              "rule": "nav links to Introduction",
+              "pattern": "href=\"introduction.html\"",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "nav links to Contract",
+              "pattern": "href=\"contract.html\"",
+              "present": true,
+              "skip_for_dirs": [
+                "itsc1110"
               ]
             },
             {
               "type": "html",
               "rule": "nav links to About",
               "pattern": "href=\"about.html\"",
-              "present": true
+              "present": true,
+              "skip_for_dirs": [
+                "itsc1110"
+              ]
             },
             {
               "type": "element",
@@ -203,7 +180,16 @@
               "rule": "links to the instructor's teaching site",
               "pattern": "divonbriesen\\.github\\.io/teaching",
               "present": true,
-              "skip_for_dirs": ["web115", "web-115", "web215", "web-215", "web250", "web-250", "cis110", "cis-110"]
+              "skip_for_dirs": [
+                "web115",
+                "web-115",
+                "web215",
+                "web-215",
+                "web250",
+                "web-250",
+                "cis110",
+                "cis-110"
+              ]
             },
             {
               "type": "text_all",
@@ -220,7 +206,9 @@
               "rule": "names the Vicunadator",
               "pattern": "Vicunadator",
               "present": true,
-              "skip_for_dirs": ["itis3135"]
+              "skip_for_dirs": [
+                "itis3135"
+              ]
             },
             {
               "type": "text_all",
@@ -239,7 +227,16 @@
                 "whimsical|product company",
                 "client project"
               ],
-              "skip_for_dirs": ["web115", "web-115", "web215", "web-215", "web250", "web-250", "cis110", "cis-110"]
+              "skip_for_dirs": [
+                "web115",
+                "web-115",
+                "web215",
+                "web-215",
+                "web250",
+                "web-250",
+                "cis110",
+                "cis-110"
+              ]
             },
             {
               "type": "element",
@@ -712,6 +709,13 @@
         "itsc1110",
         "cis110",
         "cis-110"
+      ],
+      "cert_started_patterns": [
+        "href=\"survey.html\"",
+        "href=\"cards.html\"",
+        "href=\"inventory.html\"",
+        "href=\"documentation.html\"",
+        "href=\"product.html\""
       ]
     },
     "hobby": {

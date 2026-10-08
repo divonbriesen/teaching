@@ -748,13 +748,13 @@
       const footHtml = footer.innerHTML;
       if (course) {
         add(CREDIT_RE.test(footer.textContent) ? "PASS" : "FAIL", "footer has designer credit");
-        // Gated on the same signal as the cert-page nav links (rules.json's
-        // soften_if_none rule): no cert pages started yet means there's
-        // nothing to certify in, so don't fail the footer line for it.
-        const certRule = rules && rules.sites && rules.sites.course &&
-          (rules.sites.course.site_checks || []).find((c) => c.soften_if_none);
-        const certStarted = !certRule || (certRule.patterns || [])
-          .some((p) => new RegExp(p, "i").test(d.documentElement.outerHTML));
+        // Gated on rules.json's cert_started_patterns: no cert pages linked
+        // yet means there's nothing to certify in, so don't fail the footer
+        // line for it.
+        const certPatterns = (rules && rules.sites && rules.sites.course &&
+          rules.sites.course.cert_started_patterns) || [];
+        const certStarted = !certPatterns.length ||
+          certPatterns.some((p) => new RegExp(p, "i").test(d.documentElement.outerHTML));
         if (!certStarted) {
           add("INFO", "footer 'Certified in ...' line", "not required until the cert pages are up");
         } else {
