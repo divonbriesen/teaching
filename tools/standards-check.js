@@ -247,15 +247,32 @@
       // Presence check, not a strict numeric threshold: a max-width without
       // centering just leaves content stuck to one side, so require both
       // together rather than crediting a lone max-width that isn't wired up.
-      const bodyCss = [...css.matchAll(/\bbody\b[^{]*\{([^}]*)\}/gi)].map((m) => m[1]).join(" ");
-      const hasMaxWidth = /max-width\s*:/i.test(bodyCss);
-      const hasAutoMargin = /margin(-inline)?\s*:\s*[^;]*\bauto\b/i.test(bodyCss) ||
-        (/margin-left\s*:\s*auto/i.test(bodyCss) && /margin-right\s*:\s*auto/i.test(bodyCss));
-      add(hasMaxWidth && hasAutoMargin ? "PASS" : "FAIL",
-        "body has a max-width and is centered (margin: auto)",
-        hasMaxWidth && hasAutoMargin ? ""
-          : !hasMaxWidth ? "no max-width on body"
-          : "max-width set but not centered — add margin: 0 auto (or margin-inline: auto)");
+      // What the stylesheet gives a tag: ok / no max-width / not centered /
+      // nothing. Rules that target the tag directly (including grouped
+      // selectors like `main, header, footer`) are combined, since max-width
+      // and margin may sit in separate rules.
+      const centering = (tag) => {
+        const tagRe = new RegExp("^" + tag + "(?:[.#\\[:][^\\s>+~]*)*$", "i");
+        // comments out first, or a comment right before a rule becomes part
+        // of its "selector" and the tag never matches
+        const cssNoComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
+        const decls = [...cssNoComments.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
+          .filter((m) => m[1].split(",").some((part) => tagRe.test(part.trim())))
+          .map((m) => m[2]).join(" ");
+        const hasMw = /max-width\s*:/i.test(decls);
+        const hasAuto = /margin(-inline)?\s*:\s*[^;]*\bauto\b/i.test(decls) ||
+          (/margin-left\s*:\s*auto/i.test(decls) && /margin-right\s*:\s*auto/i.test(decls));
+        if (hasMw && hasAuto) return "ok";
+        if (hasMw) return "not centered";
+        return hasAuto ? "no max-width" : "nothing";
+      };
+      const mwStates = {};
+      for (const t of ["body", "header", "main", "footer"]) mwStates[t] = centering(t);
+      const mwOk = mwStates.body === "ok" || ["header", "main", "footer"].every((t) => mwStates[t] === "ok");
+      add(mwOk ? "PASS" : "FAIL",
+        "max-width and margin: auto on body, or on header, main and footer",
+        mwOk ? "" : "set max-width and margin: auto on <body>, OR on all three of <header>, <main>, and " +
+          "<footer>. Right now — " + Object.entries(mwStates).map(([t, st]) => t + ": " + st).join("; "));
     }
 
     if (css) {
@@ -573,10 +590,12 @@
                 "each h2's content in its own <section> or <article>");
     }
 
-    // The favicon never counts as the page image, however it's included.
-    const favHref = icon ? icon.getAttribute("href") || "" : "";
+    // The favicon link itself never counts as the page image. A visible <img>
+    // does count even when it's the same file as the favicon (a logo used as
+    // both is a real header image) — only a file literally named "favicon" is
+    // treated as the favicon showing up in the page body.
     const imgs = [...d.querySelectorAll("img")].map((i) => i.getAttribute("src") || "")
-      .filter((s) => s !== favHref && !s.toLowerCase().includes("favicon")
+      .filter((s) => !s.toLowerCase().includes("favicon")
         && !s.includes("lint.page")); // Accumulus injects its own imgs — not the student's
     if (!imgs.length && !d.querySelector("svg")) add("FAIL", "at least one image (favicon doesn't count)");
     else add("PASS", "at least one image (favicon doesn't count)", imgs.slice(0, 3).map(short).join(", ") || "inline svg");
