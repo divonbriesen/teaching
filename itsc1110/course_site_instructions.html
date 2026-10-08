@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D.I. von Briesen's Dapper Innovative Vicuña Buck | ITSC1110 | Course Site Instructions</title>
+    <link rel="stylesheet" href="../styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- classes below are styling hooks with no semantic element available:
+         site-header/site-footer match the shared stylesheet's landmark rules,
+         home-logo and home-logo-end size the two facing vicuñas, note boxes a
+         rule or caveat, and mirrored flips the second camel so the pair faces
+         inward -->
+    <header class="site-header">
+      <h1>
+        <a href="../index.html" class="home-logo"
+          ><img
+            src="../images/vicuna.svg"
+            alt="Camelid Software vicuña logo — instructor's teaching site"
+            width="40"
+            height="40"
+        /></a>
+        D.I. von Briesen's Dapper Innovative Vicuña Buck | ITSC1110
+        <img
+          class="home-logo-end"
+          src="../images/vicuna.svg"
+          alt=""
+          width="40"
+          height="40"
+        />
+      </h1>
+      <p class="tagline"><em>Introduction to Computer Science Principles</em></p>
+      <nav aria-label="ITSC1110">
+        <a href="index.html">Home</a>
+        <a href="assignments.html">Assignments</a>
+        <a href="faq.html">FAQ</a>
+        <a href="../index.html">Teaching</a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Course Site Instructions</h2>
+
+      <p>ITSC1110 &bull; Introduction to Computer Science Principles</p>
+
+      <p>
+        Your course site lives in a folder inside your UNC Charlotte webspace:
+        webpages.charlotte.edu/youruserid/itsc1110/. It's small on purpose —
+        three pages that share one header and one footer. Your personal
+        <a href="home_page_instructions.html">home page</a> sits one level
+        above it and links down to it.
+      </p>
+
+      <section>
+        <h3>The Folder</h3>
+        <p>
+          Name it <strong>itsc1110</strong> — all lowercase, no dashes, no
+          spaces. The checker looks for exactly that. Inside:
+        </p>
+        <ul>
+          <li><strong>index.html</strong> — the course home page</li>
+          <li><strong>introduction.html</strong> — your introduction</li>
+          <li><strong>ai_introduction.html</strong> — your AI introduction</li>
+          <li>
+            <strong>components</strong> — header.html and footer.html, the
+            shared pieces
+          </li>
+          <li>
+            <strong>scripts</strong>, <strong>styles</strong>, and
+            <strong>images</strong> — the include script, your stylesheet
+            (named default.css), and your pictures, each in its own folder
+          </li>
+        </ul>
+        <p>
+          Those three pages are the whole site. You won't add others in this
+          assignment.
+        </p>
+      </section>
+
+      <section>
+        <h3>Common Headers and Footers</h3>
+        <p>
+          Professional sites don't copy the same header and footer into every
+          page — they reuse one copy. Update it once and every page changes
+          with it.
+        </p>
+        <ol>
+          <li>
+            Get Paul Browne's HTMLInclude script (HTMLInclude.min.js from
+            GitHub) and put it in your scripts folder.
+          </li>
+          <li>
+            Create the <strong>components</strong> folder with
+            <strong>header.html</strong> and <strong>footer.html</strong>.
+            Put your header and footer in them —
+            <strong>including the header and footer elements themselves</strong>.
+            The header holds your site name and a navigation that links to all
+            three pages.
+          </li>
+          <li>
+            In each page, replace the whole header and footer with the include
+            element from the HTMLInclude instructions, and add the script
+            element at the bottom of the page.
+          </li>
+        </ol>
+        <blockquote class="note">
+          <p>
+            View the source of one of your pages. If you can see a header or
+            footer element in the page file itself, it's in the wrong place —
+            the page should hold only the include.
+          </p>
+        </blockquote>
+      </section>
+
+      <section>
+        <h3>The Three Pages</h3>
+        <ul>
+          <li>
+            <strong>Home</strong> (index.html) — welcomes a visitor, says what
+            this site is, and points to the other two pages.
+          </li>
+          <li>
+            <strong>Introduction</strong> (introduction.html) — your Shared
+            Introduction from the course Google Doc, moved onto your own page.
+            It follows the
+            <a href="../web-standards.html#introduction-webpage"
+              >Introduction Webpage Standards</a
+            >, minus the links line.
+          </li>
+          <li>
+            <strong>AI Introduction</strong> (ai_introduction.html) — described
+            below.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>The AI Introduction</h3>
+        <p>
+          Give an AI tool the facts about you, ask it to write your
+          introduction, and publish the result — then be honest about how it
+          did. The page has three parts, in this order:
+        </p>
+        <ol>
+          <li>
+            <strong>The AI's introduction</strong>, exactly as it wrote it.
+            Don't edit it. Use UNC Charlotte's data-protected Gemini or
+            Copilot, and give it only what you'd be comfortable putting on a
+            public webpage — this page is public.
+          </li>
+          <li>
+            <strong>Your comparison</strong>, a short paragraph or two beside
+            your own introduction: what it got right, what it got wrong or
+            invented, what it missed, and what you would never say that way.
+          </li>
+          <li>
+            <strong>Your disclosure</strong>: the tool you used, the prompt
+            you gave it, and the acknowledgment statement from the
+            <a href="../ai-policy.html">AI Policy</a>.
+          </li>
+        </ol>
+      </section>
+
+      <section>
+        <h3>What We Check</h3>
+        <ul>
+          <li>
+            The folder is named itsc1110, and holds index.html,
+            introduction.html, and ai_introduction.html.
+          </li>
+          <li>
+            components/header.html and components/footer.html exist and
+            contain the header and footer elements, and your page source holds
+            only the include.
+          </li>
+          <li>
+            Every page passes Accumulus and the
+            <a href="../validation.html">Vicunadator</a>, and the
+            <a href="../web-standards.html">Web Standards</a> apply.
+          </li>
+          <li>
+            The AI Introduction has all three parts. That one we read
+            ourselves — no checker can tell an honest comparison from a
+            hurried one.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Submitting</h3>
+        <p>
+          Submit the address of your course site — webpages.charlotte.edu/youruserid/itsc1110/,
+          without index.html on the end. Canvas carries the due date and the
+          point value.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <span class="mirrored">&#128042;</span> This site is a Camelid Software
+        Production, who'd-wanna-copy-this 2026 &#128043;
+      </p>
+      <p>
+        <em
+          >If you keep on doin' what you've been doin' yer gonna keep on
+          gettin' what you've been gettin!</em
+        >
+      </p>
+    </footer>
+    <script src="../tools/standards-check.js" defer data-mode="general"></script>
+  </body>
+</html>
