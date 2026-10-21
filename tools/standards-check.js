@@ -24,6 +24,20 @@
   // "Designed by", plus the variants a student reaches for: "designed and developed
   // by", "designed & illustrated by", "made by", "crafted by".
   const CREDIT_RE = /(?:designed|created|built|developed|made|crafted)(?:\s+(?:and|&)\s+\w+)?\s+by|a product of|brought to you by|production/i;
+  // A credit phrase counts as-is. Failing that, a bare "by" counts when what
+  // follows it, within a few words, holds a part of the student's own name
+  // (from the "Name's Mascot" h1) — "by Martinez Digital Designs". A firm name
+  // with no "by" in front of it doesn't say it was made BY that firm, and
+  // "powered by GitHub" says nothing about the student.
+  const hasDesignerCredit = (footerText, h1) => {
+    const text = footerText.replace(/\s+/g, " ");
+    if (CREDIT_RE.test(text)) return true;
+    const m = (h1 || "").match(/^(.+?)(?:['’]s|(?<=s)['’])\s+(.+?)(?:\s*[^\w\s'".,-]|\s+-+\s)/);
+    if (!m) return false;
+    const parts = m[1].split(/[\s.\-]+/).filter((w) => w.length >= 3);
+    return parts.some((part) =>
+      new RegExp("\\bby\\s+(?:\\S+\\s+){0,4}?\\S*" + part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(text));
+  };
   const results = [];
   const add = (level, rule, detail) => results.push({ level, rule, detail: detail || "" });
 
@@ -773,8 +787,9 @@
     if (footer) {
       const footHtml = footer.innerHTML;
       if (course) {
-        add(CREDIT_RE.test(footer.textContent) ? "PASS" : "FAIL", "footer has designer credit",
-          CREDIT_RE.test(footer.textContent) ? "" : 'no credit phrase in the footer, e.g. "Designed by Your Firm Name"');
+        const creditOk = hasDesignerCredit(footer.textContent, h1Text);
+        add(creditOk ? "PASS" : "FAIL", "footer has designer credit",
+          creditOk ? "" : 'no credit in the footer — put "by" before your firm name, e.g. "Designed by Your Firm Name"');
         // Gated on rules.json's cert_started_patterns: no cert pages linked
         // yet means there's nothing to certify in, so don't fail the footer
         // line for it.
