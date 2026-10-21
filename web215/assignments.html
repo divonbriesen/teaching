@@ -16,7 +16,8 @@
          site-header/site-footer match the shared stylesheet's landmark rules,
          home-logo and home-logo-end size the two facing vicuñas, note boxes a
          rule or caveat, and mirrored flips the second camel so the pair faces
-         inward -->
+         inward. The ids on the h2, sections, and tutorial-proof note are anchor
+         targets for the contents list and the back-to-top links -->
     <header class="site-header">
       <h1>
         <a href="../index.html" class="home-logo"
@@ -45,14 +46,15 @@
     </header>
 
     <main>
-      <h2>Assignments</h2>
+      <h2 id="top">Assignments</h2>
 
       <p>WEB215 &bull; Advanced Markup and Scripting</p>
 
       <p>
         The modules in order. Module numbers match the week numbers on the
         <a href="../schedule.html">Schedule</a>, and work is due by the end of
-        its week. Your LMS carries the exact dates and point values.
+        its week. Your LMS carries the exact dates and point values. Each
+        assignment below has its own anchor, and a link back to the top.
       </p>
 
       <blockquote class="note">
@@ -66,115 +68,870 @@
       <h3>Every Module, Every Week</h3>
       <ul>
         <li><strong><a href="../discussion-boards.html">Class Discussion</a></strong> — read always, post when you've something</li>
-        <li><strong>Journal</strong> — one entry per module, plus a reply to a classmate</li>
-        <li><strong>Work Notes / Log</strong> — date, times, total, and what you did</li>
+        <li><strong><a href="../journals.html">Journal</a></strong> — one entry per module, plus a reply to a classmate</li>
+        <li><strong><a href="../work-logs.html">Work Notes / Log</a></strong> — date, times, total, and what you did</li>
       </ul>
 
-      <h3>M00 — Start Here</h3>
-      <ul>
-        <li>Syllabus, assignment guidelines, and how grading works</li>
-        <li>Getting started with GitHub</li>
-        <li>Netiquette, journaling, and the review checklist</li>
-        <li>First discussion post, first <a href="../journals.html">journal</a> entry, first <a href="../work-logs.html">work log</a></li>
-      </ul>
+      <h3>Contents</h3>
+        <ul>
+          <li><a href="#m00">M00 — Start Here</a></li>
+          <li><a href="#m01">M01 — Site Standing Up</a>
+          <ul>
+            <li><a href="#profile-image">Profile image</a></li>
+            <li><a href="#navigate-course">Navigate the course</a></li>
+            <li><a href="#email-alerts">Email alerts</a> <strong>(NPR)</strong></li>
+            <li><a href="#introductions">Introductions</a></li>
+            <li><a href="#gh-home-pages">GitHub home pages</a></li>
+            <li><a href="#course-template">Course webpage template</a></li>
+            <li><a href="#home-contract-introduction">Home, contract, introduction, and about pages</a></li>
+            <li><a href="#codecademy-basics">Codecademy: the six basics</a> <strong>(NPR)</strong></li>
+          </ul>
+          </li>
+          <li><a href="#m02">M02 — Intermediate JavaScript</a>
+          <ul>
+            <li><a href="#intermediate-javascript">Codecademy: Learn Intermediate JavaScript</a> <strong>(NPR)</strong></li>
+          </ul>
+          </li>
+          <li><a href="#m03">M03 — Meet the Stack, One Piece at a Time</a>
+          <ul>
+            <li><a href="#terminal-tutor">Learn the command line at Terminal Tutor</a> <strong>(NPR)</strong></li>
+            <li><a href="#mongodb">Codecademy: Learn MongoDB</a> <strong>(NPR)</strong></li>
+            <li><a href="#react-intro">Codecademy: Learn React, Introduction</a> <strong>(NPR)</strong></li>
+            <li><a href="#nodejs">Codecademy: Learn Node.js</a> <strong>(NPR)</strong></li>
+            <li><a href="#express-bonus">Bonus: Express tutorial</a> <strong>(NPR)</strong></li>
+            <li><a href="#mern-tutorial">Find and complete a MERN tutorial</a></li>
+          </ul>
+          </li>
+          <li><a href="#m05">M05 — Certifications and Components</a>
+          <ul>
+            <li><a href="#fcc-rwd">freeCodeCamp: Responsive Web Design certification</a> <strong>(NPR)</strong></li>
+            <li><a href="#fcc-js">freeCodeCamp: JavaScript Data Structures and Algorithms certification</a> <strong>(NPR)</strong></li>
+            <li><a href="#components">Including dynamic header and footer components</a> <strong>(NPR)</strong></li>
+          </ul>
+          </li>
+          <li><a href="#m06">M06 — CSS and Types</a>
+          <ul>
+            <li><a href="#intermediate-css">Codecademy: Learn Intermediate CSS</a> <strong>(NPR)</strong></li>
+            <li><a href="#typescript">Codecademy: Learn TypeScript</a> <strong>(NPR)</strong></li>
+          </ul>
+          </li>
+          <li><a href="#m07">M07 — Routing and Persistence</a>
+          <ul>
+            <li><a href="#react-router">Codecademy: Learn React Router</a> <strong>(NPR)</strong></li>
+            <li><a href="#node-sqlite">Codecademy: Learn Node SQLite</a> <strong>(NPR)</strong></li>
+          </ul>
+          </li>
+          <li><a href="#m08">M08 — Deploy What You Built</a>
+          <ul>
+            <li><a href="#deploy-mern">Deploy your MERN tutorial</a></li>
+            <li><a href="#course-feedback">Course feedback</a></li>
+          </ul>
+          </li>
+          <li><a href="#m09">M09 — Describe Your Project</a>
+          <ul>
+            <li><a href="#describe-project">Describe your project</a></li>
+          </ul>
+          </li>
+          <li><a href="#m10">M10 — Deploy an App Skeleton With a Login Page</a>
+          <ul>
+            <li><a href="#skeleton-login">Deploy an app skeleton with a login page</a></li>
+          </ul>
+          </li>
+          <li><a href="#m11">M11 — Populate Data and Get It Displayed</a>
+          <ul>
+            <li><a href="#populate-data">Populate data and get it displayed</a></li>
+          </ul>
+          </li>
+          <li><a href="#m13">M13 — App Create and Insert</a>
+          <ul>
+            <li><a href="#app-create">App create and insert</a></li>
+          </ul>
+          </li>
+          <li><a href="#m15">M15 — App Update and Delete</a>
+          <ul>
+            <li><a href="#app-update-delete">App update and delete</a></li>
+          </ul>
+          </li>
+          <li><a href="#m16">M16 — Wrap Up</a>
+          <ul>
+            <li><a href="#project-wrapup">Project wrap-up</a></li>
+            <li><a href="#self-evaluation">Self evaluation, plus Start, Stop, Continue</a> <strong>(NPR)</strong></li>
+          </ul>
+          </li>
+          <li><a href="#m17">M17 — Finalize Your Grade</a>
+          </li>
+          <li><a href="#bonus">Bonus</a>
+          <ul>
+            <li><a href="#brand">Your own brand</a></li>
+            <li><a href="#round-trip-form">Round trip introduction form</a></li>
+            <li><a href="#cookies">Cookies — make, bake, and take</a></li>
+          </ul>
+          </li>
+        </ul>
 
-      <h3>M01 — Site Standing Up</h3>
-      <ul>
-        <li>Profile image</li>
-        <li>Navigate the course</li>
-        <li>Email alerts <strong>(NPR)</strong></li>
-        <li><a href="../introductions.html">Introductions</a></li>
-        <li>GitHub home pages</li>
-        <li>Course webpage template</li>
-        <li>Home, contract, and <a href="../web-standards.html#introduction-webpage">introduction</a> pages</li>
-        <li>Codecademy: the six basics <strong>(NPR)</strong></li>
-      </ul>
+      <section id="tutorial-proof">
+        <h3>Proof for Tutorials</h3>
+        <p>
+          Every tutorial in this course is submitted the same way. Post a link to
+          your profile on the platform, plus a screenshot, <strong>embedded</strong>
+          rather than attached, showing the 100% completion bar and your id, login,
+          or name in the same image. Crop it so it's legible. Each tutorial below
+          that says "the usual proof" means this.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
 
-      <h3>M02 — Intermediate JavaScript</h3>
-      <p>Codecademy: Learn Intermediate JavaScript <strong>(NPR)</strong>.</p>
+      <section id="m00">
+        <h3>M00 — Start Here</h3>
+        <ul>
+          <li>Syllabus, assignment guidelines, and how grading works</li>
+          <li>Getting started with <a href="../itis3135/github_setup_instructions.html">GitHub</a></li>
+          <li>Netiquette, journaling, and the <a href="../peer-reviews.html">review checklist</a></li>
+          <li>First discussion post, first <a href="../journals.html">journal</a> entry, first <a href="../work-logs.html">work log</a></li>
+        </ul>
+        <p><a href="#top">Back to top</a></p>
+      </section>
 
-      <h3>M03 — Meet the Stack, One Piece at a Time</h3>
-      <ul>
-        <li>Learn the command line at Terminal Tutor <strong>(NPR)</strong></li>
-        <li>Codecademy: Learn MongoDB <strong>(NPR, about 5 hours)</strong></li>
-        <li>Codecademy: Learn React, Introduction <strong>(NPR, about 6 hours)</strong></li>
-        <li>Codecademy: Learn Node.js <strong>(NPR, about 5 hours)</strong></li>
-        <li>Bonus: Express tutorial <strong>(NPR, about 5 hours)</strong></li>
-        <li>Find and complete a MERN tutorial — the one that puts it together</li>
-      </ul>
+      <section id="m01">
+        <h3>M01 — Site Standing Up</h3>
+      <section id="profile-image">
+        <h4>Profile Image</h4>
+        <p>
+          Change your picture in the LMS: click your name (top-right), choose
+          Profile, then Change Picture. Images over 1 MB won't upload, so resize
+          or crop anything straight off a modern camera first.
+        </p>
+        <ul>
+          <li>Clear and cropped proportionally to the display size — width equals height, 100 &times; 100 at most, smaller in some places.</li>
+          <li>A headshot is best, but any image will do. A simple picture with good contrast between the subject and the background works best.</li>
+          <li>Open Roster, then Classlist, and look at your classmates' pictures. If you can't tell what one is, or wouldn't recognize a face, it isn't good. Check yours the same way, pretending you don't know what it is — if you can't tell, do it again.</li>
+        </ul>
+        <p>
+          Submit a post saying you've done it; your visible profile is the
+          evidence. An image that's already there counts if it isn't the default
+          and it meets these rules. Then peer review two classmates with
+          meaningful feedback — for a bonus, help them fix something or point
+          them to a good resource.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="navigate-course">
+        <h4>Navigate the Course</h4>
+        <p>The LMS course has three kinds of navigation:</p>
+        <ul>
+          <li>A top menu with the logo and drop-downs, called the <strong>mini-bar</strong>.</li>
+          <li>A secondary menu, the <strong>menu bar</strong>.</li>
+          <li>A set of <strong>widgets</strong> on the first page: a top row, a bottom row, and two columns in between. Each does something different, and some are custom built. Widgets can have controls of their own.</li>
+        </ul>
+        <p>
+          Pick six items from anywhere in the course — a menu, an item in a
+          drop-down, a widget. Find at least one you think is critical and one
+          you think is useless. Post a <strong>numbered</strong> list of the six,
+          explaining each one's features and purpose and how you might or might
+          not use it.
+        </p>
+        <p>
+          Tip: Ctrl-Enter starts a new line inside the same bullet. Never make a
+          sublist of one item. Read your classmates' posts first so you don't
+          duplicate theirs — a good time to do your two peer reviews too.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="email-alerts">
+        <h4>Email Alerts</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>
+          Open your notification settings: your name (top-right), then
+          Notifications, then scroll down and check the <strong>two email
+          boxes for both types of announcements</strong>. Take a screenshot and
+          embed it in a post.
+        </p>
+        <ul>
+          <li>Crop it to fit nicely and keep it legible. Both boxes must show as checked.</li>
+          <li><strong>Embed</strong> the image, don't attach it — the embed tool is the small mountain icon to the right of the link icon. Don't use the "Insert Stuff" option.</li>
+          <li>The image has to show directly in the post. If it doesn't, you've done it wrong — but you can edit a post, so fix it.</li>
+        </ul>
+        <p>
+          Other notification options (alerts when you get a grade, alerts to
+          your phone, settings for each class) are up to you and aren't part of
+          this assignment.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="introductions">
+        <h4>Introductions</h4>
+        <p>
+          Follow the <a href="../introductions.html">Introductions</a> page: write
+          your introduction in the shared document, update the table of contents
+          so it jumps to your name, and check your formatting against the
+          examples. Then start a thread here saying you've done all of it, with
+          a link to <em>your</em> heading (right-click your name in the document
+          and choose Copy Heading Link).
+        </p>
+        <p>
+          Peer review two classmates with meaningful feedback, and do it right
+          around when you post yours — don't wait until after I've given
+          feedback. The links at the bottom matter most: check them carefully
+          in a private window so they show <em>your</em> information, and pick
+          a divider (any icon, emoji, or character) to go between them. They'll
+          appear in the footer of almost every page you build. You'll make a
+          webpage from this introduction, so get it right here first.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="gh-home-pages">
+        <h4>GitHub Home Pages</h4>
+        <p>
+          Set up your GitHub Pages account if you haven't (see
+          <a href="../itis3135/github_setup_instructions.html">GitHub &amp; GitHub Pages Setup</a>).
+          You'll have a folder named <strong>yourgithubid.github.io</strong>, and
+          from now on all your work goes in it. Inside, create a folder named
+          after this course — <strong>web215</strong>, no spaces, no capitals —
+          to hold everything you build for this class.
+        </p>
+        <h5>What Every Page Needs From Here On</h5>
+        <ul>
+          <li>Proper html, head, meta, title, and body elements.</li>
+          <li>A <strong>title</strong> with your name (possessive) and mascot, the course ID (no section), and the page name, separated by a divider you choose. For example: John Kennedy's Jumping Kangaroo ✦ WEB215 ✦ Home.</li>
+          <li><strong>header, main, and footer</strong>, in that order, with nothing between them.</li>
+          <li>An <strong>h1</strong> in the header holding the first items of your title but <em>not</em> the page name.</li>
+          <li>An <strong>h2</strong> as the first item in main, holding the page name. The title is the h1, plus the divider, plus the h2.</li>
+        </ul>
+        <h5>The Two Home Pages</h5>
+        <ul>
+          <li>You need an index.html in your root folder <em>and</em> one in your course folder.</li>
+          <li>The root page is <strong>not</strong> about this class: no course ID and not the course's CSS. It does carry a link to the course site, in a paragraph inside main that identifies it as your personal home page: <code>&lt;a href="web215/"&gt;Click to go to my WEB215 course.&lt;/a&gt;</code></li>
+          <li>The course home page has an h2 like "Home" and a paragraph or two about what the site is and a little about you, ending with something like "you can learn more about me by reading my introduction," linked to your introduction page.</li>
+          <li>The footer of your course pages links to GitHub, GitHub.io, and the course's .io page, so you can always jump back.</li>
+        </ul>
+        <p>
+          Submit a link to your .io home page, with the link to
+          <code>web215/</code> (not <code>web215/index.html</code> — the index
+          loads on its own). Reply to two classmates with something they missed,
+          or say it's perfect if it is. Your grade is a mix of your work and your
+          replies: two thirds, one sixth, and one sixth.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="course-template">
+        <h4>Course Webpage Template</h4>
+        <p>
+          You'll build many pages, and the easy way is to copy one good page.
+          This page holds every key element a page should have, plus the ones
+          your course pages need. Make its contents specific to you and this
+          course, with a reminder to change each thing when you copy it:
+        </p>
+        <ul>
+          <li><strong>Title:</strong> <code>D.I. von Briesen's Dapper Vicuña ✦ WEB215 ✦ Template Page - CHANGE FOR THIS PAGE</code>, using your own name, mascot, and divider.</li>
+          <li><strong>Header h1:</strong> your name and mascot, a divider, and WEB215.</li>
+          <li><strong>Main h2:</strong> <code>Template Page - CHANGE TO PAGE NAME</code>, then two sample paragraphs saying this is a template you copy and edit.</li>
+          <li><strong>Footer:</strong> a credit such as "Website designed by [your name] Enterprises."</li>
+        </ul>
+        <ul>
+          <li>Link a stylesheet named <strong>default.css</strong> in a folder called <strong>styles</strong>. For now, basic fonts and colors; you'll tweak it as you go.</li>
+          <li>Put a <strong>nav in the header</strong> linking home (index.html), introduction (introduction.html), contract (contract.html), and about (about.html).</li>
+          <li>Put a <strong>nav in the footer</strong> with all the links from your introduction, with your divider between them: GitHub, GitHub.io (your home page), WEB215.io (this course's home), and your freeCodeCamp and Codecademy profiles, and your public JSFiddles (at least one with your name in it).</li>
+          <li>Test every link in a private window. A link that doesn't load means the link is wrong or the profile isn't public.</li>
+          <li>Both validators go on the page: the Accumulus script as the <strong>last item in your head</strong>, and the Vicunadator before the end of your body — see <a href="../validation.html">Validation</a>, and the <a href="../web-standards.html">Web Standards</a> for everything else.</li>
+        </ul>
+        <p>
+          Submit a clickable link showing the full URL to your template page —
+          don't make it pretty. Peer review: open a classmate's link and check it
+          against this list; there's always at least one thing to correct, and
+          you'll learn from finding it. Don't forget to log your work.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="home-contract-introduction">
+        <h4>Home, Contract, Introduction, and About Pages</h4>
+        <p>
+          Build these four pages from your template, all in your course folder
+          and all linked from your header nav: home, introduction, contract, and
+          about. Everything they need is already on the general site, so this
+          assignment points there instead of repeating it.
+        </p>
+        <ul>
+          <li>
+            <strong>Home</strong> (index.html), <strong>Introduction</strong>
+            (introduction.html), and <strong>Contract</strong> (contract.html):
+            the <a href="../web-standards.html#course-site">Course Site Standards</a>,
+            under "The Three Pages Every Course Site Starts With." The
+            introduction also follows the
+            <a href="../web-standards.html#introduction-webpage">Introduction Webpage Standards</a>
+            and starts from your <a href="../introductions.html">shared introduction</a>.
+          </li>
+          <li>
+            <strong>About</strong> (about.html, linked as About after Contract in
+            your menu): follow the
+            <a href="../itis3135/about_page_instructions.html">About Page Instructions</a>,
+            writing it for WEB215 — this course, the tools it uses, and the sites
+            you'll build.
+          </li>
+        </ul>
+        <p>
+          Run the <a href="../validation.html">validators</a> before you submit,
+          then peer review as usual.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="codecademy-basics">
+        <h4>Codecademy: The Six Basics</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>
+          Use the free catalog at codecademy.com — you shouldn't pay for
+          anything. Finish these <strong>six</strong> courses over the next three
+          weeks. They vary a lot in length, so plan for that. You took these
+          earlier, so they should be easy; if not, you have some work ahead.
+        </p>
+        <ul>
+          <li>Welcome to Codecademy</li>
+          <li>Learn How to Code</li>
+          <li>Learn HTML</li>
+          <li>Learn CSS</li>
+          <li>Learn JavaScript</li>
+          <li>Make a Website with Namecheap</li>
+          <li>Bonus: Learn What to Learn</li>
+        </ul>
+        <p>
+          Post each time you finish one or when you finish them all, with the
+          <a href="#tutorial-proof">usual proof</a>: your profile link and a
+          screenshot of your profile page showing your login and icon at the
+          top-left and the completion percentage on the right (zoom out or take
+          two screenshots to show it all). The Codecademy link in your footer
+          should lead to your profile too — now's a good time to check it. A
+          working link looks like
+          <code>https://www.codecademy.com/profiles/yourid</code>.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
 
-      <h3>M05 — Certifications</h3>
-      <ul>
-        <li>freeCodeCamp: Responsive Web Design certification <strong>(NPR)</strong></li>
-        <li>
-          freeCodeCamp: JavaScript Data Structures and Algorithms certification
-          <strong>(NPR)</strong>
-        </li>
-      </ul>
+      <section id="m02">
+        <h3>M02 — Intermediate JavaScript</h3>
+      <section id="intermediate-javascript">
+        <h4>Codecademy: Learn Intermediate JavaScript</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>
+          This takes real time — spread it over the next four weeks. Post the
+          <a href="#tutorial-proof">usual proof</a> when you finish.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
 
-      <h3>M06 — CSS and Types</h3>
-      <ul>
-        <li>Codecademy: Learn Intermediate CSS <strong>(NPR)</strong></li>
-        <li>Codecademy: Learn TypeScript <strong>(NPR)</strong></li>
-      </ul>
+      <section id="m03">
+        <h3>M03 — Meet the Stack, One Piece at a Time</h3>
+      <section id="terminal-tutor">
+        <h4>Learn the Command Line at Terminal Tutor</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>
+          Work through the tutorial at terminaltutor.com. For proof, post a
+          screenshot of your completion with your name in the URL, embedded as
+          usual. Then add two things:
+        </p>
+        <ul>
+          <li>A short explanation of your experience — the good, the bad, whatever. Sub-bullets are fine instead of an essay.</li>
+          <li>Two alternative tutorials. Spend a couple of minutes with each and list them, with their obvious pros and cons against the one you just finished.</li>
+        </ul>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="mongodb">
+        <h4>Codecademy: Learn MongoDB</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>
+          About five hours. Post the <a href="#tutorial-proof">usual proof</a>.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="react-intro">
+        <h4>Codecademy: Learn React, Introduction</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>
+          About six hours. Post the <a href="#tutorial-proof">usual proof</a>,
+          with the 100% completion bar and your id or name in the same shot.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="nodejs">
+        <h4>Codecademy: Learn Node.js</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>
+          About five hours. Post the <a href="#tutorial-proof">usual proof</a>,
+          with your id or login and the 100% completion bar in the same image.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="express-bonus">
+        <h4>Bonus: Express Tutorial</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>
+          About five hours, in two parts. Finish Codecademy's Learn Express and
+          post the <a href="#tutorial-proof">usual proof</a>. Then complete the
+          ExpressJS tutorial on TutorialsPoint
+          (tutorialspoint.com/expressjs) and post some evidence that you did.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="mern-tutorial">
+        <h4>Find and Complete a MERN Tutorial</h4>
+        <p>
+          Find a MongoDB, Express, React, and Node tutorial online. React changes
+          quickly, so look for something current — 2024 or newer at the least —
+          that seems reasonable and that you think you'll like. An hour spent
+          comparing several, including their comments, is worth it. CPCC has
+          LinkedIn Learning Premium, which is another source, and freeCodeCamp
+          partners with many content providers.
+        </p>
+        <ul>
+          <li>Follow along and configure your machine so it runs the platform. Make a note of directories and locations — you'll publish a repo from what you build here.</li>
+          <li>Get the tutorial's application running cleanly on your own computer. This isn't trivial. Give yourself time, take breaks, come back to it.</li>
+          <li>Show it running locally, with screenshots or a video, and demonstrate all four parts of <strong>CRUD</strong> — Create, Read, Update, and Delete, which cover nearly all software functionality.</li>
+        </ul>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
 
-      <h3>M07 — Routing and Persistence</h3>
-      <ul>
-        <li>Codecademy: Learn React Router <strong>(NPR)</strong></li>
-        <li>Codecademy: Learn Node SQLite <strong>(NPR)</strong></li>
-      </ul>
+      <section id="m05">
+        <h3>M05 — Certifications and Components</h3>
+      <section id="fcc-rwd">
+        <h4>freeCodeCamp: Responsive Web Design Certification</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>
+          You should have finished this in WEB115, so these are easy points. If
+          you didn't, you have a lot to catch up on — it isn't trivial, so plan
+          for it.
+        </p>
+        <p>
+          Once all the parts below are done you'll have earned the certification.
+          Then update your standard footer so that after the "designed by…" (or
+          your equivalent) it says something like <em>certified in Responsive
+          Web Design</em>, with "Responsive Web Design" linked to your
+          certificate. Submit a link to your site.
+        </p>
+        <h5>The Parts</h5>
+        <ol>
+          <li>Learn HTML by Building a Cat Photo App (69 exercises); Learn Basic CSS by Building a Cafe Menu (91); Learn CSS Colors by Building a Set of Colored Markers (94); Learn HTML Forms by Building a Registration Form (63)</li>
+          <li>Certification Project: Survey Form (16 user stories); Learn the CSS Box Model by Building a Rothko Painting (45); Learn CSS Flexbox by Building a Photo Gallery (21)</li>
+          <li>Learn Typography by Building a Nutrition Label (67); Learn Accessibility by Building a Quiz (68); Certification Project: Tribute Page (9 user stories)</li>
+          <li>Learn More About CSS Pseudo Selectors by Building a Balance Sheet (65); Learn Intermediate CSS by Building a Cat Painting (82); Learn Responsive Web Design by Building a Piano (33); Certification Project: Technical Documentation Page (15 user stories)</li>
+          <li>Learn CSS Variables by Building a City Skyline (118); Learn CSS Grid by Building a Magazine (80); Certification Project: Product Landing Page (15 user stories)</li>
+          <li>Learn CSS Animation by Building a Ferris Wheel (28); Learn CSS Transforms by Building a Penguin (104); Certification Project: Personal Portfolio Webpage (11 user stories)</li>
+        </ol>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="fcc-js">
+        <h4>freeCodeCamp: JavaScript Data Structures and Algorithms Certification</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>Do what you did for Responsive Web Design:</p>
+        <ul>
+          <li>Make sure your course page footer says something like "certified in…", with links to both certifications.</li>
+          <li>Include a link to that page, the one with the common footer.</li>
+          <li>Include a link to your freeCodeCamp profile.</li>
+          <li>Include a link to the certification itself.</li>
+        </ul>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="components">
+        <h4>Including Dynamic Header and Footer Components</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>
+          If you aren't already including your headers and footers dynamically,
+          now's the time to do it for all your work. The base steps are on the
+          <a href="../itis3135/headers_footers_instructions.html">Common Headers/Footers Instructions</a>
+          page, using Paul Browne's HTMLInclude script from
+          github.com/paul-browne/HTMLInclude. Here's what this course adds.
+        </p>
+        <ul>
+          <li>Every page includes <strong>one header and one footer</strong> and, optionally, a navbar if it isn't already in the header. Main can hold its own content, or you can include it — if you do, I suggest a folder called <code>content</code> for the different mains.</li>
+          <li>Each page's head must be unique, because the title has to include <em>that page's</em> title. For the full treatment, make the head a component too, and use the script's variable-passing feature to hand it the page name (see the readme in the script's repo).</li>
+          <li>GitHub won't validate using the referrer, so the validation links in the footer have to change to point at the calling page. Type this in rather than copying it — copying code out of a document causes trouble:</li>
+        </ul>
+<pre><code>&lt;a href="https://validator.w3.org/check?uri=" id="validation_link_html"&gt;HTML validation&lt;/a&gt;
+&lt;a href="https://jigsaw.w3.org/css-validator/validator?uri=" id="validation_link_css"&gt;CSS validation&lt;/a&gt;
+&lt;script&gt;
+document.getElementById("validation_link_html").setAttribute("href",
+  "https://validator.w3.org/check?uri=" + location.href);
+document.getElementById("validation_link_css").setAttribute("href",
+  "https://jigsaw.w3.org/css-validator/validator?uri=" + location.href);
+&lt;/script&gt;</code></pre>
+        <p>
+          This isn't the most efficient way to do it. For a challenge, learn to
+          read the contents in with your own script, or from a JSON file, and
+          talk it over on the forum.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
 
-      <h3>M08 — Deploy What You Built</h3>
-      <ul>
-        <li>Deploy your MERN tutorial</li>
-        <li>Course feedback</li>
-      </ul>
+      <section id="m06">
+        <h3>M06 — CSS and Types</h3>
+      <section id="intermediate-css">
+        <h4>Codecademy: Learn Intermediate CSS</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>
+          Finish it over the next four weeks and post the
+          <a href="#tutorial-proof">usual proof</a>.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="typescript">
+        <h4>Codecademy: Learn TypeScript</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>Post the <a href="#tutorial-proof">usual proof</a>.</p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
 
-      <h3>M09 — Describe Your Project</h3>
+      <section id="m07">
+        <h3>M07 — Routing and Persistence</h3>
+      <section id="react-router">
+        <h4>Codecademy: Learn React Router</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>Post the <a href="#tutorial-proof">usual proof</a>.</p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="node-sqlite">
+        <h4>Codecademy: Learn Node SQLite</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>Post the <a href="#tutorial-proof">usual proof</a>.</p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
+
+      <section id="m08">
+        <h3>M08 — Deploy What You Built</h3>
+      <section id="deploy-mern">
+        <h4>Deploy Your MERN Tutorial</h4>
+        <p>
+          This one gets about two weeks. You ran a complete MERN tutorial on your
+          own machine and showed it working. Now deploy that same application to
+          a server on the web, and give us a URL we can test. That means:
+        </p>
+        <ol>
+          <li>Finding a host — free, or paid if you're willing.</li>
+          <li>Possibly setting up MongoDB on another host, depending on your choices.</li>
+          <li>Any configuration and setup it needs.</li>
+          <li>Getting your application to run.</li>
+          <li>Adding the URL to your course website, on a secondary menu for outside items, so we can test.</li>
+          <li>Submitting the URL to your course site, where the link is.</li>
+        </ol>
+        <p>
+          I'll test it by adding something, editing it, and deleting it —
+          possibly a few times, in different ways. You'll use this as a rough
+          model for your own application, so keep that in mind. Most of the
+          trouble here is devops, and it can be substantial and frustrating:
+          plan ahead, leave lots of time for sorting things out, and share what
+          you learn on the discussion forum.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="course-feedback">
+        <h4>Course Feedback</h4>
+        <p>
+          Take a few minutes to look through the assignments in the gradebook
+          or under the content area. I'd like to understand your experience with
+          each one for future adjustments: which you found useless (busywork),
+          really helpful, too hard, too easy, too time-consuming for the value,
+          and so on. Please don't say "everything is fine" — that suggests you
+          aren't trying. Peer review as usual.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
+
+      <section id="m09">
+        <h3>M09 — Describe Your Project</h3>
       <p>
         Say what you intend to build, in enough detail that someone else could
         tell whether you finished it. Everything from here to M16 is that one
         project.
       </p>
+      <section id="describe-project">
+        <h4>Describe Your Project</h4>
+        <p>
+          You've finished a MERN tutorial and a good run of freeCodeCamp work
+          with HTML, CSS, JavaScript, and React. Now it's time to think about an
+          online project. There are two big parts: building the app — modifying
+          the one from the tutorial, or one of your own, or starting from
+          scratch — and figuring out where and how to host it.
+        </p>
+        <h5>The Project</h5>
+        <ul>
+          <li>Something you care about. Discuss on the forum if you need ideas.</li>
+          <li>It needs data persistence in MongoDB with the equivalent of a <strong>many-to-many relationship</strong> — one person can own many cars, and one car can have more than one owner, which a traditional relational database would handle with a join table.</li>
+          <li>It needs <strong>authentication</strong> — some kind of login.</li>
+          <li>Sample data (AI is fine): at least a dozen values prepopulated. We should be able to load these at first, and eventually do CRUD on them and anything you add.</li>
+        </ul>
+        <h5>The Plan and the Host</h5>
+        <p>
+          Begin a project plan and research where you'll host. You may choose a
+          paid account for your own benefit — you only need to pay for one month
+          for this, and you can probably do it for about $10. There are free
+          sites, and Heroku has been used in the past, but those can be harder.
+        </p>
+        <ul>
+          <li>Start by getting a very primitive app going that represents one of your pages, like your introduction or contract, and make sure it runs on your computer through node.</li>
+          <li>Then research hosting and put that simple app on the site you host with. <strong>Submit the link</strong>, and make sure the page loads. The next step is having your whole site load, so you can begin that as you go.</li>
+          <li>Make a branch for this in your GitHub work. GitHub Pages may not work with the MERN work, and you don't want to break your older pages.</li>
+          <li>Add a link in the footer of your common menu that leads here, and a link in your header nav that leads to these assignments. We should be able to click through to your github.io pages and follow links to your hosted work.</li>
+        </ul>
+        <p>
+          Describe the project here in as much detail as you're comfortable with,
+          and where you plan to host it. Your data may live somewhere different.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
 
-      <h3>M10 — Deploy an App Skeleton With a Login Page</h3>
+      <section id="m10">
+        <h3>M10 — Deploy an App Skeleton With a Login Page</h3>
+      <section id="skeleton-login">
+        <h4>Deploy an App Skeleton With a Login Page</h4>
+        <p>
+          Any site with user data needs some kind of authentication. Nobody
+          without the right to should be able to see, update, or delete what's in
+          your data store.
+        </p>
+        <p>
+          Ideally you'd build a whole user-management system with user levels.
+          For this course, keep it simple: <strong>one user is enough</strong>.
+          Choose a user id and password, and <strong>put them in your
+          submission</strong> so we can log in and test. Pick a password you don't
+          use anywhere else — your post is visible to classmates.
+        </p>
+        <ul>
+          <li>If the user is authenticated, they get into the app. If not, it should gracefully refuse them.</li>
+          <li>Deploy a skeleton of your app — its name, headers, and the like — with a login option. Temporary pages that just say "You're logged in!" are fine, or start rolling in real functionality.</li>
+        </ul>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
 
-      <h3>M11 — Populate Data and Get It Displayed</h3>
+      <section id="m11">
+        <h3>M11 — Populate Data and Get It Displayed</h3>
+      <section id="populate-data">
+        <h4>Populate Data and Get It Displayed</h4>
+        <p>
+          Once you have a login, use the dummy data you created and put it in
+          your data store, then display it on the screen. This is the first of
+          the four CRUD operations — Read — and usually the most
+          straightforward.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
 
-      <h3>M13 — App Create and Insert</h3>
+      <section id="m13">
+        <h3>M13 — App Create and Insert</h3>
+      <section id="app-create">
+        <h4>App Create and Insert</h4>
+        <p>
+          Get your application running so that the data in your store displays
+          on the screen — the data you prepopulated — and so that you can also
+          <strong>insert</strong> new data.
+        </p>
+        <p>
+          Depending on how you build it, it may be easier to do CRUD all
+          together or out of sequence, so you can submit these related
+          assignments at the same time, separately, or out of order.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
 
-      <h3>M15 — App Update and Delete</h3>
+      <section id="m15">
+        <h3>M15 — App Update and Delete</h3>
+      <section id="app-update-delete">
+        <h4>App Update and Delete</h4>
+        <p>
+          Add the functionality that lets a user <strong>update</strong> data.
+          You can often reuse the design you used to add new values, since the
+          only differences are prepopulating the form and knowing <em>what</em>
+          you're updating, chosen from a previous selection.
+        </p>
+        <p>
+          <strong>Delete</strong> is usually the most basic, but you still have
+          to be able to select the item, just as you do to update it. A common
+          design is a list with an edit and a delete icon next to each item.
+        </p>
+        <p>
+          At this point your application should be more or less functional. A
+          full test: log in, create a value or a set, confirm they show up, edit
+          them, confirm the edits show up, then delete them and confirm they're
+          gone. Further testing includes confirming you can't do anything without
+          logging in — copy a logged-in URL into a browser that isn't logged in
+          and try it — and that logging out works.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
 
-      <h3>M16 — Wrap Up</h3>
-      <ul>
-        <li>Project wrap-up</li>
-        <li>Self evaluation, plus Start, Stop, Continue <strong>(NPR)</strong></li>
-      </ul>
+      <section id="m16">
+        <h3>M16 — Wrap Up</h3>
+      <section id="project-wrapup">
+        <h4>Project Wrap-Up</h4>
+        <p>
+          This is your final project submission. Fix any bugs your peers found,
+          and make whatever tweaks the design needs.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="self-evaluation">
+        <h4>Self Evaluation, and Start, Stop, Continue</h4>
+        <p><strong>NPR</strong> — not peer reviewed.</p>
+        <p>
+          Two parts. The self evaluation is about <em>you</em>; Start, Stop,
+          Continue is about the <em>class</em>. Be thorough, honest, and
+          respectful.
+        </p>
+        <h5>Self Evaluation</h5>
+        <p>
+          Spend a few minutes evaluating your own performance so far. Copy these
+          bullets into a post and address each one. Your grade doesn't depend on
+          <em>what</em> you write — only that you wrote it.
+        </p>
+        <ul>
+          <li>Your involvement in the in-person class (if applicable):</li>
+          <li>Your reading of the class discussion forum:</li>
+          <li>Your posting on the class discussion forum:</li>
+          <li>Your homework readings:</li>
+          <li>Your assignments:</li>
+          <li>Your biggest challenges:</li>
+          <li>Easiest things:</li>
+          <li>Where you'd like to see the class go from here:</li>
+        </ul>
+        <p>
+          Review your gradebook — counting extra credit and work not yet graded
+          — and say what grade you think you should get. If you'd like an Audit
+          (you've taken part all semester but not finished the work), a W, or a
+          condition (such as "if I don't get a B or better I'd like an Audit"),
+          say so clearly. Depending on policy and the semester I may be able to
+          honor it, but I can't promise. Please don't write "I'll take what I
+          deserve" or "I'm OK with what I've earned."
+        </p>
+        <h5>Stop, Start, Continue</h5>
+        <p>
+          How do you feel about this class? Say specifically, and with some
+          explanation, what you like and don't like about each part of the
+          course. Paste these bullets into a new post and finish each sentence:
+        </p>
+        <ul>
+          <li>Course materials — Stop… Start… Continue…</li>
+          <li>Instruction — Stop… Start… Continue…</li>
+          <li>Projects and assignments — Stop… Start… Continue…</li>
+        </ul>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
 
-      <h3>M17 — Finalize Your Grade</h3>
+      <section id="m17">
+        <h3>M17 — Finalize Your Grade</h3>
       <p>
         I assign nothing new. You close out anything still sitting at 1 point
         and add any peer reviews you owe.
       </p>
 
-      <h3>Bonus</h3>
-      <ul>
-        <li>Your own brand</li>
-        <li>Cookies — make, bake, and take</li>
-        <li>
-            <a href="../introduction-form.html"
-              >Round trip introduction form</a
-            >
-          </li>
-      </ul>
+        <p><a href="#top">Back to top</a></p>
+      </section>
 
-      <h3>Before You Submit Anything</h3>
-      <p>
-        Run the <a href="../validation.html">validators</a>, check the page
-        against the <a href="../web-standards.html">Web Standards</a>, and work
-        the <a href="../peer-reviews.html">review checklist</a> on your own
-        submission first.
-      </p>
+      <section id="bonus">
+        <h3>Bonus</h3>
+      <section id="brand">
+        <h4>Your Own Brand</h4>
+        <p>
+          You've probably done something like this before. If so, <strong>don't
+          reuse</strong> the colors, fonts, logos, or name — and the same goes if
+          you're doing it for another class at the same time. Make it a
+          completely different set.
+        </p>
+        <p>
+          Create a page called Brand. Using either your animal name or a name you
+          come up with, invent a real or imaginary product. You need:
+        </p>
+        <ul>
+          <li>A tagline or slogan</li>
+          <li>A logo</li>
+          <li>A favicon</li>
+          <li>A company name</li>
+          <li>A mission statement, or a summary of the company</li>
+          <li>A list of colors, each one displayed (coolors.co can help)</li>
+          <li>A list of fonts, each one displayed (Google Fonts can help)</li>
+        </ul>
+        <p>
+          Put each in its own <code>section</code> with an h3 saying what it is —
+          "Logo" in the h3, then the logo under it in a <code>figure</code>.
+          Include the tagline, logo, and favicon on <em>every</em> page, as well
+          as listing them on the Brand page. Update your default stylesheet to
+          use these fonts and colors throughout.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="round-trip-form">
+        <h4>Round Trip Introduction Form</h4>
+        <p>
+          The <a href="../introduction-form.html">round trip introduction form</a>
+          here must be built with a front-end JS framework, like React or Vue —
+          not plain JS (as in WEB115) or PHP (as in WEB250).
+        </p>
+        <p>
+          The form takes in every value on your introduction — last name, first
+          name, middle initial, nickname, mascot, divider, image, caption,
+          professional background, and the rest — <em>including the courses</em>,
+          flexible enough for more or fewer. Then it outputs them back on the
+          screen in a format identical to your current introduction page.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="cookies">
+        <h4>Cookies: Make, Bake, and Take</h4>
+        <p>
+          Read up on cookies and how to create, delete, and view them with
+          JavaScript. Wherever it's appropriate you may use local storage in
+          place of cookies. Two of the most common uses:
+        </p>
+        <ol>
+          <li>Tracking whether you're logged in, so every other page or part of the app can confirm it. These are <strong>session</strong> variables, because they track your browsing session.</li>
+          <li>Tracking whether this person (presumably) has been here before, when, with what browser, and so on. A catalog site can follow what you were looking at even if you never logged in, then offer specials next time. This is getting more complex — and more intrusive — as platforms swap data around. This exercise teaches the <em>basics</em> with an automatic cookie and a manual cookie.</li>
+        </ol>
+        <h5>Build</h5>
+        <ul>
+          <li>Make a copy of your introduction form assignment.</li>
+          <li>Above the form, show two sets of non-editable information: <strong>browser and version, session info, timestamp, and IP address</strong>.</li>
+          <li>Create a cookie that saves that information plus everything in the form.</li>
+          <li>On load, populate the form from the saved values. The <em>first</em> set shows the current values; the <em>second</em> pulls the last values from the cookie.</li>
+          <li>Collect the information with JavaScript when the page loads and display it. When the user saves, save it along with the form data. Think of these as extra form fields.</li>
+          <li>Retrieve the cookies, if they're there, and display each item in a formatted way, like <code>browser: … || timestamp: …</code>.</li>
+          <li>Delete one cookie, the other, or both. Add a button to purge the cookie.</li>
+        </ul>
+        <h5>To Test</h5>
+        <ul>
+          <li>The first time you visit, it shows that there's no cookie information.</li>
+          <li>Go back, and it shows the automatic cookie's information.</li>
+          <li>Submit the form, and it refreshes on save and shows that.</li>
+          <li>Leave and come back, and it shows both.</li>
+          <li>Delete one and go back, and it shows only the other — but if you deleted the automatic one, it should regenerate by itself, so how will that work?</li>
+        </ul>
+        <p>
+          It may look complex, but break it into modules and methods and think
+          through the logic. Use if and else properly so that if you have a
+          result you show it, and if you don't you don't try. Ask or discuss —
+          don't be shy. Link it in your table of contents as usual, and do your
+          classmates a favor: really test theirs before I get to it.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
+
+      <section id="before-you-submit">
+        <h3>Before You Submit Anything</h3>
+        <p>
+          Run the <a href="../validation.html">validators</a>, check the page
+          against the <a href="../web-standards.html">Web Standards</a>, and work
+          the <a href="../peer-reviews.html">review checklist</a> on your own
+          submission first.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
     </main>
 
     <footer class="site-footer">
