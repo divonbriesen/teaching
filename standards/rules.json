@@ -748,9 +748,9 @@
           "present": true
         },
         {
-          "type": "css",
+          "type": "html",
           "rule": "embedded stylesheet does the styling",
-          "pattern": "section",
+          "pattern": "<style[^>]*>\\s*[^<\\s]",
           "present": true
         },
         {
