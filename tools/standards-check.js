@@ -454,7 +454,7 @@
       else add("FAIL", HDR_RULE, "h1 present but <" + f + "> comes first");
     }
     if (course && h1Text) {
-      const good = /['’]s\s+\S+/.test(h1Text) && /[A-Z]{2,}\d{3,}[A-Z0-9]*\s*$/.test(h1Text);
+      const good = /(?:['’]s|(?<=s)['’])\s+\S+/.test(h1Text) && /[A-Z]{2,}\d{3,}[A-Z0-9]*\s*$/.test(h1Text);
       add(good ? "PASS" : "FAIL", "site name = Name's Mascot <divider> COURSEID", good ? "" : h1Text);
 
       // The format check above only confirms SOME word follows "'s" — it
@@ -476,7 +476,7 @@
       // regex's job is just to split "name" from "mascot phrase", not to
       // police which symbol was used (that's the general divider checks'
       // job elsewhere).
-      const nameMascot = h1Text.match(/^(.+?)['’]s\s+(.+?)\s*[^\w\s'".,]/);
+      const nameMascot = h1Text.match(/^(.+?)(?:['’]s|(?<=s)['’])\s+(.+?)(?:\s*[^\w\s'".,-]|\s+-+\s)/);
       if (nameMascot) {
         const initialsMatchFor = (nameWords, mascotWords) =>
           nameWords.length === mascotWords.length &&
