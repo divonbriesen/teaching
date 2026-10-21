@@ -21,7 +21,9 @@
     ? SCRIPT_SRC.replace(/[^/]+\/standards-check\.js.*$/, "standards/rules.json")
     : "standards/rules.json";
   const BANNED_FONTS = ["times new roman", "comic sans", "papyrus"];
-  const CREDIT_RE = /designed by|created by|built by|a product of|brought to you by|production/i;
+  // "Designed by", plus the variants a student reaches for: "designed and developed
+  // by", "designed & illustrated by", "made by", "crafted by".
+  const CREDIT_RE = /(?:designed|created|built|developed|made|crafted)(?:\s+(?:and|&)\s+\w+)?\s+by|a product of|brought to you by|production/i;
   const results = [];
   const add = (level, rule, detail) => results.push({ level, rule, detail: detail || "" });
 
@@ -204,7 +206,7 @@
     // |~•·—- set) — a student's title can legitimately use a star, diamond,
     // or other character, same as the mascot-name divider below.
     const dividerRe = /[^\w\s'".,]/;
-    if (!title) add("FAIL", "title element present");
+    if (!title) add("FAIL", "title element present", "no <title> in the <head>");
     else if (!dividerRe.test(title)) add("FAIL", "title has a divider", "no divider: " + title);
     else add("PASS", "title has a divider", title);
 
@@ -281,7 +283,9 @@
       const primaries = new Set(
         stacks.map((s) => s.split(",")[0].trim().replace(/['"]/g, "").toLowerCase()).filter((f) => f && !generic.has(f))
       );
-      add(primaries.size >= 2 ? "PASS" : "FAIL", "at least 2 fonts", [...primaries].sort().join(", ") || "none");
+      add(primaries.size >= 2 ? "PASS" : "FAIL", "at least 2 fonts",
+        primaries.size === 1 ? "only " + [...primaries][0] + " — need at least 2 different fonts"
+          : ([...primaries].sort().join(", ") || "none found — need at least 2 different fonts"));
       const banned = [...primaries].filter((f) => BANNED_FONTS.some((b) => f.includes(b)));
       add(!banned.length ? "PASS" : "FAIL", "no banned fonts (as the primary choice)", banned.join(", "));
       // Must apply unconditionally — a rule that only exists inside an
@@ -600,7 +604,7 @@
     const imgs = [...d.querySelectorAll("img")].map((i) => i.getAttribute("src") || "")
       .filter((s) => !s.toLowerCase().includes("favicon")
         && !s.includes("lint.page")); // Accumulus injects its own imgs — not the student's
-    if (!imgs.length && !d.querySelector("svg")) add("FAIL", "at least one image (favicon doesn't count)");
+    if (!imgs.length && !d.querySelector("svg")) add("FAIL", "at least one image (favicon doesn't count)", "no <img> or inline <svg> found — a logo in the header counts, the favicon doesn't");
     else add("PASS", "at least one image (favicon doesn't count)", imgs.slice(0, 3).map(short).join(", ") || "inline svg");
     const localImgs = imgs.filter(isLocal);
     if (localImgs.length) {
@@ -765,11 +769,12 @@
 
     // ===== FOOTER =====
     const footer = d.querySelector("footer");
-    add(footer ? "PASS" : "FAIL", "<footer> present");
+    add(footer ? "PASS" : "FAIL", "<footer> present", footer ? "" : "no <footer> element found (one loaded from components/footer.html counts)");
     if (footer) {
       const footHtml = footer.innerHTML;
       if (course) {
-        add(CREDIT_RE.test(footer.textContent) ? "PASS" : "FAIL", "footer has designer credit");
+        add(CREDIT_RE.test(footer.textContent) ? "PASS" : "FAIL", "footer has designer credit",
+          CREDIT_RE.test(footer.textContent) ? "" : 'no credit phrase in the footer, e.g. "Designed by Your Firm Name"');
         // Gated on rules.json's cert_started_patterns: no cert pages linked
         // yet means there's nothing to certify in, so don't fail the footer
         // line for it.
@@ -787,7 +792,8 @@
       const chrome = (header ? header.innerHTML : "") + footHtml;
       const chromeText = (header ? header.textContent : "") + footer.textContent;
       const hasTagline = /<em|<i[\s>]/.test(chrome) || /["“][^"”]{4,}["”]/.test(chromeText);
-      add(hasTagline ? "PASS" : "FAIL", "tagline in italics or quotes (header or footer)");
+      add(hasTagline ? "PASS" : "FAIL", "tagline in italics or quotes (header or footer)",
+        hasTagline ? "" : "no tagline found — put one in italics (<em>) or in quotes in the header or footer");
     }
 
     // ===== Layer-2/3 site and page rules from rules.json =====
@@ -814,7 +820,8 @@
                 const sel = c.within ? c.within + " " + c.tag : c.tag;
                 const n = d.querySelectorAll(sel).length;
                 const okc = n >= (c.min || 1);
-                add(okc ? "PASS" : "FAIL", rule, okc ? "" : "found " + n);
+                add(okc ? "PASS" : "FAIL", rule, okc ? "" : "found " + n + " <" + c.tag + ">" +
+                  (c.within ? " inside <" + c.within + ">" : "") + " — need at least " + (c.min || 1));
               } else if (c.type === "text" || c.type === "html") {
                 const hay = c.type === "text" ? docText : docHtml;
                 // soften_unless: a milestone that chains off an earlier one
@@ -1016,7 +1023,7 @@
           }
           const navs = [...d.querySelectorAll("nav")];
           const hasHobby = (n) => n && [...n.querySelectorAll("a")].some((a) => (a.getAttribute("href") || "").toLowerCase().includes("hobby"));
-          if (hasHobby(navs[0])) add("FAIL", "Hobby link lives in the secondary nav (second <nav>)", "found in the primary nav");
+          if (hasHobby(navs[0])) add("FAIL", "Hobby link lives in the secondary nav (second <nav>)", "Hobby link is in the main nav — move it into a second <nav> (the secondary navigation)");
           else if (navs.slice(1).some(hasHobby)) add("PASS", "Hobby link lives in the secondary nav (second <nav>)");
           else add("INFO", "Hobby link lives in the secondary nav (second <nav>)", "no hobby link yet (required once the midterm is up)");
         }
