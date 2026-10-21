@@ -297,7 +297,10 @@
         return m ? "#" + m.slice(1).map((ch) => ch + ch).join("") : c;
       };
       const linkColors = {};
-      for (const [, selGroup, body] of unconditionalCss.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      // comments out first, or a comment right before a rule becomes part of its
+      // first selector and that selector never pairs with its :visited twin
+      const linkCss = unconditionalCss.replace(/\/\*[\s\S]*?\*\//g, "");
+      for (const [, selGroup, body] of linkCss.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
         const cm = body.match(/(?<![-\w])color\s*:\s*([^;}]+)/i);
         if (!cm) continue;
         for (const sel of selGroup.split(",")) {
