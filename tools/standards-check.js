@@ -275,7 +275,8 @@
         const decls = [...cssNoComments.matchAll(/([^{}]+)\{([^{}]*)\}/g)]
           .filter((m) => m[1].split(",").some((part) => tagRe.test(part.trim())))
           .map((m) => m[2]).join(" ");
-        const hasMw = /max-width\s*:/i.test(decls);
+        // width: min(90%, 950px) and clamp() cap the width exactly like max-width does
+        const hasMw = /max-(?:width|inline-size)\s*:|(?<![-\w])width\s*:\s*(?:min|clamp)\(/i.test(decls);
         const hasAuto = /margin(-inline)?\s*:\s*[^;]*\bauto\b/i.test(decls) ||
           (/margin-left\s*:\s*auto/i.test(decls) && /margin-right\s*:\s*auto/i.test(decls));
         if (hasMw && hasAuto) return "ok";
