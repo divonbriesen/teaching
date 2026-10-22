@@ -782,6 +782,19 @@
     }
     add(!broken.length ? "PASS" : "FAIL", "internal links resolve", broken.slice(0, 6).join(", "));
 
+    // A path that starts with "/" means the root of the DOMAIN, not your course
+    // folder. It only works while the site happens to sit exactly there, and
+    // breaks the moment the folder moves. Relative paths survive the move.
+    if (course) {
+      const rooted = [...new Set(
+        [...d.querySelectorAll("a[href], link[href], img[src], script[src], [data-include]")]
+          .map((e) => (e.getAttribute("href") || e.getAttribute("src") || e.getAttribute("data-include") || "").trim())
+          .filter((h) => /^\/(?!\/)/.test(h)))];
+      add(!rooted.length ? "PASS" : "FAIL", "internal paths are relative, not root-absolute (no leading /)",
+        !rooted.length ? "" : "a path starting with / means the root of the domain, so it breaks if the site moves — " +
+          "make it relative (e.g. contract.html or ./contract.html): " + rooted.slice(0, 4).join(", "));
+    }
+
     // ===== FOOTER =====
     const footer = d.querySelector("footer");
     add(footer ? "PASS" : "FAIL", "<footer> present", footer ? "" : "no <footer> element found (one loaded from components/footer.html counts)");
