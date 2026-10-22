@@ -19,13 +19,13 @@
             {
               "type": "html",
               "rule": "nav links to Introduction",
-              "pattern": "href=\"introduction.html\"",
+              "pattern": "href=\"(?:[^\"#?]*/)?introduction\\.(?:html?|php)(?:[#?][^\"]*)?\"",
               "present": true
             },
             {
               "type": "html",
               "rule": "nav links to Contract",
-              "pattern": "href=\"contract.html\"",
+              "pattern": "href=\"(?:[^\"#?]*/)?contract\\.(?:html?|php)(?:[#?][^\"]*)?\"",
               "present": true,
               "skip_for_dirs": [
                 "itsc1110"
@@ -34,7 +34,7 @@
             {
               "type": "html",
               "rule": "nav links to About",
-              "pattern": "href=\"about.html\"",
+              "pattern": "href=\"(?:[^\"#?]*/)?about\\.(?:html?|php)(?:[#?][^\"]*)?\"",
               "present": true,
               "skip_for_dirs": [
                 "itsc1110"
