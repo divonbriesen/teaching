@@ -168,6 +168,16 @@
             <li><a href="#cookies">Cookies — make, bake, and take</a></li>
           </ul>
           </li>
+          <li><a href="#bonus-more">Bonus — More Practice</a>
+          <ul>
+            <li><a href="#sprites">Using sprites</a></li>
+            <li><a href="#everything-html">Everything HTML</a></li>
+            <li><a href="#dynamize-html">Dynamize Everything HTML</a></li>
+            <li><a href="#console-play">Console play</a></li>
+            <li><a href="#one-div-graphic">A one-div graphic</a></li>
+            <li><a href="#node-hello-world">Node Hello World</a></li>
+          </ul>
+          </li>
         </ul>
 
       <section id="tutorial-proof">
@@ -918,6 +928,155 @@ document.getElementById("validation_link_css").setAttribute("href",
           result you show it, and if you don't you don't try. Ask or discuss —
           don't be shy. Link it in your table of contents as usual, and do your
           classmates a favor: really test theirs before I get to it.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      </section>
+
+      <section id="bonus-more">
+        <h3>Bonus — More Practice</h3>
+      <p>
+        Extra practice for when you want it. These are older exercises that still
+        fit this course. Your instructor will say whether any carry points.
+      </p>
+      <section id="sprites">
+        <h4>Using Sprites</h4>
+        <p>
+          A CSS sprite is one image file holding many small images, shown a piece
+          at a time. Start by reading about them —
+          <a href="https://css-tricks.com/css-sprites/">CSS Tricks</a> and
+          <a href="https://www.leveluptutorials.com/tutorials/css-tutorials/css-sprites">Level Up Tutorials</a>
+          — and try <a href="http://www.spritecow.com/">Sprite Cow</a>, which
+          writes the positioning CSS for you. Find a few more articles and
+          consider sharing them on the discussion forum.
+        </p>
+        <p>
+          Then create or find a set of sprites that fits your site's theme and
+          build a basic page that uses them. It must show a <strong>single
+          spritesheet</strong> with multiple sprites, used in different places or
+          in different ways. As always, the page carries your standard linked CSS
+          and passes the validators.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="everything-html">
+        <h4>Everything HTML</h4>
+        <p>
+          Build a single page, themed to your site, that uses and, where it can,
+          <strong>demonstrates every HTML5 tag</strong>. The list of tags is
+          online in several places (W3Schools has one), and with a little
+          creativity you can get it into a format where much of the work is done
+          for you.
+        </p>
+        <h5>Part I: The Menu</h5>
+        <ul>
+          <li>Make a new page — "my everything HTML page" will do — with your standard branding and validators. As on every page, put a heading with the assignment's title under your normal header.</li>
+          <li>At the top, list every HTML5 tag as a menu, alphabetically, each one a link: <code>&lt;!-- --&gt;</code> || <code>&lt;!DOCTYPE&gt;</code> || <code>&lt;a&gt;</code> || <code>&lt;abbr&gt;</code> || <code>&lt;address&gt;</code> and so on. It can be a horizontal line or a vertical list; if it's vertical, the content should appear to its right, which takes a more dynamic layout.</li>
+          <li>Most of these links point to somewhere lower on the same page, so review internal anchors — they're how this assignment works. This page has the pattern: each section has an anchor, and a link back to the top.</li>
+        </ul>
+        <h5>Part II: The Demonstrations</h5>
+        <p>
+          Keep the menu alphabetical. Several tags can share one destination —
+          <code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code>, <code>&lt;th&gt;</code>,
+          and <code>&lt;td&gt;</code> can all lead to one themed example table.
+          Each link gets a "back to menu" or "back to top" link.
+        </p>
+        <h5>Part III: Finish</h5>
+        <p>
+          Every tag in the menu leads to something that shows what it does. Where
+          a tag can't be demonstrated — a comment, the doctype — link to a
+          statement that says the tag is there and what it does. The page is
+          themed, validates, and lists them all.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="dynamize-html">
+        <h4>Dynamize Everything HTML</h4>
+        <p>
+          Do <a href="#everything-html">Everything HTML</a> first. That page is
+          still manual — if it were a list of people in a company, you'd be
+          editing it every time somebody joined, left, or changed their name.
+          Here you take a page that lists a lot of information and make the
+          information come from data.
+        </p>
+        <p>
+          Each tag has a handful of data points, all of them text: its
+          <strong>name</strong>, its <strong>description</strong>, its
+          <strong>relationship to HTML5</strong> (not supported, replaced by…),
+          <strong>your themed example</strong>, and anything else you'd add.
+        </p>
+        <ul>
+          <li>Put the data in a <strong>delimited text file</strong>, one record per line, five values each. Use a delimiter like <code>||</code> — commas and ampersands cause trouble here — and make it obvious, so debugging is easy.</li>
+          <li>Your code opens and reads the file, and knows when to stop (or not to start): open if it's there, read while there are values left.</li>
+          <li>Separate the records, and put the values into a two-dimensional array — one dimension is the record, the other its values. Loading everything once is usually simplest, after which you only read from the array.</li>
+          <li>Use the first value to generate the menu, extract the one the user chose, format it, and output it to the page.</li>
+        </ul>
+        <p>
+          Want a stretch? Once it works, move the records into MongoDB and read
+          them from there.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="console-play">
+        <h4>Console Play</h4>
+        <p>
+          Using any app that shows the JavaScript console — your browser's
+          developer tools, or JSFiddle — write <strong>at least 50
+          expressions</strong> that show different bits of code at play, using
+          material from your reading. If you did something like this in WEB115,
+          this time work on <em>more complex or tricky</em> examples. It's
+          different from the Intermediate JavaScript tutorial: there you follow
+          lessons, here you write the experiments yourself.
+        </p>
+        <ul>
+          <li>Avoid more than a few alerts. For output use <code>console.log</code> or <code>document.write</code>. For input use <code>prompt</code>, or an HTML button and textfield if you want to be fancy.</li>
+          <li>Show some math, some string manipulation, some variable declarations, some logic and flow control, and try to create functions.</li>
+          <li>Try to break code and then fix it. Don't be shy about experimenting.</li>
+          <li>A simple route is to cycle through examples in your reading, but customize them — that isn't copying if you make it yours.</li>
+        </ul>
+        <p>
+          Paste the code and results right into your post, or link to where they
+          are. Don't attach a text file. Reply to two classmates, saying what
+          they missed or what needs improving — or that it's perfect, if it is.
+        </p>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="one-div-graphic">
+        <h4>A One-Div Graphic</h4>
+        <p>
+          Look at this
+          <a href="https://codepen.io/jordanoaragao/pen/ynjoc">CodePen</a> and
+          figure out what's going on. Then make your own: find a logo or graphic
+          and see how well you can recreate it with CSS in a <strong>single
+          div</strong>.
+        </p>
+        <ul>
+          <li>Include a copy of the original (unless you made it from scratch), a link to your work on your site, and a screenshot of what it looks like to you, at its best, in your browser. These don't render reliably everywhere, so the screenshot shows what you see and the link shows what we see.</li>
+          <li>This isn't trivial — it's why people say "wow" when they see one online — so give yourself time. You'll do better recreating an existing logo than inventing one.</li>
+          <li>Don't overcomplicate it. A complex logo makes this much harder than it has to be. The point is to get a feel for how this works, then move on.</li>
+          <li>Put it on a new page, linked from your site menu.</li>
+        </ul>
+        <p><a href="#top">Back to top</a></p>
+      </section>
+      <section id="node-hello-world">
+        <h4>Node Hello World</h4>
+        <p>
+          Pairs well with <a href="#nodejs">Learn Node.js</a>. Go to
+          <a href="http://www.nodebeginner.org/">nodebeginner.org</a> and get Node
+          running on your system by reaching the Hello World part — customized
+          to your site's theme, of course.
+        </p>
+        <p>
+          Then tweak the code to be cleaner and easier to understand. Comment it
+          line by line, simplify it as much as you can, and avoid repeating code
+          or function calls. Add the rest of an HTML document around the output —
+          the head, the title, and so on — so it's valid.
+        </p>
+        <p>
+          Make a page for this assignment, linked from your site, that shows your
+          Hello World greeting running locally on a node server as a screenshot,
+          then your code, then the output of your modified, branded home page
+          shown right in the page — as formatted text and images, not links.
         </p>
         <p><a href="#top">Back to top</a></p>
       </section>
