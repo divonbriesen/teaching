@@ -17,6 +17,11 @@
 (function () {
   "use strict";
   const SCRIPT_SRC = (document.currentScript && document.currentScript.src) || "";
+  // The validation page on the teaching site, next to the script's own folder,
+  // so the report's "About this validator" link works from any page that loads it.
+  const VALIDATION_URL = SCRIPT_SRC
+    ? SCRIPT_SRC.replace(/[^/]+\/standards-check\.js.*$/, "validation.html")
+    : "validation.html";
   const RULES_URL = SCRIPT_SRC
     ? SCRIPT_SRC.replace(/[^/]+\/standards-check\.js.*$/, "standards/rules.json")
     : "standards/rules.json";
@@ -146,7 +151,8 @@
   async function runChecks() {
     const d = document;
     const h1 = d.querySelector("h1");
-    const h1Text = h1 ? h1.textContent.trim() : "";
+    // a heading an editor wrapped over several lines is still one line of text
+    const h1Text = h1 ? h1.textContent.replace(/\s+/g, " ").trim() : "";
     // Self-aware mode detection: rules.json declares which directories are
     // course sites (match_dirs); a pattern guess would misfire on things
     // like web123 (the teaching site). data-mode still overrides.
@@ -380,7 +386,10 @@
     // or a bare h1/h2/h3 selector). Minor words (a, of, the...) are exempt
     // except as the first/last word, matching normal title-case style.
     const TITLE_CASE_MINOR = new Set(["a", "an", "the", "and", "but", "or", "nor", "for", "so", "yet",
-      "at", "by", "in", "of", "on", "to", "up", "as", "vs", "via", "from", "into", "with"]);
+      "at", "by", "in", "of", "on", "to", "up", "as", "vs", "via", "from", "into", "with",
+      // name particles stay lowercase in a name: "D.I. von Briesen", "Ludwig van Beethoven"
+      "von", "van", "der", "den", "de", "del", "della", "la", "le", "du", "da", "di",
+      "dos", "das", "bin", "ibn", "al", "el", "ten", "ter"]);
     const looksTitleCase = (text) => {
       const words = text.trim().split(/\s+/).filter(Boolean);
       return words.every((w, i) => {
@@ -407,7 +416,7 @@
     else {
       const badHeadings = headingEls.filter((h) => h.textContent.trim() && !looksTitleCase(h.textContent));
       add(!badHeadings.length ? "PASS" : "FAIL", "headings (h1-h3) use Title Case",
-        badHeadings.length ? badHeadings.slice(0, 3).map((h) => JSON.stringify(h.textContent.trim())).join(", ") : "");
+        badHeadings.length ? badHeadings.slice(0, 3).map((h) => JSON.stringify(h.textContent.replace(/\s+/g, " ").trim())).join(", ") : "");
     }
 
     const scripts = [...d.querySelectorAll("script[src]")].map((s) => s.getAttribute("src") || "");
@@ -1163,7 +1172,9 @@
     const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const closeX = '<span data-vicuña-close style="position:sticky;top:0;float:right;' +
       'cursor:pointer;font:bold 14px/1 sans-serif;color:#666;padding:0 2px;">&#10005;</span>';
-    panel.innerHTML = closeX + res
+    const aboutLink = '<a href="' + VALIDATION_URL + '" target="_blank" rel="noopener" ' +
+      'style="color:#1a5fb4;text-decoration:underline;font-weight:bold;">About this validator</a><br>';
+    panel.innerHTML = closeX + aboutLink + res
       .map((r) => r.level === "HEAD"
         ? "<br>&gt;&gt;&gt;&gt;&gt;&gt; <strong>" + esc(r.rule) + "</strong> &lt;&lt;&lt;&lt;&lt;&lt;"
         : icons[r.level] + " " + esc(r.rule) + (r.detail ? " &rarr; found: &quot;" + esc(r.detail) + "&quot;" : ""))

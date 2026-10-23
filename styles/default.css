@@ -171,7 +171,7 @@ pre {
   overflow-x: auto;
   padding: 12px;
   border: 1px solid #d6d0c4;
-  background: #fff;
+  background: #fff; /* white, so code blocks stand out from the cream page */
 }
 
 hr {
@@ -269,6 +269,25 @@ header {
   margin: 0 0 6px;
 }
 
+/* subtitle: the small line under the site name in the header. It's a
+   paragraph, not a heading: an h5 straight after the h1 skips three heading
+   levels, which the W3C validator reports as an error. The h1 stays the plain
+   site name the page title is built from. */
+.subtitle {
+  margin: 0 0 6px;
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+}
+
+/* the con tooltip is sized for large text; in the subtitle it needs a
+   readable size of its own */
+.subtitle .con-note:hover::after,
+.subtitle .con-note:focus::after {
+  font-size: 0.85rem;
+  letter-spacing: normal;
+}
+
 /* badge-demo: static copies of the Vicunadator's pass/fail states so the
    validation page can show students what to look for */
 .badge-demo-row {
@@ -332,7 +351,7 @@ header {
 }
 
 .faq-item {
-  background: #fff;
+  background: #fff; /* white cards on the cream page */
   border: 1px solid #d6d0c4;
   border-left: 5px solid #3c6e47;
   border-radius: 10px;
