@@ -176,10 +176,10 @@
     const course = site === "course";
 
     if (location.pathname.toLowerCase().includes("/components/")) {
-      add("INFO", "component fragment", "checked via the pages that include it — not a standalone page");
+      add("INFO", "component fragment", "checked via the pages that include it - not a standalone page");
       return results;
     }
-    if (site === "crappy") add("HEAD", "CRAPPY STANDARDS (INVERTED — SINS REQUIRED)");
+    if (site === "crappy") add("HEAD", "CRAPPY STANDARDS (INVERTED - SINS REQUIRED)");
     else add("HEAD", "GENERAL RULES (EVERY PAGE)");
 
     if (site === "crappy") {
@@ -215,7 +215,7 @@
     if (!icon) add("FAIL", FAV_RULE, "no favicon link");
     else {
       const href = icon.getAttribute("href") || "";
-      if (href.startsWith("data:")) add("PASS", FAV_RULE, short(href) + " (embedded — folder not required)");
+      if (href.startsWith("data:")) add("PASS", FAV_RULE, short(href) + " (embedded - folder not required)");
       else if (!(await ok(href))) add("FAIL", FAV_RULE, short(href) + " doesn't resolve");
       else if (isLocal(href) && !href.includes("images/")) add("FAIL", FAV_RULE, short(href) + " not in images/");
       else add("PASS", FAV_RULE, short(href));
@@ -240,7 +240,7 @@
     // and not a further sub/sub folder inside styles/ itself.
     const inStylesFolder = (s) => /^\.?\/?styles\/[^/]+$/i.test(s);
     if (!localSheets.length) {
-      add("PASS", CSS_RULE, embedded.trim() ? "embedded styles only — folder/default.css not required" : "no stylesheets on this page");
+      add("PASS", CSS_RULE, embedded.trim() ? "embedded styles only - folder/default.css not required" : "no stylesheets on this page");
     } else if (localSheets.some((s) => !inStylesFolder(s)))
       add("FAIL", CSS_RULE, "outside styles/: " + localSheets.filter((s) => !inStylesFolder(s)).join(", "));
     else if (localSheets[0].split("/").pop().toLowerCase() !== "default.css")
@@ -295,7 +295,7 @@
       add(mwOk ? "PASS" : "FAIL",
         "max-width and margin: auto on body, or on header, main and footer",
         mwOk ? "" : "set max-width and margin: auto on <body>, OR on all three of <header>, <main>, and " +
-          "<footer>. Right now — " + Object.entries(mwStates).map(([t, st]) => t + ": " + st).join("; "));
+          "<footer>. Right now - " + Object.entries(mwStates).map(([t, st]) => t + ": " + st).join("; "));
     }
 
     if (css) {
@@ -305,8 +305,8 @@
         stacks.map((s) => s.split(",")[0].trim().replace(/['"]/g, "").toLowerCase()).filter((f) => f && !generic.has(f))
       );
       add(primaries.size >= 2 ? "PASS" : "FAIL", "at least 2 fonts",
-        primaries.size === 1 ? "only " + [...primaries][0] + " — need at least 2 different fonts"
-          : ([...primaries].sort().join(", ") || "none found — need at least 2 different fonts"));
+        primaries.size === 1 ? "only " + [...primaries][0] + " - need at least 2 different fonts"
+          : ([...primaries].sort().join(", ") || "none found - need at least 2 different fonts"));
       const banned = [...primaries].filter((f) => BANNED_FONTS.some((b) => f.includes(b)));
       add(!banned.length ? "PASS" : "FAIL", "no banned fonts (as the primary choice)", banned.join(", "));
       // Must apply unconditionally — a rule that only exists inside an
@@ -341,7 +341,7 @@
           if (!BANNED_LINK_COLORS.has(linkColors[key])) continue;
           const [prefix, state] = key.split("|");
           visitedProblems.push((state === "base" ? prefix : prefix + ":" + state) + " is " + linkColors[key]
-            + " — pick your own color, not a default blue/purple/green/red");
+            + " - pick your own color, not a default blue/purple/green/red");
         }
         for (const key of Object.keys(linkColors)) {
           const [prefix, state] = key.split("|");
@@ -378,7 +378,7 @@
       if (!bwUses.length) add("PASS", BW_RULE);
       else if (!unexplained.length) add("PASS", BW_RULE, [...new Set(bwUses.map((u) => u.value))].join(", "));
       else add("FAIL", BW_RULE, unexplained.slice(0, 5).map((u) => "`" + cssLines[u.line].trim().slice(0, 50) + "`").join(", ")
-        + " — add a comment on that line or the line above that says why (mention white/black)");
+        + " - add a comment on that line or the line above that says why (mention white/black)");
     } else add("FAIL", "page has CSS (linked or embedded)", "no CSS found at all");
 
     // h1-h3 should read as Title Case — either in the text itself, or via
@@ -616,7 +616,7 @@
       const isSpa = wraps.every(Boolean) && new Set(wraps).size === wraps.length;
       add(isSpa ? "PASS" : "FAIL", MAIN_RULE,
         isSpa ? "found " + h2s.length + " h2s, each in its own section/article"
-              : "found " + h2s.length + " h2s outside a <section>/<article> — a page has ONE h2 name, so if this " +
+              : "found " + h2s.length + " h2s outside a <section>/<article> - a page has ONE h2 name, so if this " +
                 "isn't a real multi-page SPA, the extra headings should probably be h3s; if it IS an SPA, wrap " +
                 "each h2's content in its own <section> or <article>");
     }
@@ -627,8 +627,8 @@
     // treated as the favicon showing up in the page body.
     const imgs = [...d.querySelectorAll("img")].map((i) => i.getAttribute("src") || "")
       .filter((s) => !s.toLowerCase().includes("favicon")
-        && !s.includes("lint.page")); // Accumulus injects its own imgs — not the student's
-    if (!imgs.length && !d.querySelector("svg")) add("FAIL", "at least one image (favicon doesn't count)", "no <img> or inline <svg> found — a logo in the header counts, the favicon doesn't");
+        && !s.includes("lint.page")); // Accumulus injects its own imgs - not the student's
+    if (!imgs.length && !d.querySelector("svg")) add("FAIL", "at least one image (favicon doesn't count)", "no <img> or inline <svg> found - a logo in the header counts, the favicon doesn't");
     else add("PASS", "at least one image (favicon doesn't count)", imgs.slice(0, 3).map(short).join(", ") || "inline svg");
     const localImgs = imgs.filter(isLocal);
     if (localImgs.length) {
@@ -800,7 +800,7 @@
           .map((e) => (e.getAttribute("href") || e.getAttribute("src") || e.getAttribute("data-include") || "").trim())
           .filter((h) => /^\/(?!\/)/.test(h)))];
       add(!rooted.length ? "PASS" : "FAIL", "internal paths are relative, not root-absolute (no leading /)",
-        !rooted.length ? "" : "a path starting with / means the root of the domain, so it breaks if the site moves — " +
+        !rooted.length ? "" : "a path starting with / means the root of the domain, so it breaks if the site moves - " +
           "make it relative (e.g. contract.html or ./contract.html): " + rooted.slice(0, 4).join(", "));
     }
 
@@ -812,7 +812,7 @@
       if (course) {
         const creditOk = hasDesignerCredit(footer.textContent, h1Text);
         add(creditOk ? "PASS" : "FAIL", "footer has designer credit",
-          creditOk ? "" : 'no credit in the footer — put "by" before your firm name, e.g. "Designed by Your Firm Name"');
+          creditOk ? "" : 'no credit in the footer - put "by" before your firm name, e.g. "Designed by Your Firm Name"');
         // Gated on rules.json's cert_started_patterns: no cert pages linked
         // yet means there's nothing to certify in, so don't fail the footer
         // line for it.
@@ -831,7 +831,7 @@
       const chromeText = (header ? header.textContent : "") + footer.textContent;
       const hasTagline = /<em|<i[\s>]/.test(chrome) || /["“][^"”]{4,}["”]/.test(chromeText);
       add(hasTagline ? "PASS" : "FAIL", "tagline in italics or quotes (header or footer)",
-        hasTagline ? "" : "no tagline found — put one in italics (<em>) or in quotes in the header or footer");
+        hasTagline ? "" : "no tagline found - put one in italics (<em>) or in quotes in the header or footer");
     }
 
     // ===== Layer-2/3 site and page rules from rules.json =====
@@ -859,7 +859,7 @@
                 const n = d.querySelectorAll(sel).length;
                 const okc = n >= (c.min || 1);
                 add(okc ? "PASS" : "FAIL", rule, okc ? "" : "found " + n + " <" + c.tag + ">" +
-                  (c.within ? " inside <" + c.within + ">" : "") + " — need at least " + (c.min || 1));
+                  (c.within ? " inside <" + c.within + ">" : "") + " - need at least " + (c.min || 1));
               } else if (c.type === "text" || c.type === "html") {
                 const hay = c.type === "text" ? docText : docHtml;
                 // soften_unless: a milestone that chains off an earlier one
@@ -871,7 +871,7 @@
                 }
                 const found = new RegExp(c.pattern, "i").test(hay);
                 const okc = found === want;
-                let detail = okc ? "" : (want ? "missing" : "found — remove it");
+                let detail = okc ? "" : (want ? "missing" : "found - remove it");
                 // near-miss hint: strict pattern failed but a looser one
                 // matches — say what's wrong instead of "missing"
                 if (!okc && c.fail_hint_pattern && new RegExp(c.fail_hint_pattern, "i").test(hay)) {
@@ -885,7 +885,7 @@
                 // none of its items present. Once even one shows up, the
                 // student has started, so the rest are fair game to require.
                 if (c.soften_if_none && missing.length === (c.patterns || []).length) {
-                  add("INFO", rule, "none yet — not required until you start");
+                  add("INFO", rule, "none yet - not required until you start");
                 } else {
                   add(!missing.length ? "PASS" : "FAIL", rule,
                     missing.length ? "missing: " + missing.slice(0, 4).join(", ") : "");
@@ -895,7 +895,7 @@
                 const heads = [...d.querySelectorAll(sel)].map((h) => h.textContent.trim());
                 const found = heads.some((h) => new RegExp(c.pattern, "i").test(h));
                 const okc = found === want;
-                add(okc ? "PASS" : "FAIL", rule, okc ? "" : (want ? "missing" : "found — remove it"));
+                add(okc ? "PASS" : "FAIL", rule, okc ? "" : (want ? "missing" : "found - remove it"));
               } else if (c.type === "css") {
                 const found = new RegExp(c.pattern, "i").test(css);
                 const okc = found === want;
@@ -994,7 +994,7 @@
           const hasEm = hf.some((e) => e.querySelector("em"));
           const hasQuotes = /["“”][^"“”<>]{4,120}["“”]/.test(hfText);
           const SLOGAN = "slogan/tagline in header or footer (italics OR quotes, not both)";
-          if (hasEm && hasQuotes) add("WARN", SLOGAN, "found both em and quoted text — pick one style");
+          if (hasEm && hasQuotes) add("WARN", SLOGAN, "found both em and quoted text - pick one style");
           else if (hasEm || hasQuotes) add("PASS", SLOGAN, hasEm ? "em" : "quotes");
           else add("FAIL", SLOGAN, "no em or quoted text found in header/footer");
 
@@ -1017,7 +1017,7 @@
           else add("FAIL", "designer/developer credit in the footer",
             "footer should refer to you as designer/developer/coder");
 
-          add("INFO", "3 dynamic JS functionalities (M15)", "not auto-checked — summarize them in your submission");
+          add("INFO", "3 dynamic JS functionalities (M15)", "not auto-checked - summarize them in your submission");
           add("INFO", "look and feel differs from your course/hobby/firm sites", "judged by eye");
         }
         if (site === "course" || site === "mascot") {
@@ -1061,7 +1061,7 @@
           }
           const navs = [...d.querySelectorAll("nav")];
           const hasHobby = (n) => n && [...n.querySelectorAll("a")].some((a) => (a.getAttribute("href") || "").toLowerCase().includes("hobby"));
-          if (hasHobby(navs[0])) add("FAIL", "Hobby link lives in the secondary nav (second <nav>)", "Hobby link is in the main nav — move it into a second <nav> (the secondary navigation)");
+          if (hasHobby(navs[0])) add("FAIL", "Hobby link lives in the secondary nav (second <nav>)", "Hobby link is in the main nav - move it into a second <nav> (the secondary navigation)");
           else if (navs.slice(1).some(hasHobby)) add("PASS", "Hobby link lives in the secondary nav (second <nav>)");
           else add("INFO", "Hobby link lives in the secondary nav (second <nav>)", "no hobby link yet (required once the midterm is up)");
         }
@@ -1118,7 +1118,7 @@
             (found[i - 1].el.compareDocumentPosition(r.el) & Node.DOCUMENT_POSITION_FOLLOWING));
           add(found.length === REQUIRED_LINKS.length && inOrder ? "PASS" : "FAIL",
             "profile links are in the required order (" + REQUIRED_LINKS.map((r) => r.label).join(", ") + ")",
-            found.length === REQUIRED_LINKS.length ? (inOrder ? "" : "out of order") : "can't check order — some links missing");
+            found.length === REQUIRED_LINKS.length ? (inOrder ? "" : "out of order") : "can't check order - some links missing");
         }
       }
     }
@@ -1159,8 +1159,8 @@
           "box-shadow:0 0 12px 6px rgba(40,170,60,.55);");
     badge.textContent = "🦙";
     badge.title = crappy
-      ? (fails ? fails + " sin(s) still missing — make it worse" : "perfectly terrible 🎉 — click for details")
-      : fails ? fails + " standards check(s) failing — click for details" : "All standards checks pass — click for details";
+      ? (fails ? fails + " sin(s) still missing - make it worse" : "perfectly terrible 🎉 - click for details")
+      : fails ? fails + " standards check(s) failing - click for details" : "All standards checks pass - click for details";
 
     const panel = document.createElement("div");
     panel.style.cssText =

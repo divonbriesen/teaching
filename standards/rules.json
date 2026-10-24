@@ -6,11 +6,11 @@
       "site_checks": [
         {
           "type": "text",
-          "rule": "copyright (optional) is Firm ©YEAR — name, space, © tight against the year",
+          "rule": "copyright (optional) is Firm ©YEAR - name, space, © tight against the year",
           "pattern": "©(?!20\\d\\d)|(?<!\\S )©",
           "present": false,
           "fail_hint_pattern": "©",
-          "fail_hint": "© found but malformed — needs: YourFirmName ©2026 (space before ©, none after)"
+          "fail_hint": "© found but malformed - needs: YourFirmName ©2026 (space before ©, none after)"
         }
       ],
       "pages": {
@@ -619,7 +619,7 @@
               "rule": "M13: Generate HTML / JSON / XML buttons",
               "pattern": "generate\\s*(html|json|xml)",
               "fail_hint_pattern": "<button",
-              "fail_hint": "buttons found, but no Generate HTML/JSON/XML — required from M13 on",
+              "fail_hint": "buttons found, but no Generate HTML/JSON/XML - required from M13 on",
               "present": true
             }
           ]
@@ -692,7 +692,7 @@
               "rule": "M13: Generate HTML / JSON / XML buttons",
               "pattern": "generate\\s*(html|json|xml)",
               "fail_hint_pattern": "<button",
-              "fail_hint": "buttons found, but no Generate HTML/JSON/XML — required from M13 on",
+              "fail_hint": "buttons found, but no Generate HTML/JSON/XML - required from M13 on",
               "present": true
             }
           ]
@@ -737,7 +737,7 @@
         },
         {
           "type": "html",
-          "rule": "no includes — header/footer written directly in the file",
+          "rule": "no includes - header/footer written directly in the file",
           "pattern": "data-include|components/(header|footer)",
           "present": false
         },
@@ -765,7 +765,7 @@
           "pattern": "<footer[\\s\\S]*?href=\"\\.\\./",
           "present": true,
           "fail_hint_pattern": "<footer[\\s\\S]*?href=\"[^\"]*/[a-z0-9-]+\\.[a-z]{2,4}/",
-          "fail_hint": "firm is linked with an absolute URL — use a relative link (../yourfirm.tld/)"
+          "fail_hint": "firm is linked with an absolute URL - use a relative link (../yourfirm.tld/)"
         }
       ],
       "pages": {},
@@ -873,7 +873,7 @@
         "stuff"
       ],
       "inverse": true,
-      "comment": "Sin checklist — PASS means the badness is present. Code-side checks add filename sins, heading order, inline-style count, and (JS) aspect distortion.",
+      "comment": "Sin checklist - PASS means the badness is present. Code-side checks add filename sins, heading order, inline-style count, and (JS) aspect distortion.",
       "site_checks": [
         {
           "type": "html",

@@ -74,3 +74,27 @@ Commandments, validator usage) extracted from web123 — written for reuse
 across future course sites. That Project isn't reachable from this repo; if
 its content and this repo drift apart, that's on whoever's driving to keep in
 sync manually.
+
+## Voice: write like D.I., not like an AI (read before writing any site copy)
+
+D.I.'s real writing (Canvas announcements, Brightspace assignments) is plain and
+direct. It talks to "you", uses contractions, SHOUTS a word or two when it matters,
+trails off with ellipses..., adds (parenthetical asides), and uses a spaced hyphen
+" - " as its dash. Across about 5,000 words of announcements: zero em dashes.
+
+- **No em dashes.** Use " - " (spaced hyphen), a period, or a comma. En dashes stay
+  for ranges only (Chapters 1–3, Mon–Wed).
+- **Short, plain words.** "Use", not "leverage". "Make sure", not "ensure". "Is in"
+  or "is at", not "lives in" or "lives here".
+- **Say it once, straight.** No "It's not X, it's Y" setups, no lists of three for
+  rhythm, no wind-up lines ("Here's the thing", "That's the point").
+- **Tell the student what to do.** Imperative is fine ("Post a link..."). Say the
+  rule, then one plain sentence of why if it needs one.
+- **Don't dress rules up.** A dry, short joke is fine. Flourishes aren't.
+- **Words to avoid:** lives here/in, source of truth, under the hood, leverage,
+  robust, seamless, dive into, deep dive, delve, journey, landscape, crucial, vital,
+  essentially, worth noting, at its core, navigate (unless literally moving around a
+  site), empower, foster, streamline, comprehensive, holistic, mindset, sweet spot,
+  wrestle, nuance, double down, load-bearing, bedrock, north star, guardrails,
+  friction, level up, bite-sized, gotcha, pitfall, rabbit hole, non-negotiable,
+  table stakes, "on purpose", "the whole point", genuinely, honestly, deliberately.
