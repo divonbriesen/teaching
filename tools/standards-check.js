@@ -1061,9 +1061,9 @@
           }
           const navs = [...d.querySelectorAll("nav")];
           const hasHobby = (n) => n && [...n.querySelectorAll("a")].some((a) => (a.getAttribute("href") || "").toLowerCase().includes("hobby"));
-          if (hasHobby(navs[0])) add("FAIL", "Hobby link lives in the secondary nav (second <nav>)", "Hobby link is in the main nav - move it into a second <nav> (the secondary navigation)");
-          else if (navs.slice(1).some(hasHobby)) add("PASS", "Hobby link lives in the secondary nav (second <nav>)");
-          else add("INFO", "Hobby link lives in the secondary nav (second <nav>)", "no hobby link yet (required once the midterm is up)");
+          if (hasHobby(navs[0])) add("FAIL", "Hobby link is in the secondary nav (second <nav>)", "Hobby link is in the main nav - move it into a second <nav> (the secondary navigation)");
+          else if (navs.slice(1).some(hasHobby)) add("PASS", "Hobby link is in the secondary nav (second <nav>)");
+          else add("INFO", "Hobby link is in the secondary nav (second <nav>)", "no hobby link yet (required once the midterm is up)");
         }
         const pageRules = siteRules.pages && siteRules.pages[page];
         if (pageRules) {
