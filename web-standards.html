@@ -88,7 +88,7 @@
           page, all green.
         </li>
         <li>
-          Design on purpose with the
+          Design with the
           <a href="crap.html">CRAP principles</a>: Contrast, Repetition,
           Alignment, and Proximity.
         </li>
@@ -129,7 +129,7 @@
           always. Semantic structure, a favicon that resolves, stylesheets in
           <code>styles/</code> with <code>default.css</code> first, scripts in
           a folder rather than loose, at least two fonts, no banned fonts,
-          link colors you chose on purpose, images in <code>images/</code>
+          link colors you chose yourself, images in <code>images/</code>
           with names that say what they're, dividers spaced, and hrefs with
           no stray whitespace.
         </li>
@@ -143,7 +143,7 @@
         <li>
           <strong>Page rules</strong> are specific to the assignment: what an
           introduction page must contain, what the pictures page must show,
-          which links the navigation must carry by which module.
+          which links the navigation needs by which module.
         </li>
       </ul>
 
@@ -156,14 +156,13 @@
         </p>
       </blockquote>
 
-      <h3>The Rules That Catch People Out</h3>
+      <h3>The Rules People Miss</h3>
       <ul>
         <li>
           <strong>Relative links inside your own site.</strong> An absolute URL
           pointing back into your own webspace is a failure, because your CLT
           and GitHub copies must both work. The exception is the footer's
-          home and site links, which are deliberately absolute so they point
-          at one fixed home regardless of which copy the reader landed on.
+          home and site links, which are absolute so they always point to one home, whichever copy the reader is on.
         </li>
         <li>
           <strong>Explain the non-semantic bits.</strong> Prefer a real element
@@ -246,7 +245,7 @@
 <section>
       <h3>Before the Course Site: Your Root Site</h3>
       <p>
-        Your webspace root carries an <code>index.html</code> that isn't
+        Your webspace root has an <code>index.html</code> that isn't
         course work. It introduces you and points onward. From there, an
         obvious relative link leads to the course, labelled with the course ID
         in capitals and no spaces - "Click to go to WEB250" - and it points at
@@ -255,16 +254,14 @@
       </p>
       <ul>
         <li>Root page: <code>index.html</code>, no class content on it</li>
-        <li>Link text carries the course ID in caps: WEB250, ITIS3135</li>
+        <li>Link text has the course ID in caps: WEB250, ITIS3135</li>
         <li>Link target is the folder: <code>web250/</code>, not a page</li>
         <li>The link is relative, never absolute</li>
       </ul>
 
       <h3>The Footer, in Order</h3>
       <p>
-        Every page's footer carries a nav with these seven links, as absolute
-        URLs, because they point at fixed homes regardless of which copy of
-        your site a reader landed on:
+        Every page's footer has a nav with these seven links, as absolute URLs, because they point to fixed homes whichever copy of your site a reader is on:
       </p>
       <ol>
         <li>Your webspace</li>
@@ -304,8 +301,7 @@
 
       <h3>Your Brand, and Where It Has to Show Up</h3>
       <p>
-        Your site carries a brand identity, and every page carries some of it.
-        That means all six of these, chosen deliberately and used consistently:
+        Your site has a brand identity, and every page shows some of it. That means all six of these, picked by you and used consistently:
       </p>
       <ul>
         <li>Organization or company name</li>
@@ -316,7 +312,7 @@
         <li>Tagline or slogan</li>
       </ul>
       <p>
-        Consistency is the whole point. Headers, footers, navigation, colors,
+        Consistency is what counts. Headers, footers, navigation, colors,
         and type should make any two pages of your site look like they belong
         to each other, and anything you customize should suit the theme - a
         candy-shop site says "Good Morning, Sweeties", not "Good Morning".
@@ -353,9 +349,9 @@
             certificates (e.g. freeCodeCamp Responsive Web Design), linked.
           </li>
           <li>
-            Intentionally bad assignment pages (e.g., the CRAP page) live in a
+            The intentionally bad assignment pages (e.g., the CRAP page) go in a
             <strong>stuff/</strong> folder. Pages inside stuff/ are exempt from
-            these standards - that's the point of them - but the rest of the
+            these standards - they're supposed to be bad - but the rest of the
             site isn't excused for linking to them.
           </li>
         </ol>
@@ -464,7 +460,7 @@
               </li>
               <li>
                 Linked stylesheets (other than font services like Google
-                Fonts) live in a styles folder, and the site's stylesheet is
+                Fonts) go in a styles folder, and the site's stylesheet is
                 called default.css - if there are several, default.css must be
                 first. A single page using only embedded styles needs neither
                 the folder nor the file.
@@ -524,8 +520,7 @@
           </li>
           <li>
             There's a legible favicon that matches the site name and/or theme,
-            when viewed on the browser tab. The favicon file lives in the
-            images folder, unless it's embedded (a data URI).
+            when viewed on the browser tab. The favicon file goes in the images folder, unless it's embedded (a data URI).
           </li>
           <li>
             Page Validation with the script from Accumulus (cloud)
@@ -533,7 +528,7 @@
             <ul>
               <li>Script is last line within head element</li>
               <li>
-                Every page also carries the
+                Every page also has the
                 <a href="validation.html">Vicunadator</a> script before the end
                 of body - both validators, on every page, while you code.
               </li>
