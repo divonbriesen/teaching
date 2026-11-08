@@ -672,7 +672,11 @@
     const divSpan = (rawCounted.match(/<(div|span)[\s>]/gi) || []).length
       - (rawCounted.match(/<div[^>]*data-include/gi) || []).length;
     const classId = (rawCounted.match(/\s(class|id)\s*=\s*["']/gi) || []).length;
-    const inline = (rawCounted.match(/\sstyle\s*=\s*["']/gi) || []).length;
+    // The Everything Images page tells students to resize images with inline
+    // width/height, so those don't count against the 2-or-fewer limit there.
+    const onImagesPage = /\/(pictures|images)\.html$/i.test(location.pathname);
+    const inline = (rawCounted.match(/\sstyle\s*=\s*["']/gi) || []).length
+      - (onImagesPage ? (rawCounted.match(/<img\b[^>]*\sstyle\s*=\s*["']/gi) || []).length : 0);
     // The comment has to actually talk about the thing, not just exist.
     const NOTE_STRUCT = "Any use of divs/spans/classes requires a justifying comment, as you should only use these if you need them.";
     const NOTE_INLINE = "Any inline style requires a justifying comment, as you should only use one if you need it.";
@@ -780,6 +784,9 @@
       const h = a.getAttribute("href") || "";
       if (a.target !== "_blank" || !isLocal(h)) return false;
       const path = h.split("#")[0].split("?")[0];
+      // a link to an image file (the originals on the Everything Images page)
+      // isn't site navigation, so it may open in a new tab
+      if (/\.(jpe?g|png|gif|webp|avif|svg)$/i.test(path)) return false;
       let targetPath;
       try { targetPath = new URL(path, location.href).pathname; } catch (e) { return false; }
       return classifySite(targetPath, location.host, rules) === site;
