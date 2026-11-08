@@ -150,6 +150,19 @@
 
   async function runChecks() {
     const d = document;
+    // The student's own <style> blocks, read from the page's original markup.
+    // The live DOM also holds styles that other scripts and browser extensions
+    // inject at runtime (an extension's Tailwind "@property --tw-*" rules were
+    // flagged as unexplained white), and the student wrote none of those.
+    // Falls back to the live DOM when the source can't be fetched.
+    let ownStyleText;
+    try {
+      const rawSource = await (await fetch(location.href)).text();
+      ownStyleText = [...new DOMParser().parseFromString(rawSource, "text/html").querySelectorAll("style")]
+        .map((s) => s.textContent).join("\n");
+    } catch (e) {
+      ownStyleText = [...d.querySelectorAll("style")].map((s) => s.textContent).join("\n");
+    }
     const h1 = d.querySelector("h1");
     // a heading an editor wrapped over several lines is still one line of text
     const h1Text = h1 ? h1.textContent.replace(/\s+/g, " ").trim() : "";
@@ -184,7 +197,7 @@
 
     if (site === "crappy") {
       const docHtml0 = d.documentElement.outerHTML;
-      const css0 = [...d.querySelectorAll("style")].map((s) => s.textContent).join("\n");
+      const css0 = ownStyleText;
       for (const c of (rules.sites.crappy.site_checks || [])) {
         const hay = c.type === "css" ? css0 : docHtml0;
         const found = new RegExp(c.pattern, "i").test(hay);
@@ -232,7 +245,7 @@
 
     const sheets = [...d.querySelectorAll('link[rel~="stylesheet"]')].map((l) => l.getAttribute("href") || "");
     const localSheets = sheets.filter(isLocal);
-    const embedded = [...d.querySelectorAll("style")].map((s) => s.textContent).join("\n");
+    const embedded = ownStyleText;
     const CSS_RULE = "stylesheets in styles/, first named default.css";
     // styles/ must be the immediate folder holding a single file directly —
     // not just "styles/" present anywhere in the path (was matching
