@@ -74,6 +74,26 @@
           last line inside your head element, the cloud shows all green, and a
           manual check of cloud &gt; WCAG shows no warnings or errors.
         </p>
+        <h4>Known Accumulus quirks</h4>
+        <p>
+          Accumulus is still young, and its CSS reader has two bugs. Your CSS is
+          fine in both cases, and the W3C validators will agree. Work around them
+          so the cloud shows green.
+        </p>
+        <ul>
+          <li>
+            <strong>Do not name a class <code>grid</code>.</strong> Any rule
+            with <code>.grid</code> in its selector gets flagged, with an error
+            like "Expected a FUNCTION or IDENT after colon". Use a different
+            name, like <code>layout</code>, in the CSS and in the HTML.
+          </li>
+          <li>
+            <strong>Keep <code>grid-template-areas</code> on one line.</strong>
+            Splitting the quoted rows across lines gives "Unexpected token".
+            Write it as
+            <code>grid-template-areas: "header header" "info photo";</code>
+          </li>
+        </ul>
       </section>
 
       <section>
