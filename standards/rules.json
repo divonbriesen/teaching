@@ -116,6 +116,15 @@
               "min": 1
             },
             {
+              "type": "html",
+              "rule": "this course's item in the courses list links to your contract",
+              "pattern": "<main[\\s\\S]*<ol[^>]*>(?:(?!</ol>)[\\s\\S])*<a\\s[^>]*href=\"(?:[^\"#?]*/)?contract\\.(?:html?|php)(?:[#?][^\"]*)?\"",
+              "present": true,
+              "skip_for_dirs": [
+                "itsc1110"
+              ]
+            },
+            {
               "type": "element",
               "rule": "quote in a blockquote",
               "tag": "blockquote",
@@ -160,9 +169,21 @@
               "present": true
             },
             {
+              "type": "html",
+              "rule": "your name in the first paragraph links to your introduction",
+              "pattern": "<main[^>]*>(?:(?!<p[\\s>])[\\s\\S])*<p[^>]*>(?:(?!</p>)[\\s\\S])*?<a\\s[^>]*href=\"[^\"]*introduction[^\"]*\"",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "signature (in italics) includes the date",
+              "pattern": "<p[^>]*>\\s*Signed\\b(?:(?!</p>)[\\s\\S])*?<(?:em|i)[\\s>](?:(?!</p>)[\\s\\S])*?\\d",
+              "present": true
+            },
+            {
               "type": "text",
               "rule": "no unedited placeholders",
-              "pattern": "FIRST M\\.? LAST|SEMESTER YYYY|ABC123|NAME OF CLASS",
+              "pattern": "FIRST M\\.? LAST|SEMESTER YYYY|ABC123|NAME OF CLASS|\\[[A-Za-z][A-Za-z ]{2,30}\\]",
               "present": false
             }
           ]

@@ -77,6 +77,18 @@
     } catch (e) { return false; }
   }
 
+  // A file that resolves can still be blank: a favicon saved empty returns 200
+  // and shows nothing in the tab. Smallest real image (a minimal SVG or a
+  // one-pixel PNG) is well over this, so anything under it is treated as empty.
+  // A fetch that fails (cross-origin, offline) answers false: can't tell.
+  async function isBlankFile(url) {
+    try {
+      const r = await fetch(url);
+      if (!r.ok) return false;
+      return (await r.arrayBuffer()).byteLength < 30;
+    } catch (e) { return false; }
+  }
+
   async function getText(url) {
     try {
       const r = await fetch(url);
@@ -99,6 +111,31 @@
     // real mistake and should keep getting flagged as broken.
     const external = ["http:" + ss, "https:" + ss, ss, "data:", "mailto:", "tel:", "sms:", "facetime:", "facetime-audio:", "geo:", "#"];
     return !external.some(function (p) { return low.startsWith(p); });
+  }
+
+  // Do the words of a mascot phrase share initials, position by position, with
+  // the words of a name? "Thomas McElroy" + "Terrific Muskrat" -> true.
+  // A hyphen in a name is ambiguous ("McCrary-Roffis" is two parts, "Al-Jafari"
+  // is one), so both readings are tried on both sides; a middle initial
+  // ("Kaleb J. Weaver") usually isn't echoed in the phrase, so dropping it is
+  // tried too. Shared by the course-site mascot check and the personal-site
+  // "no mascot" check so both mean the same thing by "mascot".
+  function nameMatchesMascotPhrase(nameStr, mascotStr) {
+    const splitWords = (str, hyphenBreaks) =>
+      str.split(hyphenBreaks ? /[\s.-]+/ : /[\s.]+/).map((w) => w.trim()).filter(Boolean);
+    const initialsMatchFor = (nameWords, mascotWords) =>
+      nameWords.length === mascotWords.length &&
+      nameWords.every((w, i) => w[0] && mascotWords[i][0] && w[0].toLowerCase() === mascotWords[i][0].toLowerCase());
+    const dropMiddleInitials = (words) =>
+      words.length > 2 ? words.filter((w, i) => !(i > 0 && i < words.length - 1 && w.length === 1)) : words;
+    for (const nameHyphen of [true, false]) {
+      for (const mascotHyphen of [true, false]) {
+        const nw = splitWords(nameStr, nameHyphen);
+        const mw = splitWords(mascotStr, mascotHyphen);
+        if (initialsMatchFor(nw, mw) || initialsMatchFor(dropMiddleInitials(nw), mw)) return true;
+      }
+    }
+    return false;
   }
 
   // Which declared site (rules.json's sites map) does a path belong to?
@@ -230,6 +267,7 @@
       const href = icon.getAttribute("href") || "";
       if (href.startsWith("data:")) add("PASS", FAV_RULE, short(href) + " (embedded - folder not required)");
       else if (!(await ok(href))) add("FAIL", FAV_RULE, short(href) + " doesn't resolve");
+      else if (await isBlankFile(href)) add("FAIL", FAV_RULE, short(href) + " is empty - save a real image into the file");
       else if (isLocal(href) && !href.includes("images/")) add("FAIL", FAV_RULE, short(href) + " not in images/");
       else add("PASS", FAV_RULE, short(href));
     }
@@ -509,8 +547,6 @@
       // both right. Try both interpretations (hyphen as a word break, and
       // hyphen kept inside the word) for both sides and accept a match
       // from any combination, rather than committing to one convention.
-      const splitWords = (s, hyphenBreaks) =>
-        s.split(hyphenBreaks ? /[\s.-]+/ : /[\s.]+/).map((w) => w.trim()).filter(Boolean);
       // Any decorative symbol counts as the divider here (not just the
       // narrow |~•·—- set) — a student's h1 can legitimately use a star,
       // diamond, or other character as their divider of choice, and this
@@ -519,23 +555,7 @@
       // job elsewhere).
       const nameMascot = h1Text.match(/^(.+?)(?:['’]s|(?<=s)['’])\s+(.+?)(?:\s*[^\w\s'".,-]|\s+-+\s)/);
       if (nameMascot) {
-        const initialsMatchFor = (nameWords, mascotWords) =>
-          nameWords.length === mascotWords.length &&
-          nameWords.every((w, i) => w[0] && mascotWords[i][0] && w[0].toLowerCase() === mascotWords[i][0].toLowerCase());
-        // A middle initial ("Kaleb J. Weaver") splits into its own word but
-        // usually isn't reflected in the mascot phrase — try dropping any
-        // single-letter interior word as an alternate reading.
-        const dropMiddleInitials = (words) =>
-          words.length > 2 ? words.filter((w, i) => !(i > 0 && i < words.length - 1 && w.length === 1)) : words;
-        const combos = [];
-        for (const nameHyphen of [true, false]) {
-          for (const mascotHyphen of [true, false]) {
-            const nw = splitWords(nameMascot[1], nameHyphen);
-            const mw = splitWords(nameMascot[2], mascotHyphen);
-            combos.push([nw, mw], [dropMiddleInitials(nw), mw]);
-          }
-        }
-        const initialsMatch = combos.some(([nw, mw]) => initialsMatchFor(nw, mw));
+        const initialsMatch = nameMatchesMascotPhrase(nameMascot[1], nameMascot[2]);
         add(initialsMatch ? "PASS" : "FAIL", "mascot's words share initials with your name's words",
           initialsMatch ? "" : nameMascot[1].trim() + " vs " + nameMascot[2].trim());
       } else {
@@ -987,6 +1007,29 @@
           )];
           add(!coursey.length ? "PASS" : "FAIL", "title/h1 read as YOUR page, not the course's",
             coursey.slice(0, 2).join("; ").trim());
+          // The mascot belongs to the course site. The personal home page
+          // should not tie itself to it in the title, h1, or h2: neither the
+          // word "mascot" nor the course-site pattern "Name's Same Initials".
+          const MASCOT_RULE = "no mascot in the title, h1, or h2 (that belongs to the course site)";
+          const prominent = [title]
+            .concat(title.split(/\s+(?:[|~•·—-]+)\s+/))
+            .concat([...d.querySelectorAll("h1, h2")].map((h) => h.textContent.trim()))
+            .filter(Boolean);
+          const mascotHits = [...new Set(prominent.filter((t) => {
+            if (/mascot/i.test(t)) return true;
+            const m = t.match(/^(.+?)(?:['’]s|(?<=s)['’])\s+(.+?)\s*$/);
+            if (!m) return false;
+            // A lead-in word ("Meet Pat Student's ...") shouldn't hide it, so
+            // try the last 2-4 words before the 's as the name. One-word names
+            // are skipped: "Pat's Portfolio" is an ordinary personal title.
+            const phrase = m[2].replace(/\s*[^\w\s'".,-].*$/, "");
+            const before = m[1].trim().split(/\s+/);
+            for (let k = Math.min(before.length, 4); k >= 2; k--) {
+              if (nameMatchesMascotPhrase(before.slice(-k).join(" "), phrase)) return true;
+            }
+            return false;
+          }))];
+          add(!mascotHits.length ? "PASS" : "FAIL", MASCOT_RULE, mascotHits.slice(0, 2).join("; "));
           const courseLinks = anchors.map((a) => a.getAttribute("href") || "").filter(isCourseRef);
           if (courseLinks.length === 1) add("PASS", "exactly one link to the course site", courseLinks[0]);
           else if (!courseLinks.length) add("FAIL", "exactly one link to the course site", "none found");

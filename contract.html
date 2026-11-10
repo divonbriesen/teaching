@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D.I. von Briesen's Dapper Innovative Vicuña Buck | Contract</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- classes below are styling hooks with no semantic element available:
+         site-header/site-footer match the shared stylesheet's landmark rules,
+         home-logo and home-logo-end size the two facing vicuñas, note boxes a
+         rule or caveat, and mirrored (on a span) flips the second camel so the pair faces
+         inward,
+         con-note carries the wordplay tooltip, and subtitle sets the small line
+         under the site name -->
+    <header class="site-header">
+      <h1>
+        <a href="index.html" class="home-logo"
+          ><img
+            src="images/vicuna.svg"
+            alt="Camelid Software vicuña logo - home"
+            width="40"
+            height="40"
+        /></a>
+        D.I. von Briesen's Dapper Innovative Vicuña Buck
+        <img
+          class="home-logo-end"
+          src="images/vicuna.svg"
+          alt=""
+          width="40"
+          height="40"
+        />
+      </h1>
+      <p class="subtitle">Teaching <em class="con-note" tabindex="0">con</em> von Briesen</p>
+      <p class="tagline"><em>Contract - what you sign for the course</em></p>
+      <nav aria-label="Teaching">
+        <a href="index.html">Home</a>
+        <a href="faq.html">FAQ</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="ai-policy.html">AI Policy</a>
+        <a href="grading.html">Grading</a>
+        <a href="standards.html">Standards</a>
+        <a href="resources.html">Resources</a>
+      </nav>
+      <nav aria-label="Courses">
+        <a href="cis110/">CIS110</a>
+        <a href="web115/">WEB115</a>
+        <a href="web215/">WEB215</a>
+        <a href="web250/">WEB250</a>
+        <a href="itsc1110/">ITSC1110</a>
+        <a href="itis3135/">ITIS3135</a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Contract</h2>
+
+      <p>
+        Every course site has a contract page. It's short, and you sign it
+        with your name and the date. Use the text below as written and fill
+        in the brackets.
+      </p>
+
+      <section>
+        <h3>The Text</h3>
+        <blockquote class="note">
+          <p>
+            I, [Your Full Name], agree to abide by the terms of the course
+            contract in my [Term Year] [COURSE CODE], [Course Name] class with
+            my instructor, Professor D.I. von Briesen.
+          </p>
+          <p>
+            I understand that all work that I do on publicly available online
+            tools will be available to the world and will not put information
+            there that is inappropriate for schoolwork, or that I wish to keep
+            private. I also understand that it is my work that counts for
+            attendance, not logins or showing up for class.
+          </p>
+          <p>
+            As such, failure to turn in assignments may show as absences. I
+            also understand that given the structure and content of this class
+            it's possible to find many examples online or even view my
+            classmates' code directly. I swear that I will only use these
+            resources to learn and will not cut and paste code except where I
+            have properly given credit and never from my classmates.
+          </p>
+          <p>
+            Signed:<br />
+            <em>[Your Full Name], [Date]</em>
+          </p>
+        </blockquote>
+      </section>
+
+      <section>
+        <h3>What Gets Checked</h3>
+        <ul>
+          <li>
+            The page is <code>contract.html</code>, it's in your header
+            navigation, and its heading says Contract.
+          </li>
+          <li>
+            It's several paragraphs, the three above, each in its own
+            <code>&lt;p&gt;</code>. Don't squeeze them into one block.
+          </li>
+          <li>
+            <strong>Your name in the first line is a link back to your
+            introduction.</strong> That's the only link in that paragraph.
+          </li>
+          <li>
+            Your <strong>signature is in italics</strong> after the last
+            paragraph: <em>Signed:</em> your name, then the date you signed.
+            Use the italic tag (<code>&lt;em&gt;</code>), not a font trick in
+            CSS.
+          </li>
+          <li>
+            Fill in every bracket. Your course code and name are the ones on
+            your schedule, like ITIS 3135 or WEB250.
+          </li>
+          <li>
+            The link goes both ways: your introduction's list of courses has
+            this course linked to your contract. See the
+            <a href="web-standards.html#introduction-webpage">Introduction
+            Webpage Standards</a>.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Why There's a Contract</h3>
+        <p>
+          Your work is public, and it's your work that counts, not logging in.
+          Signing says you read that. It also gives your course site one more
+          real page with real content on it.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <span class="mirrored">&#128042;</span> This site is a Camelid Software
+        Production, who'd-wanna-copy-this 2026
+        <a href="about.html">About DI</a>
+        <a href="name.html">My Name</a>
+        <a href="recommendation.html">Want a Recommendation?</a>
+        &#128043;
+      </p>
+      <p>
+        <em
+          >If you keep on doin' what you've been doin' yer gonna keep on
+          gettin' what you've been gettin!</em
+        >
+      </p>
+    </footer>
+    <script src="tools/standards-check.js" defer data-mode="general"></script>
+  </body>
+</html>
