@@ -26,19 +26,13 @@
               "type": "html",
               "rule": "nav links to Contract",
               "pattern": "href=\"(?:[^\"#?]*/)?contract\\.(?:html?|php)(?:[#?][^\"]*)?\"",
-              "present": true,
-              "skip_for_dirs": [
-                "itsc1110"
-              ]
+              "present": true
             },
             {
               "type": "html",
               "rule": "nav links to About",
               "pattern": "href=\"(?:[^\"#?]*/)?about\\.(?:html?|php)(?:[#?][^\"]*)?\"",
-              "present": true,
-              "skip_for_dirs": [
-                "itsc1110"
-              ]
+              "present": true
             },
             {
               "type": "element",
@@ -119,10 +113,7 @@
               "type": "html",
               "rule": "this course's item in the courses list links to your contract",
               "pattern": "<main[\\s\\S]*<ol[^>]*>(?:(?!</ol>)[\\s\\S])*<a\\s[^>]*href=\"(?:[^\"#?]*/)?contract\\.(?:html?|php)(?:[#?][^\"]*)?\"",
-              "present": true,
-              "skip_for_dirs": [
-                "itsc1110"
-              ]
+              "present": true
             },
             {
               "type": "element",
@@ -256,7 +247,8 @@
                 "web250",
                 "web-250",
                 "cis110",
-                "cis-110"
+                "cis-110",
+                "itsc1110"
               ]
             },
             {
