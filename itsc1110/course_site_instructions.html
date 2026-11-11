@@ -50,10 +50,14 @@
       <p>ITSC1110 &bull; Introduction to Computer Science Principles</p>
 
       <p>
-        Your course site is in a folder in your UNC Charlotte webspace:
-        webpages.charlotte.edu/youruserid/itsc1110/. It's small - five pages that share one header and one footer, the same pages the other courses start with, plus one of its own. Your personal
+        This is one assignment, and it builds your course site's first three
+        pages: <strong>Home</strong>, <strong>Introduction</strong>, and
+        <strong>Contract</strong>. Each page has its own part below, and they
+        point to each other. The site goes in a folder in your UNC Charlotte
+        webspace: webpages.charlotte.edu/youruserid/itsc1110/. Your personal
         <a href="home_page_instructions.html">home page</a> sits one level
-        above it and links down to it.
+        above it and links down to it. Two more pages, About and the AI
+        Introduction, come later with the final site.
       </p>
 
       <section>
@@ -66,8 +70,6 @@
           <li><strong>index.html</strong> - the course home page</li>
           <li><strong>introduction.html</strong> - your introduction</li>
           <li><strong>contract.html</strong> - your course contract</li>
-          <li><strong>about.html</strong> - what the site is and how it was made</li>
-          <li><strong>ai_introduction.html</strong> - your AI introduction</li>
           <li>
             <strong>components</strong> - header.html and footer.html, the
             shared pieces
@@ -78,10 +80,6 @@
             (named default.css), and your pictures, each in its own folder
           </li>
         </ul>
-        <p>
-          Those five pages are the whole site. You won't add others in this
-          assignment.
-        </p>
         <p>
           Your <a href="home_page_instructions.html">home page</a> links down
           to the folder with a relative link that ends at the folder, not at a
@@ -125,8 +123,6 @@
     &lt;a href="index.html"&gt;Home&lt;/a&gt;
     &lt;a href="introduction.html"&gt;Introduction&lt;/a&gt;
     &lt;a href="contract.html"&gt;Contract&lt;/a&gt;
-    &lt;a href="about.html"&gt;About&lt;/a&gt;
-    &lt;a href="ai_introduction.html"&gt;AI Introduction&lt;/a&gt;
   &lt;/nav&gt;
 &lt;/header&gt;
 
@@ -135,7 +131,8 @@
 &lt;/main&gt;</pre>
         <p>
           The header goes in components/header.html, as described below. The
-          title and the h2 stay in each page.
+          title and the h2 stay in each page. The menu grows when you add
+          About and the AI Introduction later.
         </p>
       </section>
 
@@ -156,7 +153,7 @@
             <strong>header.html</strong> and <strong>footer.html</strong>.
             Put your header and footer in them - <strong>including the header and footer elements themselves</strong>.
             The header holds your site name and a navigation that links to all
-            five pages.
+            three pages.
           </li>
           <li>
             In each page, replace the whole header and footer with the include
@@ -181,16 +178,15 @@
       </section>
 
       <section>
-        <h3>The Five Pages</h3>
+        <h3>The Three Pages</h3>
         <p>
-          Four of them are the same pages every course site in my courses
-          starts with, in the same order in your menu. The fifth is the one
-          this course adds.
+          These are the same three pages every course site in my courses
+          starts with, in this order in your menu.
         </p>
         <ul>
           <li>
             <strong>Home</strong> (index.html) - welcomes a visitor, says what
-            this site is, and points to the other pages.
+            this site is, and points to your introduction and your contract.
           </li>
           <li>
             <strong>Introduction</strong> (introduction.html) - your Shared
@@ -198,15 +194,93 @@
             It follows the
             <a href="../web-standards.html#introduction-webpage"
               >Introduction Webpage Standards</a
-            >, minus the links line. In the list of courses you're taking, the
-            item for this course links to your contract page.
+            >, minus the links line.
           </li>
           <li>
-            <strong>Contract</strong> (contract.html) - the
-            <a href="../contract.html">course contract</a>, several
-            paragraphs, with your name in the first line linked back to your
-            introduction and your signature in italics with the date.
+            <strong>Contract</strong> (contract.html) - the course contract,
+            from the shared <a href="../contract.html">Contract</a> page:
+            several paragraphs, the brackets filled in, and your signature in
+            italics with the date.
           </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>How the Pages Refer to Each Other</h3>
+        <p>
+          The three pages are one piece of work, so each one points to the
+          others:
+        </p>
+        <ul>
+          <li>
+            Every page's menu links to all three pages.
+          </li>
+          <li>
+            Your <strong>Home</strong> page has a sentence in main that links
+            to your introduction and your contract.
+          </li>
+          <li>
+            On your <strong>Introduction</strong>, in the list of courses
+            you're taking, the item for this course links to your contract.
+          </li>
+          <li>
+            On your <strong>Contract</strong>, your name in the first
+            paragraph links back to your introduction.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>What We Check</h3>
+        <ul>
+          <li>
+            The folder is named itsc1110, and holds index.html,
+            introduction.html, and contract.html.
+          </li>
+          <li>
+            The h1 reads your name, your mascot, a divider, and ITSC1110, and
+            each title is that name, a divider, and the page name.
+          </li>
+          <li>
+            components/header.html and components/footer.html exist and
+            contain the header and footer elements, and your page source holds
+            only the include.
+          </li>
+          <li>
+            The pages refer to each other. The Vicunadator checks the menu,
+            the contract link in your introduction, and the introduction link
+            in your contract. We read the sentence on your home page
+            ourselves.
+          </li>
+          <li>
+            Every page passes Accumulus and the
+            <a href="../validation.html">Vicunadator</a>, and the
+            <a href="../web-standards.html">Web Standards</a> apply. The
+            Vicunadator may say the About link isn't needed yet. That one comes
+            with the final site.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Submitting</h3>
+        <p>
+          Submit the address of your course site - webpages.charlotte.edu/youruserid/itsc1110/,
+          without index.html on the end. Canvas has the due date and the point value.
+        </p>
+        <p>
+          With the address, write three things that gave you trouble while you
+          built it and what you learned from each.
+        </p>
+      </section>
+
+      <section>
+        <h3>Later: About and the AI Introduction</h3>
+        <p>
+          The final site adds two more pages to the same folder, and the menu
+          links to them too.
+        </p>
+        <ul>
           <li>
             <strong>About</strong> (about.html) - in a couple of paragraphs and
             bullets: what this site shows (ITSC1110, with a link to
@@ -217,14 +291,11 @@
           </li>
           <li>
             <strong>AI Introduction</strong> (ai_introduction.html) - the one
-            difference from the other courses, described next. It's just an
-            introduction, written by an AI tool instead of by you.
+            difference from the other courses. It's an introduction written by
+            an AI tool instead of by you, described next.
           </li>
         </ul>
-      </section>
-
-      <section>
-        <h3>The AI Introduction</h3>
+        <h4>The AI Introduction</h4>
         <p>
           Give an AI tool the facts about you, ask it to write your
           introduction, and publish the result - then be honest about how it
@@ -248,47 +319,9 @@
             <a href="../ai-policy.html">AI Policy</a>.
           </li>
         </ol>
-      </section>
-
-      <section>
-        <h3>What We Check</h3>
-        <ul>
-          <li>
-            The folder is named itsc1110, and holds index.html,
-            introduction.html, contract.html, about.html, and
-            ai_introduction.html.
-          </li>
-          <li>
-            The h1 reads your name, your mascot, a divider, and ITSC1110, and
-            each title is that name, a divider, and the page name.
-          </li>
-          <li>
-            components/header.html and components/footer.html exist and
-            contain the header and footer elements, and your page source holds
-            only the include.
-          </li>
-          <li>
-            Every page passes Accumulus and the
-            <a href="../validation.html">Vicunadator</a>, and the
-            <a href="../web-standards.html">Web Standards</a> apply.
-          </li>
-          <li>
-            The AI Introduction has all three parts. That one we read
-            ourselves - no checker can tell an honest comparison from a
-            hurried one.
-          </li>
-        </ul>
-      </section>
-
-      <section>
-        <h3>Submitting</h3>
         <p>
-          Submit the address of your course site - webpages.charlotte.edu/youruserid/itsc1110/,
-          without index.html on the end. Canvas has the due date and the point value.
-        </p>
-        <p>
-          With the address, write three things that gave you trouble while you
-          built it and what you learned from each.
+          That one we read ourselves - no checker can tell an honest
+          comparison from a hurried one.
         </p>
       </section>
     </main>

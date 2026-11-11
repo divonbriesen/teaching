@@ -32,7 +32,11 @@
               "type": "html",
               "rule": "nav links to About",
               "pattern": "href=\"(?:[^\"#?]*/)?about\\.(?:html?|php)(?:[#?][^\"]*)?\"",
-              "present": true
+              "present": true,
+              "soften_for_dirs": [
+                "itsc1110"
+              ],
+              "soften_note": "comes with the About page in the final site"
             },
             {
               "type": "element",

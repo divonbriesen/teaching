@@ -929,7 +929,13 @@
                 if (!okc && c.fail_hint_pattern && new RegExp(c.fail_hint_pattern, "i").test(hay)) {
                   detail = c.fail_hint || detail;
                 }
-                add(okc ? "PASS" : "FAIL", rule, detail);
+                // soften_for_dirs: in these courses the rule isn't due yet, so a
+                // miss is information, not a failure (a pass is still a pass)
+                if (!okc && (c.soften_for_dirs || []).some((dir) => skipSegs.includes(dir))) {
+                  add("INFO", rule, c.soften_note || "not required yet");
+                } else {
+                  add(okc ? "PASS" : "FAIL", rule, detail);
+                }
               } else if (c.type === "text_all" || c.type === "html_all") {
                 const hay = c.type === "text_all" ? docText : docHtml;
                 const missing = (c.patterns || []).filter((p2) => !new RegExp(p2, "i").test(hay));
