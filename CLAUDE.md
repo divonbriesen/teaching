@@ -98,3 +98,15 @@ trails off with ellipses..., adds (parenthetical asides), and uses a spaced hyph
   wrestle, nuance, double down, load-bearing, bedrock, north star, guardrails,
   friction, level up, bite-sized, gotcha, pitfall, rabbit hole, non-negotiable,
   table stakes, "on purpose", "the whole point", genuinely, honestly, deliberately.
+
+## Common content
+
+The pages every course shares (contract, policies, standards, introductions, boards)
+are the root pages of this site, collected on `common.html`. Canvas and the course
+pages link to them instead of pasting copies.
+
+- A new root page goes in three places: the hub (`common.html`), `sites.common.match_files`
+  in `standards/rules.json` (the Vicunadator classifies the page by that list, and an
+  unlisted root page is mistaken for a student mascot site), and the nav link on the page.
+- Never paste shared text (the contract, the AI policy) into a Canvas assignment. Link
+  to the page, so there is one copy to fix.

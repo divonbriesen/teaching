@@ -869,7 +869,8 @@
         "scripts",
         "standards",
         "evaluator",
-        "GRADING-intros"
+        "GRADING-intros",
+        "teaching"
       ],
       "site_checks": [
         {
@@ -998,6 +999,50 @@
       "comment": "M3A: the personal home page. Code checks: personal h1/title, single course link, no shared assets, embedded styles.",
       "site_checks": [],
       "pages": {}
+    },
+    "common": {
+      "match": "the teaching site's own shared pages, by file name, on its own host (code-side)",
+      "comment": "Common content: the pages every course shares (contract, policies, standards, introductions, boards). Listed by file name so a page added here must also be added to this list.",
+      "match_hosts": [
+        "divonbriesen.github.io"
+      ],
+      "match_files": [
+        "404.html",
+        "about.html",
+        "ai-policy.html",
+        "bonus-participation.html",
+        "common.html",
+        "contract.html",
+        "course-standards.html",
+        "crap.html",
+        "discussion-boards.html",
+        "emojis.html",
+        "faq.html",
+        "grading.html",
+        "index.html",
+        "introduction-annotated.html",
+        "introduction-example.html",
+        "introduction-form.html",
+        "introductions.html",
+        "journals.html",
+        "name.html",
+        "peer-reviews.html",
+        "recommendation.html",
+        "resources.html",
+        "schedule.html",
+        "standards.html",
+        "validation.html",
+        "web-standards.html",
+        "work-logs.html"
+      ],
+      "site_checks": [
+        {
+          "type": "html",
+          "rule": "nav links to the Common Content hub",
+          "pattern": "<nav[^>]*>(?:(?!</nav>)[\\s\\S])*href=\"common\\.html\"",
+          "present": true
+        }
+      ]
     }
   }
 }

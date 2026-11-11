@@ -162,6 +162,18 @@
         }
       }
     }
+    // common: the teaching site's own shared pages, matched by file name, only
+    // on the teaching site's host and only at its top level, so a student's
+    // own contract.html or about.html is never mistaken for one of them.
+    if (!site && rules.sites.common) {
+      const cs = rules.sites.common;
+      const segs = lowPath.split("/").filter(Boolean);
+      const file = segs[segs.length - 1] || "index.html";
+      const hostOk = (cs.match_hosts || []).some((h) => host.toLowerCase().startsWith(h.toLowerCase()));
+      // top level = at most the repository folder plus the file itself
+      const topLevel = segs.filter((x) => !/\.html?$/.test(x)).length <= 1;
+      if (hostOk && topLevel && (cs.match_files || []).includes(file)) site = "common";
+    }
     if (!site && rules.sites.personal) {
       const depth = lowPath.split("/").filter((s) => s && !/\.html?$/.test(s)).length;
       if ((host.includes("webpages.charlotte.edu") && depth === 1) ||
