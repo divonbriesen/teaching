@@ -56,8 +56,8 @@
         point to each other. The site goes in a folder in your UNC Charlotte
         webspace: webpages.charlotte.edu/youruserid/itsc1110/. Your personal
         <a href="home_page_instructions.html">home page</a> sits one level
-        above it and links down to it. Two more pages, About and the AI
-        Introduction, come later with the final site.
+        above it and links down to it. Two more pages, the AI Introduction and
+        the Slideshow, come later with the final site.
       </p>
 
       <section>
@@ -90,6 +90,41 @@
         </p>
       </section>
 
+      <section id="organize">
+        <h3>Organize Your Websites</h3>
+        <p>
+          You end up with two sites, one inside the other. Here is how they
+          are laid out in your UNC Charlotte webspace:
+        </p>
+        <pre>public_html/                 your webspace root
+  index.html                 your personal home page
+  itsc1110/                  your course site (lowercase, no spaces)
+    index.html               Home
+    introduction.html        Introduction
+    contract.html            Contract
+    ai_introduction.html     AI Introduction
+    slideshow.html           Mascot Slideshow
+    components/              header.html and footer.html, shared by all five pages
+    scripts/  styles/  images/</pre>
+        <ul>
+          <li>
+            <strong>Your personal home page</strong> is
+            <code>index.html</code> at the root of <code>public_html</code>.
+            It's YOUR page: about you, with no mascot and nothing about the
+            course except one link to your course site
+            (<code>itsc1110/</code>). Both validators, Accumulus (the cloud)
+            and the Vicunadator (the lama), show green on it.
+          </li>
+          <li>
+            <strong>Your course site</strong> is the <code>itsc1110</code>
+            folder (all lowercase, no spaces) and has five pages: Home,
+            Introduction, Contract, AI Introduction, and Slideshow. All five
+            share one header and one footer, and both validators show green
+            on every one of them.
+          </li>
+        </ul>
+      </section>
+
       <section>
         <h3>The Folder</h3>
         <p>
@@ -115,7 +150,9 @@
           to the folder with a relative link that ends at the folder, not at a
           page: <code>itsc1110/</code>. The folder sits inside your
           <strong>public_html</strong> folder on the server, and it is the
-          only place your course work goes.
+          only place your course work goes. The AI Introduction and the
+          Slideshow (ai_introduction.html and slideshow.html) join the same
+          folder later, with the final site.
         </p>
       </section>
 
@@ -162,7 +199,7 @@
         <p>
           The header goes in components/header.html, as described below. The
           title and the h2 stay in each page. The menu grows when you add
-          About and the AI Introduction later.
+          the AI Introduction and the Slideshow later.
         </p>
       </section>
 
@@ -265,7 +302,8 @@
         <ul>
           <li>
             The folder is named itsc1110, and holds index.html,
-            introduction.html, and contract.html.
+            introduction.html, contract.html, ai_introduction.html, and
+            slideshow.html.
           </li>
           <li>
             The h1 reads your name, your mascot, a divider, and ITSC1110, and
@@ -285,9 +323,7 @@
           <li>
             Every page passes Accumulus and the
             <a href="../validation.html">Vicunadator</a>, and the
-            <a href="../web-standards.html">Web Standards</a> apply. The
-            Vicunadator may say the About link isn't needed yet. That one comes
-            with the final site.
+            <a href="../web-standards.html">Web Standards</a> apply.
           </li>
         </ul>
       </section>
@@ -306,24 +342,21 @@
       </section>
 
       <section>
-        <h3>Later: About and the AI Introduction</h3>
+        <h3>Later: The AI Introduction and the Slideshow</h3>
         <p>
           The final site adds two more pages to the same folder, and the menu
           links to them too.
         </p>
         <ul>
           <li>
-            <strong>About</strong> (about.html) - in a couple of paragraphs and
-            bullets: what this site shows (ITSC1110, with a link to
-            <a href="../index.html">my teaching site</a>), the tools the course
-            uses (VS Code, Emmet, Git and GitHub, the Accumulus validator, and
-            the Vicunadator), and the sites you build - your personal home
-            page, this course site, and your design firm.
-          </li>
-          <li>
             <strong>AI Introduction</strong> (ai_introduction.html) - the one
             difference from the other courses. It's an introduction written by
             an AI tool instead of by you, described next.
+          </li>
+          <li>
+            <strong>Slideshow</strong> (slideshow.html) - the mascot slideshow
+            you made in the "Create your mascot with AI tools" assignment, now
+            a page of your course site. It is described below.
           </li>
         </ul>
         <h4>The AI Introduction</h4>
@@ -354,6 +387,28 @@
           That one we read ourselves - no checker can tell an honest
           comparison from a hurried one.
         </p>
+        <h4>The Slideshow</h4>
+        <p>
+          The slideshow is a page of AI-generated pictures of your mascot,
+          with buttons to step through them. Each picture's caption is the
+          prompt that made it.
+        </p>
+        <ul>
+          <li>
+            Move <code>slideshow.html</code> into your <code>itsc1110</code>
+            folder and keep the pictures (mascot_1, mascot_2, and so on) in
+            its <code>images</code> folder.
+          </li>
+          <li>
+            It uses the same shared header and footer as your other four
+            pages, with a Slideshow link in the menu, and the page's title
+            and h2 follow the same naming as the rest of the site.
+          </li>
+          <li>
+            Accumulus and the Vicunadator show green on it, like every other
+            page.
+          </li>
+        </ul>
       </section>
     </main>
 
