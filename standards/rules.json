@@ -1026,6 +1026,10 @@
         "2+ related links are in a <nav>",
         "stylesheets in styles/",
         "scripts in scripts/"
+      ],
+      "fallback_host_suffixes": [
+        ".github.io",
+        ".wasmer.app"
       ]
     },
     "designfirm": {

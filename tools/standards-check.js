@@ -244,6 +244,19 @@
       add("WARN", "site-specific rules skipped (data-mode=\"general\" is set on this page's script tag)",
         "remove data-mode=\"general\" if this page should be auto-classified and checked against its site-type rules");
     }
+    // A .com-style folder that isn't under itis3135 matches the design firm
+    // rules by path alone. When it sits at the top of a student's own
+    // GitHub Pages site (CPCC hosts), or it has no header and no nav (a
+    // firm site needs both; a one-page card has neither), it is the WEB115
+    // business card instead. Hosts are listed by service in rules.json, not
+    // by student. Revisit when the card becomes card.html next to a site.
+    if (site === "designfirm" && rules && rules.sites && rules.sites.businesscard &&
+        !/\/itis3135\//i.test(location.pathname)) {
+      const suffixes = rules.sites.businesscard.fallback_host_suffixes || [];
+      const hostHit = suffixes.some((x) => location.host.toLowerCase().endsWith(x.toLowerCase()));
+      const looksLikeCard = !d.querySelector("header, nav");
+      if (hostHit || looksLikeCard) site = "businesscard";
+    }
     const course = site === "course";
 
     if (location.pathname.toLowerCase().includes("/components/")) {
