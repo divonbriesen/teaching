@@ -1025,7 +1025,8 @@
         "<footer> present",
         "2+ related links are in a <nav>",
         "stylesheets in styles/",
-        "scripts in scripts/"
+        "scripts in scripts/",
+        "title combines h1"
       ],
       "fallback_host_suffixes": [
         ".github.io",
