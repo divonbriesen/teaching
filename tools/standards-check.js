@@ -913,10 +913,12 @@
             if ((c.skip_for_dirs || []).some((dir) => skipSegs.includes(dir))) continue;
             try {
               if (c.type === "element") {
-                const sel = c.within ? c.within + " " + c.tag : c.tag;
+                // tag may list several tags separated by commas ("input,textarea,select"),
+                // counted together; "within" is prefixed to each one
+                const sel = c.tag.split(",").map((t) => (c.within ? c.within + " " : "") + t.trim()).join(",");
                 const n = d.querySelectorAll(sel).length;
                 const okc = n >= (c.min || 1);
-                add(okc ? "PASS" : "FAIL", rule, okc ? "" : "found " + n + " <" + c.tag + ">" +
+                add(okc ? "PASS" : "FAIL", rule, okc ? "" : "found " + n + " <" + c.tag.split(",").join("> + <") + ">" +
                   (c.within ? " inside <" + c.within + ">" : "") + " - need at least " + (c.min || 1));
               } else if (c.type === "text" || c.type === "html") {
                 const hay = c.type === "text" ? docText : docHtml;
