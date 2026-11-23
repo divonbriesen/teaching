@@ -987,6 +987,31 @@
           }
         };
         applyChecks(siteRules.site_checks);
+        if (site === "businesscard") {
+          // The folder is named after the company's web address
+          // (vonbriesenenterprises.com), so that address must appear on the
+          // card and the email must be at that same domain.
+          const dirs = location.pathname.split("/").filter((x) => x && !/\.html?$/i.test(x));
+          const folder = decodeURIComponent(dirs[dirs.length - 1] || "").toLowerCase();
+          if (/\.[a-z]{2,24}$/.test(folder)) {
+            const hrefs = [...d.querySelectorAll("a[href]")].map((a) => a.getAttribute("href") || "").join(" ");
+            const pool = (d.body.textContent || "") + " " + hrefs;
+            const emails = pool.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi) || [];
+            const withoutEmails = pool.replace(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi, " ");
+            const urls = (withoutEmails.match(/[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,24}/gi) || [])
+              .map((u) => u.toLowerCase().replace(/^www\./, ""));
+            const urlOk = urls.includes(folder);
+            add(urlOk ? "PASS" : "FAIL", "web address on the card matches the folder name (" + folder + ")",
+              urlOk ? "" : (urls.length ? "found " + [...new Set(urls)].slice(0, 3).join(", ") : "no web address found") + " - needs " + folder);
+            const domains = emails.map((e) => e.split("@")[1].toLowerCase());
+            const mailOk = domains.includes(folder);
+            add(mailOk ? "PASS" : "FAIL", "email is at the same address (after the @ is " + folder + ")",
+              mailOk ? "" : (domains.length ? "found @" + [...new Set(domains)].slice(0, 3).join(", @") : "no email found") + " - needs @" + folder);
+          } else {
+            add("INFO", "web address and email match the folder name",
+              "folder '" + folder + "' isn't named like a web address, so this wasn't checked");
+          }
+        }
         if (site === "hobby") {
           const h2texts = [...d.querySelectorAll("h2")].map((h) => h.textContent.trim().toLowerCase());
           const ends = h2texts.some((h) => h && title.toLowerCase().endsWith(h));
