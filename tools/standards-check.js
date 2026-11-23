@@ -1252,6 +1252,20 @@
       : fails ? fails + " standards check(s) failing - click for details" : "All standards checks pass - click for details";
 
     const panel = document.createElement("div");
+    panel.className = "vicunadator-panel";
+    // A student's own CSS (a, strong, em, span ...) leaks into this panel and
+    // can paint highlighted backgrounds that make the text illegible. Keep
+    // every element in the report on a plain background, and use bold, not a
+    // highlight, for emphasis.
+    const panelStyle = document.createElement("style");
+    panelStyle.textContent =
+      ".vicunadator-panel a,.vicunadator-panel strong,.vicunadator-panel em,.vicunadator-panel span," +
+      ".vicunadator-panel b,.vicunadator-panel mark{background:none !important;background-color:transparent !important;" +
+      "background-image:none !important;box-shadow:none !important;text-shadow:none !important;" +
+      "border:0 !important;padding:0 !important;margin:0 !important;text-decoration-color:currentColor;}" +
+      ".vicunadator-panel strong,.vicunadator-panel b,.vicunadator-panel mark{font-weight:bold !important;color:#222 !important;}" +
+      ".vicunadator-panel a{color:#1a5fb4 !important;font-weight:bold !important;text-decoration:underline !important;}";
+    document.head.appendChild(panelStyle);
     panel.style.cssText =
       "position:fixed;bottom:86px;right:36px;z-index:9999;display:none;" +
       "max-height:70vh;max-width:480px;overflow:auto;background:#fff;color:#222;" +
