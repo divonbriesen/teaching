@@ -715,6 +715,172 @@
               "present": true
             }
           ]
+        },
+        "fizzbuzz0.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 names the page",
+              "level": 2,
+              "pattern": "\\S"
+            },
+            {
+              "type": "heading",
+              "rule": "h3 page title says Fizz Buzz 0",
+              "level": 3,
+              "pattern": "fizz\\s*-?\\s*buzz\\s*-?\\s*0"
+            },
+            {
+              "type": "html",
+              "rule": "own script file linked",
+              "pattern": "<script[^>]+src=\\s*[\"'][^\"']+\\.js",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "greeting heading with id greeting",
+              "pattern": "id\\s*=\\s*[\"']greeting[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "first name field (id first_name)",
+              "pattern": "id\\s*=\\s*[\"']first_name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "last name field (id last_name)",
+              "pattern": "id\\s*=\\s*[\"']last_name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "middle initial field (id middle_initial)",
+              "pattern": "id\\s*=\\s*[\"']middle_initial[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "middle initial limited to one character",
+              "pattern": "maxlength\\s*=\\s*[\"']?1[\"']?",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "fields have placeholders or labels",
+              "pattern": "placeholder\\s*=|<label",
+              "present": true
+            },
+            {
+              "type": "element",
+              "rule": "a form with 3+ inputs",
+              "tag": "input",
+              "within": "form",
+              "min": 3
+            }
+          ]
+        },
+        "fizzbuzz1.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 names the page",
+              "level": 2,
+              "pattern": "\\S"
+            },
+            {
+              "type": "heading",
+              "rule": "h3 page title says Fizz Buzz 1",
+              "level": 3,
+              "pattern": "fizz\\s*-?\\s*buzz\\s*-?\\s*1"
+            },
+            {
+              "type": "html",
+              "rule": "own script file linked",
+              "pattern": "<script[^>]+src=\\s*[\"'][^\"']+\\.js",
+              "present": true
+            }
+          ]
+        },
+        "fizzbuzz2.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 names the page",
+              "level": 2,
+              "pattern": "\\S"
+            },
+            {
+              "type": "heading",
+              "rule": "h3 page title says Fizz Buzz 2",
+              "level": 3,
+              "pattern": "fizz\\s*-?\\s*buzz\\s*-?\\s*2"
+            },
+            {
+              "type": "html",
+              "rule": "own script file linked",
+              "pattern": "<script[^>]+src=\\s*[\"'][^\"']+\\.js",
+              "present": true
+            }
+          ]
+        },
+        "fizzbuzz3.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 names the page",
+              "level": 2,
+              "pattern": "\\S"
+            },
+            {
+              "type": "heading",
+              "rule": "h3 page title says Fizz Buzz 3",
+              "level": 3,
+              "pattern": "fizz\\s*-?\\s*buzz\\s*-?\\s*3"
+            },
+            {
+              "type": "html",
+              "rule": "own script file linked",
+              "pattern": "<script[^>]+src=\\s*[\"'][^\"']+\\.js",
+              "present": true
+            }
+          ]
+        },
+        "fizzbuzz4.html": {
+          "checks": [
+            {
+              "type": "heading",
+              "rule": "h2 names the page",
+              "level": 2,
+              "pattern": "\\S"
+            },
+            {
+              "type": "heading",
+              "rule": "h3 page title says Fizz Buzz 4",
+              "level": 3,
+              "pattern": "fizz\\s*-?\\s*buzz\\s*-?\\s*4"
+            },
+            {
+              "type": "html",
+              "rule": "own script file linked",
+              "pattern": "<script[^>]+src=\\s*[\"'][^\"']+\\.js",
+              "present": true
+            },
+            {
+              "type": "element",
+              "rule": "form with names, count, 3 divisors, 3 words, total (9+ fields)",
+              "tag": "input,select,textarea",
+              "within": "form",
+              "min": 9
+            },
+            {
+              "type": "html",
+              "rule": "total prefilled to 125",
+              "pattern": "value\\s*=\\s*[\"']125[\"']",
+              "present": true
+            }
+          ]
         }
       },
       "match_dirs": [
@@ -789,6 +955,67 @@
       ],
       "pages": {},
       "title_divider": "unique"
+    },
+    "businesscard": {
+      "match_pattern": "(?<=/web-?115/[^/]+)\\.[a-z]{2,24}/",
+      "comment": "WEB115 M11 one-page business card: folder named <company>.<tld> inside web115. ITIS3135 firm sites stay on designfirm.",
+      "site_checks": [
+        {
+          "type": "element",
+          "rule": "the card has a visible name or business heading",
+          "tag": "h1,h2,h3",
+          "min": 1
+        },
+        {
+          "type": "html",
+          "rule": "email address",
+          "pattern": "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}",
+          "present": true
+        },
+        {
+          "type": "text",
+          "rule": "phone number",
+          "pattern": "\\(?\\d{3}\\)?[-. ]\\d{3}[-. ]\\d{4}",
+          "present": true
+        },
+        {
+          "type": "text",
+          "rule": "mailing address (street number and name, or city/state/zip)",
+          "pattern": "\\b\\d{1,6}\\s+[A-Za-z0-9 .']+\\b(street|st|avenue|ave|road|rd|boulevard|blvd|drive|dr|lane|ln|way|court|ct|place|pl|suite|ste|circle|cir|parkway|pkwy)\\b|\\b[A-Z]{2}\\s+\\d{5}\\b",
+          "present": true
+        },
+        {
+          "type": "css",
+          "rule": "styling is embedded in the page",
+          "pattern": "\\S",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "no link to the shared default.css",
+          "pattern": "<link[^>]+default\\.css",
+          "present": false
+        },
+        {
+          "type": "css",
+          "rule": "card centered on the page",
+          "pattern": "place-(items|content)|justify-content\\s*:\\s*center|margin\\s*:\\s*[^;]*auto|translate",
+          "present": true
+        },
+        {
+          "type": "css",
+          "rule": "card has an edge (border or shadow)",
+          "pattern": "box-shadow|border\\s*:|border-(width|style)",
+          "present": true
+        },
+        {
+          "type": "html",
+          "rule": "no links back to course pages (standalone card)",
+          "pattern": "contract\\.html|introduction\\.html|about\\.html",
+          "present": false
+        }
+      ],
+      "pages": {}
     },
     "designfirm": {
       "match_pattern": "\\.[a-z]{2,24}/",
