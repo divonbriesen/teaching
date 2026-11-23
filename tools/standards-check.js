@@ -230,8 +230,11 @@
     const scriptMode = SCRIPT_EL && SCRIPT_EL.dataset.mode;
     const dataSite = SCRIPT_EL && SCRIPT_EL.dataset.site;
     let site = dataSite || classifySite(location.pathname, location.host, rules);
-    if (scriptMode === "course") site = "course";
-    else if (scriptMode === "general") {
+    // data-mode="course" is deliberately ignored: the folder path already
+    // decides the site type, and forcing "course" overrode more specific
+    // types (businesscard) and skipped pages (.php) for students who copied
+    // the attribute from a template. Only "general" (opt out) is honored.
+    if (scriptMode === "general") {
       site = null;
       // data-mode="general" skips ALL site-type rules (course, personal,
       // hobby, mascot...), not just course ones — easy to carry over by
