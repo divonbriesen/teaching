@@ -146,6 +146,12 @@
   function classifySite(pathname, host, rules) {
     if (!rules || !rules.sites) return null;
     const lowPath = pathname.toLowerCase();
+    // A page with one of these extensions belongs to a different assignment
+    // (the PHP pages in web250), not to the course site, so no course-site
+    // rules apply to it. Declared in rules.json so it can change without
+    // touching this script.
+    const skipExtensions = (rules.skip_extensions || []).map((e) => e.toLowerCase());
+    if (skipExtensions.some((ext) => lowPath.replace(/\/+$/, "").endsWith(ext))) return null;
     let site = null;
     let bestPos = -1;
     // deepest match wins so hobby/ inside itis3135/ resolves to hobby

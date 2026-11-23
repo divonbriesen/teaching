@@ -1,6 +1,9 @@
 {
   "version": 1,
   "comment": "Layer-3 page rules consumed by the Python checker and the JS Vicunadator. Edit here only; both checkers read this file.",
+  "skip_extensions": [
+    ".php"
+  ],
   "sites": {
     "course": {
       "site_checks": [
