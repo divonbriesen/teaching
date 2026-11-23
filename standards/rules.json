@@ -587,7 +587,7 @@
             {
               "type": "element",
               "rule": "form with the introduction fields (15+ inputs)",
-              "tag": "input,textarea,select",
+              "tag": "input,textarea,select,[contenteditable]:not([contenteditable=false])",
               "within": "form",
               "min": 15
             },
@@ -660,7 +660,7 @@
             {
               "type": "element",
               "rule": "form with the introduction fields (15+ inputs)",
-              "tag": "input,textarea,select",
+              "tag": "input,textarea,select,[contenteditable]:not([contenteditable=false])",
               "within": "form",
               "min": 15
             },
