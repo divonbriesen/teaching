@@ -1214,6 +1214,15 @@
         }
       }
     }
+    // A site type can list general rules that don't fit it (rules.json
+    // "skip_general_rules": substrings of rule names), e.g. a one-page card
+    // has no header, nav, footer or h2. Matching rules are dropped.
+    const skipGeneral = (rules && rules.sites && site && rules.sites[site] && rules.sites[site].skip_general_rules) || [];
+    if (skipGeneral.length) {
+      for (let i = results.length - 1; i >= 0; i--) {
+        if (skipGeneral.some((t) => results[i].rule.toLowerCase().includes(t.toLowerCase()))) results.splice(i, 1);
+      }
+    }
     return results;
   }
 

@@ -1015,7 +1015,18 @@
           "present": false
         }
       ],
-      "pages": {}
+      "pages": {},
+      "skip_general_rules": [
+        "max-width and margin: auto",
+        "link colors overridden",
+        "header starts with h1",
+        "main present, starting with h2",
+        "at least one image",
+        "<footer> present",
+        "2+ related links are in a <nav>",
+        "stylesheets in styles/",
+        "scripts in scripts/"
+      ]
     },
     "designfirm": {
       "match_pattern": "\\.[a-z]{2,24}/",
