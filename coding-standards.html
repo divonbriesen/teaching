@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D.I. von Briesen's Dapper Innovative Vicuña Buck | Coding Standards</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- classes below are styling hooks with no semantic element available:
+         site-header/site-footer match the shared stylesheet's landmark rules,
+         home-logo and home-logo-end size the facing vicuñas, note boxes the rule that overrides the others, and mirrored (on a span) flips the second camel inward,
+         con-note carries the wordplay tooltip, and subtitle sets the small line
+         under the site name -->
+    <header class="site-header">
+      <h1>
+        <a href="index.html" class="home-logo"
+          ><img
+            src="images/vicuna.svg"
+            alt="Camelid Software vicuña logo - home"
+            width="40"
+            height="40"
+        /></a>
+        D.I. von Briesen's Dapper Innovative Vicuña Buck
+        <img
+          class="home-logo-end"
+          src="images/vicuna.svg"
+          alt=""
+          width="40"
+          height="40"
+        />
+      </h1>
+      <p class="subtitle">Teaching <em class="con-note" tabindex="0">con</em> von Briesen</p>
+      <p class="tagline"><em>Coding Standards - names that explain themselves</em></p>
+      <nav aria-label="Teaching">
+        <a href="index.html">Home</a>
+        <a href="faq.html">FAQ</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="ai-policy.html">AI Policy</a>
+        <a href="grading.html">Grading</a>
+        <a href="standards.html">Standards</a>
+        <a href="resources.html">Resources</a>
+        <a href="common.html">Common</a>
+      </nav>
+      <nav aria-label="Courses">
+        <a href="cis110/">CIS110</a>
+        <a href="web115/">WEB115</a>
+        <a href="web215/">WEB215</a>
+        <a href="web250/">WEB250</a>
+        <a href="itsc1110/">ITSC1110</a>
+        <a href="itis3135/">ITIS3135</a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Coding Standards</h2>
+
+      <p>
+        These apply to code you write in any of my courses: HTML, CSS,
+        JavaScript, and whatever comes after. They start with how you name
+        things, because the names are most of the documentation. The rules
+        for the pages you build live under
+        <a href="web-standards.html">Web Standards</a>.
+      </p>
+
+      <blockquote class="note">
+        <p>
+          The Vicunadator checks the id and class rules on the Fizz Buzz
+          pages. Everything else here is checked by people - your reviewers
+          and me.
+        </p>
+      </blockquote>
+
+      <h3>Names for Ids and Classes</h3>
+      <ul>
+        <li>
+          Use lowercase letters, numbers, and dashes. Nothing else.
+          <code>first-name</code>, not <code>first_name</code> or
+          <code>firstName</code>.
+        </li>
+        <li>
+          That goes for every id and every class on the page, not just the
+          ones in your form.
+        </li>
+        <li>
+          Dashes because CSS already uses them (<code>font-size</code>,
+          <code>margin-top</code>), so your names read like the rest of the
+          stylesheet.
+        </li>
+        <li>
+          Name what it is, not how it looks. <code>error-message</code> still
+          makes sense when you change the color. <code>red-text</code>
+          doesn't.
+        </li>
+        <li>
+          An id is used once on a page. A class can be used as often as you
+          like.
+        </li>
+        <li>
+          A form field's id says what goes in it: <code>first-name</code>,
+          <code>middle-name</code>, <code>last-name</code>.
+        </li>
+      </ul>
+
+      <h3>Names in JavaScript</h3>
+      <ul>
+        <li>
+          Variables and functions use camelCase: <code>firstDivisor</code>,
+          <code>checkDivision</code>. Dashes don't work in JavaScript names (a
+          dash is the minus sign), which is why the rule is different here.
+        </li>
+        <li>
+          A variable is a noun for what it holds. A function is a verb for
+          what it does.
+        </li>
+        <li>
+          A true or false name reads like a question: <code>isEven</code>,
+          <code>hasMiddleName</code>.
+        </li>
+        <li>One-letter names are fine for a loop counter and nowhere else.</li>
+      </ul>
+
+      <h3>Names for Files and Folders</h3>
+      <p>
+        Lowercase, no spaces, and the name says what the file is:
+        <code>fizzbuzz0.html</code>, not <code>Page 1 FINAL.html</code>. The
+        rest of the file rules are in
+        <a href="web-standards.html">Web Standards</a>.
+      </p>
+
+      <h3>Self-Documenting Code</h3>
+      <p>
+        Self-documenting code explains itself. You can read it and tell what
+        it does without running it, and without a comment on every line. The
+        names do most of the work.
+      </p>
+
+<pre><code>// Hard to read: what are 3 and 5, and what is x?
+if (n % 3 === 0 &amp;&amp; n % 5 === 0) {
+  x += "w";
+}
+
+// Reads like what it does
+if (checkDivision(counter, firstDivisor) &amp;&amp; checkDivision(counter, secondDivisor)) {
+  line += bothWords;
+}</code></pre>
+
+      <ul>
+        <li>
+          Put a number you might change in a named variable. When Fizz Buzz 3
+          adds another number, it's one new line, not a rewrite.
+        </li>
+        <li>
+          One job per function. If you need "and" to say what a function
+          does, split it in two.
+        </li>
+        <li>
+          Write the code in the order a person would explain it: get the
+          values, check them, build the message, show it.
+        </li>
+        <li>
+          Comments say why, not what. <code>// count from start to end</code>
+          is just the loop again. <code>// blank words stay blank, not
+          "undefined"</code> tells the reader something the code can't.
+        </li>
+        <li>
+          Self-documenting doesn't mean no comments. Explain the choices and
+          rules the code can't show. Any class, id, div, or span you add only
+          for styling gets a comment explaining it, like the one at the top of
+          every page on this site.
+        </li>
+        <li>Delete code you commented out. Don't leave it lying around.</li>
+      </ul>
+
+      <h3>A Quick Test</h3>
+      <p>
+        Cover the comments and read your code to a classmate. If they can say
+        what each name holds and what each function does, it documents
+        itself. If you have to explain a name out loud, rename it.
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <span class="mirrored">&#128042;</span> This site is a Camelid Software
+        Production, who'd-wanna-copy-this 2026
+        <a href="about.html">About DI</a>
+        <a href="name.html">My Name</a>
+        <a href="recommendation.html">Want a Recommendation?</a>
+        &#128043;
+      </p>
+      <p>
+        <em
+          >If you keep on doin' what you've been doin' yer gonna keep on
+          gettin' what you've been gettin!</em
+        >
+      </p>
+    </footer>
+    <script src="tools/standards-check.js" defer></script>
+  </body>
+</html>

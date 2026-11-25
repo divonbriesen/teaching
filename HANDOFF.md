@@ -41,6 +41,8 @@ Tested against live student pages (amcrare, kalebweaver33, thuggin6 `/web115/`):
 
 Later on 2026-11-25: id naming rule changed to dashes only (best practice), every id and class name on a Fizz Buzz page must use only lowercase letters, numbers and dashes (new check; the validator html check now accepts a `flags` option), and the middle field id is now `middle-name` (was middle_initial / middle-initial). Kaleb's and thuggin6's Fizz Buzz pages use underscores, so they now fail the id checks until they rename.
 
+New page: `coding-standards.html` (root). Starts with the id/class dash rules, JavaScript naming, file names, then self-documenting code. Registered in `common.html`, `standards.html` and `sites.common.match_files` in `standards/rules.json`, and linked from the Fizz Buzz instructions. Not yet run through the Vicunadator.
+
 ## Open items
 
 - Start number default on Fizz Buzz 4 is 1. D.I. hasn't confirmed it.
