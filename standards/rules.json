@@ -756,14 +756,8 @@
             },
             {
               "type": "html",
-              "rule": "middle initial field (id middle_initial)",
+              "rule": "middle name or initial field (id middle_initial)",
               "pattern": "id\\s*=\\s*[\"']middle_initial[\"']",
-              "present": true
-            },
-            {
-              "type": "html",
-              "rule": "middle initial limited to one character",
-              "pattern": "maxlength\\s*=\\s*[\"']?1[\"']?",
               "present": true
             },
             {
@@ -800,6 +794,43 @@
               "rule": "own script file linked",
               "pattern": "<script[^>]+src=\\s*[\"'][^\"']+\\.js",
               "present": true
+            },
+            {
+              "type": "html",
+              "rule": "greeting heading with id greeting",
+              "pattern": "id\\s*=\\s*[\"']greeting[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "first name field (id first_name)",
+              "pattern": "id\\s*=\\s*[\"']first_name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "last name field (id last_name)",
+              "pattern": "id\\s*=\\s*[\"']last_name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "middle name or initial field (id middle_initial)",
+              "pattern": "id\\s*=\\s*[\"']middle_initial[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "fields have placeholders or labels",
+              "pattern": "placeholder\\s*=|<label",
+              "present": true
+            },
+            {
+              "type": "element",
+              "rule": "a form with 3+ inputs",
+              "tag": "input",
+              "within": "form",
+              "min": 3
             }
           ]
         },
@@ -822,6 +853,43 @@
               "rule": "own script file linked",
               "pattern": "<script[^>]+src=\\s*[\"'][^\"']+\\.js",
               "present": true
+            },
+            {
+              "type": "html",
+              "rule": "greeting heading with id greeting",
+              "pattern": "id\\s*=\\s*[\"']greeting[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "first name field (id first_name)",
+              "pattern": "id\\s*=\\s*[\"']first_name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "last name field (id last_name)",
+              "pattern": "id\\s*=\\s*[\"']last_name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "middle name or initial field (id middle_initial)",
+              "pattern": "id\\s*=\\s*[\"']middle_initial[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "fields have placeholders or labels",
+              "pattern": "placeholder\\s*=|<label",
+              "present": true
+            },
+            {
+              "type": "element",
+              "rule": "a form with 3+ inputs",
+              "tag": "input",
+              "within": "form",
+              "min": 3
             }
           ]
         },
@@ -844,6 +912,43 @@
               "rule": "own script file linked",
               "pattern": "<script[^>]+src=\\s*[\"'][^\"']+\\.js",
               "present": true
+            },
+            {
+              "type": "html",
+              "rule": "greeting heading with id greeting",
+              "pattern": "id\\s*=\\s*[\"']greeting[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "first name field (id first_name)",
+              "pattern": "id\\s*=\\s*[\"']first_name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "last name field (id last_name)",
+              "pattern": "id\\s*=\\s*[\"']last_name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "middle name or initial field (id middle_initial)",
+              "pattern": "id\\s*=\\s*[\"']middle_initial[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "fields have placeholders or labels",
+              "pattern": "placeholder\\s*=|<label",
+              "present": true
+            },
+            {
+              "type": "element",
+              "rule": "a form with 3+ inputs",
+              "tag": "input",
+              "within": "form",
+              "min": 3
             }
           ]
         },
@@ -868,15 +973,45 @@
               "present": true
             },
             {
-              "type": "element",
-              "rule": "form with names, count, 3 divisors, 3 words, total (9+ fields)",
-              "tag": "input,select,textarea",
-              "within": "form",
-              "min": 9
+              "type": "html",
+              "rule": "greeting heading with id greeting",
+              "pattern": "id\\s*=\\s*[\"']greeting[\"']",
+              "present": true
             },
             {
               "type": "html",
-              "rule": "total prefilled to 125",
+              "rule": "first name field (id first_name)",
+              "pattern": "id\\s*=\\s*[\"']first_name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "last name field (id last_name)",
+              "pattern": "id\\s*=\\s*[\"']last_name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "middle name or initial field (id middle_initial)",
+              "pattern": "id\\s*=\\s*[\"']middle_initial[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "fields have placeholders or labels",
+              "pattern": "placeholder\\s*=|<label",
+              "present": true
+            },
+            {
+              "type": "element",
+              "rule": "form with names, start, end, 3 divisors, 3 words, nothing-divisible field (12+ fields)",
+              "tag": "input,select,textarea",
+              "within": "form",
+              "min": 12
+            },
+            {
+              "type": "html",
+              "rule": "end number prefilled to 125",
               "pattern": "value\\s*=\\s*[\"']125[\"']",
               "present": true
             }

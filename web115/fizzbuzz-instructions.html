@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D.I. von Briesen's Dapper Innovative Vicuña Buck | WEB115 | Fizz Buzz Instructions</title>
+    <link rel="stylesheet" href="../styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="../images/favicon.svg" />
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>
+        <a href="../index.html" class="home-logo"
+          ><img
+            src="../images/vicuna.svg"
+            alt="Camelid Software vicuña logo - instructor's teaching site"
+            width="40"
+            height="40"
+        /></a>
+        D.I. von Briesen's Dapper Innovative Vicuña Buck | WEB115
+        <img
+          class="home-logo-end"
+          src="../images/vicuna.svg"
+          alt=""
+          width="40"
+          height="40"
+        />
+      </h1>
+      <p class="tagline"><em>Web Markup and Scripting</em></p>
+      <nav aria-label="WEB115">
+        <a href="index.html">Home</a>
+        <a href="assignments.html">Assignments</a>
+        <a href="../peer-reviews.html">Review Checklist</a>
+        <a href="../index.html">Teaching</a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Fizz Buzz Instructions</h2>
+
+      <p>
+        Five labs, each one built on the last. Look up "FizzBuzz" online first.
+        It's a kids' math game and a programming interview question, and you'll
+        build a bigger version each time until you're taking and checking user
+        input and testing for several numbers at once.
+      </p>
+
+      <p>
+        Each lab starts as a copy of the one before it. Keep everything that
+        was there and add the new part.
+      </p>
+
+      <section>
+        <h3>Every Fizz Buzz Page</h3>
+        <ul>
+          <li>
+            Save it as <strong>fizzbuzz0.html</strong>,
+            <strong>fizzbuzz1.html</strong> and so on (lowercase, no spaces).
+            Link each one from your course TOC.
+          </li>
+          <li>
+            It's a branded page with all the normal requirements. The h2
+            names the page and the h3 is the page title, like
+            "DI's Donuts Fizz Buzz 0".
+          </li>
+          <li>
+            Each page links its <strong>own script file</strong>. Make a new
+            script when you copy the page, and link the new one.
+          </li>
+          <li>
+            Under the title, add a greeting heading with the id
+            <strong>greeting</strong>. It says something like "Welcome to
+            DI's Donuts!"
+          </li>
+          <li>
+            Add a form with text fields for first name, middle name or
+            initial, and last name. Give them the ids
+            <strong>first_name</strong>, <strong>middle_initial</strong> and
+            <strong>last_name</strong>. Use placeholders (the grey hint text
+            inside the field) or labels so people know what goes where.
+          </li>
+          <li>
+            When the form is submitted, use DOM manipulation to replace the
+            greeting with one that has the full name: first name, the
+            <strong>first letter</strong> of the middle name followed by a
+            period, then last name. Someone who types "Jay" or "J" in the
+            middle field gets "J." either way. "Welcome to DI's Donuts! John
+            J. Jingleheimer!"
+          </li>
+          <li>
+            Get the field values with <code>getElementById</code>, build the
+            message, and put it back into the greeting heading.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 id="fizzbuzz0">Fizz Buzz 0</h3>
+        <p><strong>Part 1</strong></p>
+        <ul>
+          <li>
+            Add a loop that runs when the new greeting appears and outputs
+            <strong>125 identical lines</strong> of two words related to your
+            theme, each with a number in front. Two words only.
+          </li>
+          <li>
+            Format the lines however you like. Watch your line breaks, or use
+            an ordered or unordered list.
+          </li>
+        </ul>
+        <p><strong>Part 2</strong></p>
+        <ul>
+          <li>
+            Ask the user how high to count, using their first name
+            (<code>prompt("How high do you want to count, John?")</code>), and
+            loop that many times instead of 125.
+          </li>
+          <li>
+            Add an if/else inside the loop. If the counter is even
+            (<code>iCounter % 2 === 0</code>), the line says the number is
+            even. If not, it says the number is odd. Same line as your two
+            words:
+            <br />
+            <code>1) Bazoom Bazang - the number is odd</code>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 id="fizzbuzz1">Fizz Buzz 1</h3>
+        <p>
+          Copy Fizz Buzz 0, rename it, add it to your TOC, and give it a new
+          script. Keep the greeting and the name form. The loop changes.
+        </p>
+        <ul>
+          <li>
+            Output a numbered list from <strong>1 to 140</strong>, number at
+            the start of each line. Add a word from your theme, or just the
+            number. (The prompt and the even/odd message from Fizz Buzz 0 can
+            go.)
+          </li>
+          <li>
+            When the counter is evenly divisible by <strong>3</strong>, say a
+            second word of your choice.
+          </li>
+          <li>
+            Do the same for <strong>5</strong> with a third word.
+          </li>
+          <li>When a number is divisible by both, say both words.</li>
+        </ul>
+        <p>
+          You'll keep changing this, so write it so it's easy to change.
+        </p>
+      </section>
+
+      <section>
+        <h3 id="fizzbuzz2">Fizz Buzz 2</h3>
+        <p>Copy Fizz Buzz 1 the same way (new name, TOC link, new script).</p>
+        <ul>
+          <li>
+            Don't type 3 and 5 into your tests. Put them in variables near the
+            top, like <code>firstDivisor</code> and
+            <code>secondDivisor</code>. Use 3 and 5 or pick your own.
+          </li>
+          <li>
+            Write a function that takes two numbers and returns
+            <code>true</code> if the first divides evenly by the second and
+            <code>false</code> if not. It's a one-line function. Make it
+            longer if that reads better.
+          </li>
+          <li>
+            Use it in your loop. Instead of
+            <code>if (iCounter % secondDivisor === 0)</code>, write
+            <code>if (checkDivision(iCounter, secondDivisor))</code>
+            (or whatever you named your function).
+          </li>
+        </ul>
+        <p>
+          It doesn't make the program much shorter. It makes it easier to
+          change, which Fizz Buzz 3 and 4 need.
+        </p>
+      </section>
+
+      <section>
+        <h3 id="fizzbuzz3">Fizz Buzz 3 - Fizz, Buzz, BANG!</h3>
+        <p>Everything from Fizz Buzz 2, plus a third number.</p>
+        <ul>
+          <li>
+            Add <strong>7</strong>, which says <strong>BANG!</strong> (or your
+            word).
+          </li>
+          <li>
+            Cover every combination of 3, 5 and 7. A number divisible by 3 and
+            7 says both words, and so on.
+          </li>
+          <li>
+            Don't brute-force it by writing a separate branch for each
+            combination. Write it so that adding a fourth number would not
+            mean writing more branches.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 id="fizzbuzz4">Fizz Buzz 4 - Fizz, Buzz, EVERYTHING</h3>
+        <p>
+          Fizz Buzz 3, except now the user picks the numbers. Add these
+          fields to the form, along with the three name fields you already
+          have:
+        </p>
+        <ul>
+          <li>a <strong>starting number</strong> and an <strong>ending number</strong>
+            (prefill the start with 1 and the end with <strong>125</strong>)</li>
+          <li>the <strong>3 numbers to divide by</strong></li>
+          <li>the <strong>3 words to output</strong></li>
+          <li>
+            a field for numbers that <strong>nothing divides into</strong>.
+            Leave it <strong>BLANK</strong> (nothing in it), so those lines
+            show only the number.
+          </li>
+        </ul>
+        <p>
+          Prefill the other fields with your own numbers and words
+          (<strong>one word per field</strong>). When the form is submitted,
+          use JavaScript to read the values and print the list for that range
+          back on the page, like your earlier Fizz Buzz pages. Make it
+          readable and easy to use, and add instructions or explanations
+          wherever people might wonder what a field is for.
+        </p>
+      </section>
+
+      <section>
+        <h3>What the Validator Checks</h3>
+        <p>
+          The <a href="../validation.html">validator</a> checks the page: the
+          titles, the script link, the greeting and name field ids, labels or
+          placeholders, and on Fizz Buzz 4 the field count and the 125. It
+          can't read your JavaScript. Your reviewers check that part (the
+          140 lines, the divisor variables, the function, the 7 and BANG, no
+          brute force, the blank field, one word per field) with the
+          <a href="../peer-reviews.html">review checklist</a>.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <span class="mirrored">&#128042;</span> This site is a Camelid Software
+        Production, who'd-wanna-copy-this 2026 &#128043;
+      </p>
+      <p>
+        <em
+          >If you keep on doin' what you've been doin' yer gonna keep on
+          gettin' what you've been gettin!</em
+        >
+      </p>
+    </footer>
+    <script src="../tools/standards-check.js" defer data-mode="general"></script>
+  </body>
+</html>
