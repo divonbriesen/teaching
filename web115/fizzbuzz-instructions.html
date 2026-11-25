@@ -79,7 +79,9 @@
           </li>
           <li>
             Add a form with text fields for first name, middle name or
-            initial, and last name. Give them ids like
+            initial, and last name. Ask for the middle one as
+            "Middle Name (or initial)" in its label or placeholder, so people
+            know either one works. Give them ids like
             <strong>first_name</strong>, <strong>middle_initial</strong> and
             <strong>last_name</strong>. Hyphens (<code>first-name</code>) or
             camelCase (<code>firstName</code>) are fine too. Pick one style
@@ -89,10 +91,11 @@
           <li>
             When the form is submitted, use DOM manipulation to replace the
             greeting with one that has the full name: first name, the
-            <strong>first letter</strong> of the middle name followed by a
-            period, then last name. Someone who types "Jay" or "J" in the
-            middle field gets "J." either way. "Welcome to DI's Donuts! John
-            J. Jingleheimer!"
+            <strong>first letter</strong> of the middle name (pull out just
+            that one letter, and make it a <strong>capital</strong>) followed
+            by a period, then last name. Someone who types "Jay", "jay" or "j"
+            in the middle field gets "J." every time. "Welcome to DI's
+            Donuts! John J. Jingleheimer!"
           </li>
           <li>
             Get the field values with <code>getElementById</code>, build the
