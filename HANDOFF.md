@@ -51,6 +51,16 @@ Validator and standards updates, later on 2026-11-25:
 
 New page: `tech-setup.html` (root, listed in `common.html` and `sites.common.match_files`). Required software (VS Code with Live Server, two browsers, GitHub Desktop, an image editor), turning on file extensions, showing hidden files, and a quick check. No VPN or FileZilla, since D.I. dropped them. Browsers: Chrome plus Edge or Firefox for primary work, with a note that Safari tends to be problematic. Assumption to confirm: GitHub Desktop being required. Still mentioning the VPN and FileZilla: `itis3135/webspace_setup_instructions.html` (the whole page) and the FileZilla question in `itis3135/faq.html`; `web-standards.html` still lists "your webspace" as the first footer link.
 
+## Planned for after the term ends
+
+Remove the university webspace setup (D.I. will give the go-ahead). Everything that mentions it, so the removal is complete:
+- `itis3135/webspace_setup_instructions.html` (the whole page, M0G) and its link in `itis3135/assignments.html` (line ~106).
+- The FileZilla and VPN question in `itis3135/faq.html` (the list entry near line 46 and the answer near lines 217-232).
+- Webspace wording in `itis3135/home_page_instructions.html`, `itis3135/about_page_instructions.html`, `itis3135/mascot_instructions.html`, and the `itsc1110/` pages (`course_site_instructions.html`, `assignments.html`, `home_page_instructions.html`).
+- `web-standards.html`: "Your webspace" as the first of the seven footer links, the root-site paragraph, and the "absolute URL back into your own webspace" rules.
+- `standards/rules.json` (`webspace root` site match) and the matching host-aware code in `tools/standards-check.js` (around line 829).
+Note the footer link count (seven) and any rule that depends on it would change too.
+
 ## Open items
 
 - Start number default on Fizz Buzz 4 is 1. D.I. hasn't confirmed it.
