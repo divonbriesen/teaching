@@ -1204,7 +1204,7 @@
           const courseDirsForHeader = (rules.sites.course && rules.sites.course.match_dirs) || [];
           const pathSegsForHeader = location.pathname.toLowerCase().split("/").filter(Boolean);
           const matchedCourseDir = pathSegsForHeader.find((seg) => courseDirsForHeader.includes(seg));
-          add("HEAD", "PAGE RULES: " + page.toLowerCase() + (matchedCourseDir ? " on " + matchedCourseDir : ""));
+          add("HEAD", "PAGE RULES: " + page.toLowerCase() + (matchedCourseDir ? " in " + matchedCourseDir.toUpperCase() : ""));
           applyChecks(pageRules.checks);
         }
         if (page === "introduction.html") {
