@@ -945,7 +945,7 @@
                   add("INFO", rule, "not required until the previous milestone is up");
                   continue;
                 }
-                const found = new RegExp(c.pattern, "i").test(hay);
+                const found = new RegExp(c.pattern, c.flags === undefined ? "i" : c.flags).test(hay);
                 const okc = found === want;
                 let detail = okc ? "" : (want ? "missing" : "found - remove it");
                 // near-miss hint: strict pattern failed but a looser one

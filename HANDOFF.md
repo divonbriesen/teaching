@@ -39,7 +39,7 @@ Validator (`tools/standards-check.js`):
 
 Tested against live student pages (amcrare, kalebweaver33, thuggin6 `/web115/`): the id, h2, greeting and one-line checks behave as intended. Method: headless Chromium (Playwright), loading each live page with `tools/standards-check.js` and `standards/rules.json` served from the local clone, then reading the report panel.
 
-Later on 2026-11-25: id naming rule changed to dashes only (best practice), and the middle field id is now `middle-name` (was middle_initial / middle-initial). Kaleb's and thuggin6's Fizz Buzz pages use underscores, so they now fail the id checks until they rename.
+Later on 2026-11-25: id naming rule changed to dashes only (best practice), every id and class name on a Fizz Buzz page must use only lowercase letters, numbers and dashes (new check; the validator html check now accepts a `flags` option), and the middle field id is now `middle-name` (was middle_initial / middle-initial). Kaleb's and thuggin6's Fizz Buzz pages use underscores, so they now fail the id checks until they rename.
 
 ## Open items
 

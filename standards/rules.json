@@ -757,6 +757,20 @@
             },
             {
               "type": "html",
+              "rule": "every id uses only lowercase letters, numbers and dashes",
+              "pattern": "<[A-Za-z][^>]*\\sid\\s*=\\s*[\"'][^\"']*[^a-z0-9\\-\\s\"'][^\"']*[\"']",
+              "flags": "",
+              "present": false
+            },
+            {
+              "type": "html",
+              "rule": "every class uses only lowercase letters, numbers and dashes",
+              "pattern": "<[A-Za-z][^>]*\\sclass\\s*=\\s*[\"'][^\"']*[^a-z0-9\\-\\s\"'][^\"']*[\"']",
+              "flags": "",
+              "present": false
+            },
+            {
+              "type": "html",
               "rule": "form fields have placeholders or labels",
               "pattern": "placeholder\\s*=|<label",
               "present": true
@@ -808,6 +822,20 @@
               "rule": "middle name field has an id like middle-name",
               "pattern": "id\\s*=\\s*[\"']middle-name[\"']",
               "present": true
+            },
+            {
+              "type": "html",
+              "rule": "every id uses only lowercase letters, numbers and dashes",
+              "pattern": "<[A-Za-z][^>]*\\sid\\s*=\\s*[\"'][^\"']*[^a-z0-9\\-\\s\"'][^\"']*[\"']",
+              "flags": "",
+              "present": false
+            },
+            {
+              "type": "html",
+              "rule": "every class uses only lowercase letters, numbers and dashes",
+              "pattern": "<[A-Za-z][^>]*\\sclass\\s*=\\s*[\"'][^\"']*[^a-z0-9\\-\\s\"'][^\"']*[\"']",
+              "flags": "",
+              "present": false
             },
             {
               "type": "html",
@@ -871,6 +899,20 @@
             },
             {
               "type": "html",
+              "rule": "every id uses only lowercase letters, numbers and dashes",
+              "pattern": "<[A-Za-z][^>]*\\sid\\s*=\\s*[\"'][^\"']*[^a-z0-9\\-\\s\"'][^\"']*[\"']",
+              "flags": "",
+              "present": false
+            },
+            {
+              "type": "html",
+              "rule": "every class uses only lowercase letters, numbers and dashes",
+              "pattern": "<[A-Za-z][^>]*\\sclass\\s*=\\s*[\"'][^\"']*[^a-z0-9\\-\\s\"'][^\"']*[\"']",
+              "flags": "",
+              "present": false
+            },
+            {
+              "type": "html",
               "rule": "first, middle and last name fields are on one line, in that order (no div, p or br between them)",
               "pattern": "id\\s*=\\s*[\\\"']first-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']middle-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']last-name[\\\"']",
               "present": true
@@ -931,6 +973,20 @@
             },
             {
               "type": "html",
+              "rule": "every id uses only lowercase letters, numbers and dashes",
+              "pattern": "<[A-Za-z][^>]*\\sid\\s*=\\s*[\"'][^\"']*[^a-z0-9\\-\\s\"'][^\"']*[\"']",
+              "flags": "",
+              "present": false
+            },
+            {
+              "type": "html",
+              "rule": "every class uses only lowercase letters, numbers and dashes",
+              "pattern": "<[A-Za-z][^>]*\\sclass\\s*=\\s*[\"'][^\"']*[^a-z0-9\\-\\s\"'][^\"']*[\"']",
+              "flags": "",
+              "present": false
+            },
+            {
+              "type": "html",
               "rule": "first, middle and last name fields are on one line, in that order (no div, p or br between them)",
               "pattern": "id\\s*=\\s*[\\\"']first-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']middle-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']last-name[\\\"']",
               "present": true
@@ -988,6 +1044,20 @@
               "rule": "middle name field has an id like middle-name",
               "pattern": "id\\s*=\\s*[\"']middle-name[\"']",
               "present": true
+            },
+            {
+              "type": "html",
+              "rule": "every id uses only lowercase letters, numbers and dashes",
+              "pattern": "<[A-Za-z][^>]*\\sid\\s*=\\s*[\"'][^\"']*[^a-z0-9\\-\\s\"'][^\"']*[\"']",
+              "flags": "",
+              "present": false
+            },
+            {
+              "type": "html",
+              "rule": "every class uses only lowercase letters, numbers and dashes",
+              "pattern": "<[A-Za-z][^>]*\\sclass\\s*=\\s*[\"'][^\"']*[^a-z0-9\\-\\s\"'][^\"']*[\"']",
+              "flags": "",
+              "present": false
             },
             {
               "type": "html",
