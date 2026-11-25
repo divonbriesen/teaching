@@ -72,9 +72,10 @@
             script when you copy the page, and link the new one.
           </li>
           <li>
-            Under the h2, add a greeting heading. It's an
-            <strong>h3</strong> with the id <strong>greeting</strong>, and it
-            says something like "Welcome to DI's Donuts!"
+            Under the h2, add a greeting. It's an <strong>h3</strong> with the
+            id <strong>greeting</strong>. It says welcome (with or without a
+            name or brand) and ends in <strong>!</strong>, like "Welcome to
+            DI's Donuts!"
           </li>
           <li>
             Add a form with text fields for first name, middle name or
@@ -237,15 +238,20 @@
 
       <section>
         <h3>What the Validator Checks</h3>
-        <p>
-          The <a href="../validation.html">validator</a> checks the page: the
-          h2 name, the script link, the h3 greeting, the name field ids, labels or
-          placeholders, and on Fizz Buzz 4 the field count and the 125. It
-          can't read your JavaScript. Your reviewers check that part (the
-          140 lines, the divisor variables, the function, the 7 and BANG, no
-          brute force, the blank field, one word per field) with the
-          <a href="../peer-reviews.html">review checklist</a>.
-        </p>
+        <p>The <a href="../validation.html">validator</a> checks the page, not
+          your JavaScript. On each Fizz Buzz page it looks for:</p>
+        <ul>
+          <li>an h2 that says Fizz Buzz and the lab number, and nothing else</li>
+          <li>your own script file linked</li>
+          <li>the h3 greeting (welcome, ending in !) with the id greeting</li>
+          <li>first, middle and last name fields with ids like first_name</li>
+          <li>placeholders or labels on the fields</li>
+          <li>on Fizz Buzz 4, at least 12 fields and an end number of 125</li>
+        </ul>
+        <p>Your reviewers check the rest with the
+          <a href="../peer-reviews.html">review checklist</a>: the 140 lines,
+          the divisor variables, the function, the 7 and BANG, no brute
+          force, the blank field, and one word per field.</p>
       </section>
     </main>
 
