@@ -49,6 +49,8 @@ Validator and standards updates, later on 2026-11-25:
 - Secondary nav definition (in `web-standards.html`): it is for any assignment that isn't meant to be part of the course site (no common header, footer or CSS), like the hobby site, the mascot company and the crappy page. The `itis3135/` instruction pages still describe it as "links leaving the course site".
 - Google Doc "Everything Web Work Document" reviewed. Still open from it: no spelling and grammar rule, no "school or work appropriate" rule, no performance rule, no "test on a real server" note, and the doc's title, footer and brand wording disagrees with the repo (the repo wins).
 
+New page: `tech-setup.html` (root, listed in `common.html` and `sites.common.match_files`). Required software (VS Code with Live Server, two browsers, GitHub Desktop, an image editor), turning on file extensions, showing hidden files, and a quick check. No VPN or FileZilla, since D.I. dropped them. Assumptions to confirm: Chrome plus one other browser, and GitHub Desktop being required. Still mentioning the VPN and FileZilla: `itis3135/webspace_setup_instructions.html` (the whole page) and the FileZilla question in `itis3135/faq.html`; `web-standards.html` still lists "your webspace" as the first footer link.
+
 ## Open items
 
 - Start number default on Fizz Buzz 4 is 1. D.I. hasn't confirmed it.

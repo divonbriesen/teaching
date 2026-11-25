@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>D.I. von Briesen's Dapper Innovative Vicuña Buck | Tech Setup</title>
+    <link rel="stylesheet" href="styles/default.css" />
+    <link rel="icon" type="image/svg+xml" href="images/favicon.svg" />
+    <script
+      src="https://lint.page/kit/4d0fe3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <!-- classes below are styling hooks with no semantic element available:
+         site-header/site-footer match the shared stylesheet's landmark rules,
+         home-logo and home-logo-end size the facing vicuñas, note boxes the rule that overrides the others, and mirrored (on a span) flips the second camel inward,
+         con-note carries the wordplay tooltip, and subtitle sets the small line
+         under the site name -->
+    <header class="site-header">
+      <h1>
+        <a href="index.html" class="home-logo"
+          ><img
+            src="images/vicuna.svg"
+            alt="Camelid Software vicuña logo - home"
+            width="40"
+            height="40"
+        /></a>
+        D.I. von Briesen's Dapper Innovative Vicuña Buck
+        <img
+          class="home-logo-end"
+          src="images/vicuna.svg"
+          alt=""
+          width="40"
+          height="40"
+        />
+      </h1>
+      <p class="subtitle">Teaching <em class="con-note" tabindex="0">con</em> von Briesen</p>
+      <p class="tagline"><em>Tech Setup - what to install and turn on before you start</em></p>
+      <nav aria-label="Teaching">
+        <a href="index.html">Home</a>
+        <a href="faq.html">FAQ</a>
+        <a href="schedule.html">Schedule</a>
+        <a href="ai-policy.html">AI Policy</a>
+        <a href="grading.html">Grading</a>
+        <a href="standards.html">Standards</a>
+        <a href="resources.html">Resources</a>
+        <a href="common.html">Common</a>
+      </nav>
+      <nav aria-label="Courses">
+        <a href="cis110/">CIS110</a>
+        <a href="web115/">WEB115</a>
+        <a href="web215/">WEB215</a>
+        <a href="web250/">WEB250</a>
+        <a href="itsc1110/">ITSC1110</a>
+        <a href="itis3135/">ITIS3135</a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Tech Setup</h2>
+
+      <p>
+        Do this once, before your first assignment, on the computer you'll
+        work on. It's the same in every course I teach. Two settings on this
+        page (file extensions and hidden files) cause more confused emails
+        than anything else, so don't skip them.
+      </p>
+
+      <h3>Required Software</h3>
+      <ul>
+        <li>
+          <strong>A code editor:</strong>
+          <a href="https://code.visualstudio.com/">VS Code</a> is the one I
+          use and recommend. Add the Live Server extension so you can preview
+          pages as you type.
+        </li>
+        <li>
+          <strong>Two browsers, at least.</strong> Chrome, because the
+          <a href="https://developer.chrome.com/docs/devtools/">Chrome DevTools</a>
+          show up in the course, and one more: Firefox, Edge, or Safari. You
+          test your pages in both.
+        </li>
+        <li>
+          <strong>GitHub Desktop</strong> for repository management. You also
+          need a <a href="https://github.com/">GitHub</a> account.
+        </li>
+        <li>
+          <strong>An image editor</strong> that can rotate, crop, and resize.
+          Any free one will do. You resize images in the editor, not in your
+          HTML.
+        </li>
+      </ul>
+
+      <h3>Turn On File Extensions</h3>
+      <p>
+        Your computer hides the end of file names by default, so
+        <code>index.html</code> shows up as just <code>index</code>. Then you
+        can't tell <code>index.html</code> from <code>index.htm</code> or
+        <code>index.html.txt</code>, and the wrong one won't work online.
+      </p>
+      <ul>
+        <li>
+          <strong>Windows 11:</strong> open File Explorer, then View, Show,
+          and check File name extensions.
+        </li>
+        <li>
+          <strong>Windows 10:</strong> open File Explorer, click the View tab,
+          and check File name extensions.
+        </li>
+        <li>
+          <strong>Mac:</strong> in the Finder, open Settings (older Macs call
+          it Preferences), click Advanced, and check Show all filename
+          extensions.
+        </li>
+      </ul>
+
+      <h3>Show Hidden Files</h3>
+      <p>
+        Some files and folders you'll need are hidden, like the
+        <code>.git</code> folder, <code>.gitignore</code>, and
+        <code>.nojekyll</code>. Turn them on so you can see them.
+      </p>
+      <ul>
+        <li>
+          <strong>Windows 11:</strong> File Explorer, View, Show, then check
+          Hidden items.
+        </li>
+        <li>
+          <strong>Windows 10:</strong> File Explorer, the View tab, then check
+          Hidden items.
+        </li>
+        <li>
+          <strong>Mac:</strong> in the Finder, press
+          <strong>Command + Shift + .</strong> (period). Press it again to
+          hide them.
+        </li>
+      </ul>
+
+      <h3>Check That It Worked</h3>
+      <p>
+        Make a file called <code>index.html</code> in your working folder. You
+        should see the <code>.html</code> at the end of the name. If you see
+        <code>index.html.txt</code>, your editor added a second extension, so
+        rename the file and delete the <code>.txt</code>.
+      </p>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        <span class="mirrored">&#128042;</span> This site is a Camelid Software
+        Production, who'd-wanna-copy-this 2026
+        <a href="about.html">About DI</a>
+        <a href="name.html">My Name</a>
+        <a href="recommendation.html">Want a Recommendation?</a>
+        &#128043;
+      </p>
+      <p>
+        <em
+          >If you keep on doin' what you've been doin' yer gonna keep on
+          gettin' what you've been gettin!</em
+        >
+      </p>
+    </footer>
+    <script src="tools/standards-check.js" defer></script>
+  </body>
+</html>
