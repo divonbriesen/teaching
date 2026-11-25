@@ -720,15 +720,10 @@
           "checks": [
             {
               "type": "heading",
-              "rule": "h2 names the page",
+              "rule": "h2 is exactly Fizz Buzz 0 (or FizzBuzz 0, capital B), nothing else",
               "level": 2,
-              "pattern": "\\S"
-            },
-            {
-              "type": "heading",
-              "rule": "h3 page title says Fizz Buzz 0",
-              "level": 3,
-              "pattern": "fizz\\s*-?\\s*buzz\\s*-?\\s*0"
+              "pattern": "^Fizz\\s?Buzz\\s+0$",
+              "flags": ""
             },
             {
               "type": "html",
@@ -738,32 +733,26 @@
             },
             {
               "type": "html",
-              "rule": "greeting heading with id greeting",
-              "pattern": "id\\s*=\\s*[\"']greeting[\"']",
+              "rule": "greeting is an h3 with id greeting",
+              "pattern": "<h3[^>]*\\sid\\s*=\\s*[\"']greeting[\"']",
               "present": true
             },
             {
               "type": "html",
-              "rule": "first name field (id first_name)",
-              "pattern": "id\\s*=\\s*[\"']first_name[\"']",
+              "rule": "first name field (id first_name, first-name or firstName)",
+              "pattern": "id\\s*=\\s*[\"']first[_-]?name[\"']",
               "present": true
             },
             {
               "type": "html",
-              "rule": "last name field (id last_name)",
-              "pattern": "id\\s*=\\s*[\"']last_name[\"']",
+              "rule": "last name field (id last_name, last-name or lastName)",
+              "pattern": "id\\s*=\\s*[\"']last[_-]?name[\"']",
               "present": true
             },
             {
               "type": "html",
-              "rule": "middle initial field (id middle_initial)",
-              "pattern": "id\\s*=\\s*[\"']middle_initial[\"']",
-              "present": true
-            },
-            {
-              "type": "html",
-              "rule": "middle initial limited to one character",
-              "pattern": "maxlength\\s*=\\s*[\"']?1[\"']?",
+              "rule": "middle name or initial field (id middle_initial, middle-initial or middleInitial)",
+              "pattern": "id\\s*=\\s*[\"']middle[_-]?(initial|name)[\"']",
               "present": true
             },
             {
@@ -785,21 +774,53 @@
           "checks": [
             {
               "type": "heading",
-              "rule": "h2 names the page",
+              "rule": "h2 is exactly Fizz Buzz 1 (or FizzBuzz 1, capital B), nothing else",
               "level": 2,
-              "pattern": "\\S"
-            },
-            {
-              "type": "heading",
-              "rule": "h3 page title says Fizz Buzz 1",
-              "level": 3,
-              "pattern": "fizz\\s*-?\\s*buzz\\s*-?\\s*1"
+              "pattern": "^Fizz\\s?Buzz\\s+1$",
+              "flags": ""
             },
             {
               "type": "html",
               "rule": "own script file linked",
               "pattern": "<script[^>]+src=\\s*[\"'][^\"']+\\.js",
               "present": true
+            },
+            {
+              "type": "html",
+              "rule": "greeting is an h3 with id greeting",
+              "pattern": "<h3[^>]*\\sid\\s*=\\s*[\"']greeting[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "first name field (id first_name, first-name or firstName)",
+              "pattern": "id\\s*=\\s*[\"']first[_-]?name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "last name field (id last_name, last-name or lastName)",
+              "pattern": "id\\s*=\\s*[\"']last[_-]?name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "middle name or initial field (id middle_initial, middle-initial or middleInitial)",
+              "pattern": "id\\s*=\\s*[\"']middle[_-]?(initial|name)[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "fields have placeholders or labels",
+              "pattern": "placeholder\\s*=|<label",
+              "present": true
+            },
+            {
+              "type": "element",
+              "rule": "a form with 3+ inputs",
+              "tag": "input",
+              "within": "form",
+              "min": 3
             }
           ]
         },
@@ -807,21 +828,53 @@
           "checks": [
             {
               "type": "heading",
-              "rule": "h2 names the page",
+              "rule": "h2 is exactly Fizz Buzz 2 (or FizzBuzz 2, capital B), nothing else",
               "level": 2,
-              "pattern": "\\S"
-            },
-            {
-              "type": "heading",
-              "rule": "h3 page title says Fizz Buzz 2",
-              "level": 3,
-              "pattern": "fizz\\s*-?\\s*buzz\\s*-?\\s*2"
+              "pattern": "^Fizz\\s?Buzz\\s+2$",
+              "flags": ""
             },
             {
               "type": "html",
               "rule": "own script file linked",
               "pattern": "<script[^>]+src=\\s*[\"'][^\"']+\\.js",
               "present": true
+            },
+            {
+              "type": "html",
+              "rule": "greeting is an h3 with id greeting",
+              "pattern": "<h3[^>]*\\sid\\s*=\\s*[\"']greeting[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "first name field (id first_name, first-name or firstName)",
+              "pattern": "id\\s*=\\s*[\"']first[_-]?name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "last name field (id last_name, last-name or lastName)",
+              "pattern": "id\\s*=\\s*[\"']last[_-]?name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "middle name or initial field (id middle_initial, middle-initial or middleInitial)",
+              "pattern": "id\\s*=\\s*[\"']middle[_-]?(initial|name)[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "fields have placeholders or labels",
+              "pattern": "placeholder\\s*=|<label",
+              "present": true
+            },
+            {
+              "type": "element",
+              "rule": "a form with 3+ inputs",
+              "tag": "input",
+              "within": "form",
+              "min": 3
             }
           ]
         },
@@ -829,21 +882,53 @@
           "checks": [
             {
               "type": "heading",
-              "rule": "h2 names the page",
+              "rule": "h2 is exactly Fizz Buzz 3 (or FizzBuzz 3, capital B), nothing else",
               "level": 2,
-              "pattern": "\\S"
-            },
-            {
-              "type": "heading",
-              "rule": "h3 page title says Fizz Buzz 3",
-              "level": 3,
-              "pattern": "fizz\\s*-?\\s*buzz\\s*-?\\s*3"
+              "pattern": "^Fizz\\s?Buzz\\s+3$",
+              "flags": ""
             },
             {
               "type": "html",
               "rule": "own script file linked",
               "pattern": "<script[^>]+src=\\s*[\"'][^\"']+\\.js",
               "present": true
+            },
+            {
+              "type": "html",
+              "rule": "greeting is an h3 with id greeting",
+              "pattern": "<h3[^>]*\\sid\\s*=\\s*[\"']greeting[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "first name field (id first_name, first-name or firstName)",
+              "pattern": "id\\s*=\\s*[\"']first[_-]?name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "last name field (id last_name, last-name or lastName)",
+              "pattern": "id\\s*=\\s*[\"']last[_-]?name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "middle name or initial field (id middle_initial, middle-initial or middleInitial)",
+              "pattern": "id\\s*=\\s*[\"']middle[_-]?(initial|name)[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "fields have placeholders or labels",
+              "pattern": "placeholder\\s*=|<label",
+              "present": true
+            },
+            {
+              "type": "element",
+              "rule": "a form with 3+ inputs",
+              "tag": "input",
+              "within": "form",
+              "min": 3
             }
           ]
         },
@@ -851,15 +936,10 @@
           "checks": [
             {
               "type": "heading",
-              "rule": "h2 names the page",
+              "rule": "h2 is exactly Fizz Buzz 4 (or FizzBuzz 4, capital B), nothing else",
               "level": 2,
-              "pattern": "\\S"
-            },
-            {
-              "type": "heading",
-              "rule": "h3 page title says Fizz Buzz 4",
-              "level": 3,
-              "pattern": "fizz\\s*-?\\s*buzz\\s*-?\\s*4"
+              "pattern": "^Fizz\\s?Buzz\\s+4$",
+              "flags": ""
             },
             {
               "type": "html",
@@ -868,15 +948,45 @@
               "present": true
             },
             {
-              "type": "element",
-              "rule": "form with names, count, 3 divisors, 3 words, total (9+ fields)",
-              "tag": "input,select,textarea",
-              "within": "form",
-              "min": 9
+              "type": "html",
+              "rule": "greeting is an h3 with id greeting",
+              "pattern": "<h3[^>]*\\sid\\s*=\\s*[\"']greeting[\"']",
+              "present": true
             },
             {
               "type": "html",
-              "rule": "total prefilled to 125",
+              "rule": "first name field (id first_name, first-name or firstName)",
+              "pattern": "id\\s*=\\s*[\"']first[_-]?name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "last name field (id last_name, last-name or lastName)",
+              "pattern": "id\\s*=\\s*[\"']last[_-]?name[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "middle name or initial field (id middle_initial, middle-initial or middleInitial)",
+              "pattern": "id\\s*=\\s*[\"']middle[_-]?(initial|name)[\"']",
+              "present": true
+            },
+            {
+              "type": "html",
+              "rule": "fields have placeholders or labels",
+              "pattern": "placeholder\\s*=|<label",
+              "present": true
+            },
+            {
+              "type": "element",
+              "rule": "form with names, start, end, 3 divisors, 3 words, nothing-divisible field (12+ fields)",
+              "tag": "input,select,textarea",
+              "within": "form",
+              "min": 12
+            },
+            {
+              "type": "html",
+              "rule": "end number prefilled to 125",
               "pattern": "value\\s*=\\s*[\"']125[\"']",
               "present": true
             }
