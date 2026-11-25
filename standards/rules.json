@@ -817,10 +817,10 @@
             },
             {
               "type": "element",
-              "rule": "form has at least 3 inputs",
+              "rule": "form has at least 5 inputs (3 names, start, end)",
               "tag": "input",
               "within": "form",
-              "min": 3
+              "min": 5
             }
           ]
         },
@@ -871,10 +871,10 @@
             },
             {
               "type": "element",
-              "rule": "form has at least 3 inputs",
+              "rule": "form has at least 5 inputs (3 names, start, end)",
               "tag": "input",
               "within": "form",
-              "min": 3
+              "min": 5
             }
           ]
         },
@@ -925,10 +925,10 @@
             },
             {
               "type": "element",
-              "rule": "form has at least 3 inputs",
+              "rule": "form has at least 5 inputs (3 names, start, end)",
               "tag": "input",
               "within": "form",
-              "min": 3
+              "min": 5
             }
           ]
         },
