@@ -705,6 +705,26 @@
       const unclear = localImgs.filter((i) => unclearRe.test(i.split("/").pop()));
       add(!unclear.length ? "PASS" : "FAIL", "image names say what they are", unclear.map(short).join(", "));
     }
+    // Alt text: every <img> has an alt attribute (alt="" is fine for a purely
+    // decorative image), and a non-empty alt says what the image shows - not a
+    // file name or a bare "image". Favicons and Accumulus's own imgs don't count.
+    const altImgs = [...d.querySelectorAll("img")].filter((i) => {
+      const src = (i.getAttribute("src") || "").toLowerCase();
+      return !src.includes("favicon") && !src.includes("lint.page");
+    });
+    if (altImgs.length) {
+      const noAlt = altImgs.filter((i) => !i.hasAttribute("alt"));
+      add(!noAlt.length ? "PASS" : "FAIL", "every image has an alt attribute (alt=\"\" is fine for decoration)",
+        noAlt.map((i) => short(i.getAttribute("src"))).join(", "));
+      const junkAlt = /^(?:an?\s+)?(?:img|image|picture|photo|pic|graphic|screenshot|untitled)(?:\s+of)?\s*\d*$/i;
+      const fileAlt = /\.(?:jpe?g|png|gif|svg|webp|avif)$/i;
+      const poorAlt = altImgs.filter((i) => {
+        const alt = (i.getAttribute("alt") || "").trim();
+        return alt && (junkAlt.test(alt) || fileAlt.test(alt));
+      });
+      add(!poorAlt.length ? "PASS" : "FAIL", "alt text says what the image shows (not a file name or just \"image\")",
+        poorAlt.map((i) => "\"" + short(i.getAttribute("alt")) + "\"").join(", "));
+    }
 
     // comments justify divs/spans, classes/ids, inline styles
     const commentTexts = [];

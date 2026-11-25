@@ -43,6 +43,12 @@ Later on 2026-11-25: id naming rule changed to dashes only (best practice), ever
 
 New page: `coding-standards.html` (root). Starts with the id/class dash rules, JavaScript naming, file names, then self-documenting code. Registered in `common.html`, `standards.html` and `sites.common.match_files` in `standards/rules.json`, and linked from the Fizz Buzz instructions. Not yet run through the Vicunadator.
 
+Validator and standards updates, later on 2026-11-25:
+- New general rules in `tools/standards-check.js` (every page): every image has an alt attribute (`alt=""` is fine for decoration), and alt text isn't a file name or a bare "image". Favicons and Accumulus's own images don't count. Tested in the browser on good and bad samples.
+- The W3C HTML and CSS validators are retired in favor of Accumulus (the cloud) and the Vicunadator (the llama). Removed the "HTML validation link, and a CSS validation link" footer line from `web-standards.html` and the "CSS validates" item from the review checklist in `peer-reviews.html`. Still mentioning the W3C validators: `resources.html` (two links), `validation.html` (one sentence), `web215/assignments.html` (the JS assignment that builds the validation links), and a student quote in `peer-reviews.html`. Decide what to do with those.
+- Secondary nav definition (in `web-standards.html`): it is for any assignment that isn't meant to be part of the course site (no common header, footer or CSS), like the hobby site, the mascot company and the crappy page. The `itis3135/` instruction pages still describe it as "links leaving the course site".
+- Google Doc "Everything Web Work Document" reviewed. Still open from it: no spelling and grammar rule, no "school or work appropriate" rule, no performance rule, no "test on a real server" note, and the doc's title, footer and brand wording disagrees with the repo (the repo wins).
+
 ## Open items
 
 - Start number default on Fizz Buzz 4 is 1. D.I. hasn't confirmed it.
