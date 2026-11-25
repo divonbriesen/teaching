@@ -975,7 +975,7 @@
               } else if (c.type === "heading") {
                 const sel = c.level ? "h" + c.level : "h1,h2,h3,h4,h5,h6";
                 const heads = [...d.querySelectorAll(sel)].map((h) => h.textContent.trim());
-                const found = heads.some((h) => new RegExp(c.pattern, "i").test(h));
+                const found = heads.some((h) => new RegExp(c.pattern, c.flags === undefined ? "i" : c.flags).test(h));
                 const okc = found === want;
                 add(okc ? "PASS" : "FAIL", rule, okc ? "" : (want ? "missing" : "found - remove it"));
               } else if (c.type === "css") {

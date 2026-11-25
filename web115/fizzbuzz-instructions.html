@@ -63,24 +63,26 @@
             Link each one from your course TOC.
           </li>
           <li>
-            It's a branded page with all the normal requirements. The h2
-            names the page and the h3 is the page title, like
-            "DI's Donuts Fizz Buzz 0".
+            It's a branded page with all the normal requirements. The h2 is
+            the page name and nothing else: "Fizz Buzz 0", or "FizzBuzz 0"
+            if you leave out the space (then the B is a capital).
           </li>
           <li>
             Each page links its <strong>own script file</strong>. Make a new
             script when you copy the page, and link the new one.
           </li>
           <li>
-            Under the title, add a greeting heading with the id
-            <strong>greeting</strong>. It says something like "Welcome to
-            DI's Donuts!"
+            Under the h2, add a greeting heading. It's an
+            <strong>h3</strong> with the id <strong>greeting</strong>, and it
+            says something like "Welcome to DI's Donuts!"
           </li>
           <li>
             Add a form with text fields for first name, middle name or
-            initial, and last name. Give them the ids
+            initial, and last name. Give them ids like
             <strong>first_name</strong>, <strong>middle_initial</strong> and
-            <strong>last_name</strong>. Use placeholders (the grey hint text
+            <strong>last_name</strong>. Hyphens (<code>first-name</code>) or
+            camelCase (<code>firstName</code>) are fine too. Pick one style
+            and use it for every id on the page. Use placeholders (the grey hint text
             inside the field) or labels so people know what goes where.
           </li>
           <li>
@@ -237,7 +239,7 @@
         <h3>What the Validator Checks</h3>
         <p>
           The <a href="../validation.html">validator</a> checks the page: the
-          titles, the script link, the greeting and name field ids, labels or
+          h2 name, the script link, the h3 greeting, the name field ids, labels or
           placeholders, and on Fizz Buzz 4 the field count and the 125. It
           can't read your JavaScript. Your reviewers check that part (the
           140 lines, the divisor variables, the function, the 7 and BANG, no
