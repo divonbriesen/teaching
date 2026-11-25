@@ -25,7 +25,7 @@ Calendar (Google Calendar, primary):
 Fizz Buzz (WEB115), all merged to `main`:
 - New instructions page: `web115/fizzbuzz-instructions.html`, linked from `web115/assignments.html`. Source spec was the old WEB 115 "Everything Page" Google Doc (marked invalid since 29 Aug 2024, used as the spec on purpose).
 - Rules for pages `fizzbuzz0.html` to `fizzbuzz4.html` are in `standards/rules.json` (course site, `pages`). The labs build on each other, so the checks are cumulative.
-- Every page: h2 says exactly "Fizz Buzz N" or "FizzBuzz N" (capital B if no space); own .js file linked; h3 greeting with id `greeting` that says welcome and ends in `!`; first, middle and last name fields with dashed ids (`first-name`, `middle-initial`, `last-name`; underscores and camelCase fail); placeholders or labels.
+- Every page: h2 says exactly "Fizz Buzz N" or "FizzBuzz N" (capital B if no space); own .js file linked; h3 greeting with id `greeting` that says welcome and ends in `!`; first, middle and last name fields with dashed ids (`first-name`, `middle-name`, `last-name`; underscores, camelCase and `middle-initial` fail); placeholders or labels.
 - Middle field is asked for as "Middle Name (or initial)". The greeting uses only its first letter, capitalized, plus a period.
 - Fizz Buzz 1 to 4: name fields must be on one line, in order, with no block tags (div, p, br...) between them. Fizz Buzz 1 to 3 need at least 5 form inputs.
 - Fizz Buzz 1: pop-up prompt and even/odd message are gone; second line has a start and an end number (prefilled 1 and 140).
@@ -39,7 +39,7 @@ Validator (`tools/standards-check.js`):
 
 Tested against live student pages (amcrare, kalebweaver33, thuggin6 `/web115/`): the id, h2, greeting and one-line checks behave as intended. Method: headless Chromium (Playwright), loading each live page with `tools/standards-check.js` and `standards/rules.json` served from the local clone, then reading the report panel.
 
-Later on 2026-11-25: id naming rule changed to dashes only (best practice). Kaleb's and thuggin6's Fizz Buzz pages use underscores, so they now fail the id checks until they rename.
+Later on 2026-11-25: id naming rule changed to dashes only (best practice), and the middle field id is now `middle-name` (was middle_initial / middle-initial). Kaleb's and thuggin6's Fizz Buzz pages use underscores, so they now fail the id checks until they rename.
 
 ## Open items
 

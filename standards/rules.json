@@ -751,8 +751,8 @@
             },
             {
               "type": "html",
-              "rule": "middle name or initial field has an id like middle-initial",
-              "pattern": "id\\s*=\\s*[\"']middle-(?:initial|name)[\"']",
+              "rule": "middle name field has an id like middle-name",
+              "pattern": "id\\s*=\\s*[\"']middle-name[\"']",
               "present": true
             },
             {
@@ -805,14 +805,14 @@
             },
             {
               "type": "html",
-              "rule": "middle name or initial field has an id like middle-initial",
-              "pattern": "id\\s*=\\s*[\"']middle-(?:initial|name)[\"']",
+              "rule": "middle name field has an id like middle-name",
+              "pattern": "id\\s*=\\s*[\"']middle-name[\"']",
               "present": true
             },
             {
               "type": "html",
               "rule": "first, middle and last name fields are on one line, in that order (no div, p or br between them)",
-              "pattern": "id\\s*=\\s*[\\\"']first-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']middle-(?:initial|name)[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']last-name[\\\"']",
+              "pattern": "id\\s*=\\s*[\\\"']first-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']middle-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']last-name[\\\"']",
               "present": true
             },
             {
@@ -865,14 +865,14 @@
             },
             {
               "type": "html",
-              "rule": "middle name or initial field has an id like middle-initial",
-              "pattern": "id\\s*=\\s*[\"']middle-(?:initial|name)[\"']",
+              "rule": "middle name field has an id like middle-name",
+              "pattern": "id\\s*=\\s*[\"']middle-name[\"']",
               "present": true
             },
             {
               "type": "html",
               "rule": "first, middle and last name fields are on one line, in that order (no div, p or br between them)",
-              "pattern": "id\\s*=\\s*[\\\"']first-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']middle-(?:initial|name)[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']last-name[\\\"']",
+              "pattern": "id\\s*=\\s*[\\\"']first-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']middle-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']last-name[\\\"']",
               "present": true
             },
             {
@@ -925,14 +925,14 @@
             },
             {
               "type": "html",
-              "rule": "middle name or initial field has an id like middle-initial",
-              "pattern": "id\\s*=\\s*[\"']middle-(?:initial|name)[\"']",
+              "rule": "middle name field has an id like middle-name",
+              "pattern": "id\\s*=\\s*[\"']middle-name[\"']",
               "present": true
             },
             {
               "type": "html",
               "rule": "first, middle and last name fields are on one line, in that order (no div, p or br between them)",
-              "pattern": "id\\s*=\\s*[\\\"']first-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']middle-(?:initial|name)[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']last-name[\\\"']",
+              "pattern": "id\\s*=\\s*[\\\"']first-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']middle-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']last-name[\\\"']",
               "present": true
             },
             {
@@ -985,14 +985,14 @@
             },
             {
               "type": "html",
-              "rule": "middle name or initial field has an id like middle-initial",
-              "pattern": "id\\s*=\\s*[\"']middle-(?:initial|name)[\"']",
+              "rule": "middle name field has an id like middle-name",
+              "pattern": "id\\s*=\\s*[\"']middle-name[\"']",
               "present": true
             },
             {
               "type": "html",
               "rule": "first, middle and last name fields are on one line, in that order (no div, p or br between them)",
-              "pattern": "id\\s*=\\s*[\\\"']first-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']middle-(?:initial|name)[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']last-name[\\\"']",
+              "pattern": "id\\s*=\\s*[\\\"']first-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']middle-name[\\\"'][^>]*>(?:(?!</?(?:div|p|br|hr|h[1-6]|ul|ol|li|dl|dt|dd|table|thead|tbody|tr|td|th|section|article|aside|header|footer|nav|main|form|fieldset|legend|blockquote|pre|address|figure|details|summary)\\b)[\\s\\S])*?id\\s*=\\s*[\\\"']last-name[\\\"']",
               "present": true
             },
             {
